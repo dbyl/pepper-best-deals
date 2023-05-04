@@ -1,0 +1,6 @@
+Django==4.2.1
+pandas==2.0.1
+numpy==1.23.3
+plotly==5.14.1
+matplotlib==3.7.1
+matplotlib-inline==0.1.6
