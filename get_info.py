@@ -1,10 +1,42 @@
 
+class Months(Enum):
+
+    sty = '01'
+    lut = '02'
+    mar = '03'
+    kwi = '04'
+    maj = '05'
+    cze = '06'
+    lip = '07'
+    sie = '08'
+    wrz = '09'
+    paz = '10'
+    paź = '10'
+    lis = '11'
+    gru = '12'
+
+    @classmethod
+    def to_dict(cls):
+        """Returns a dictionary representation of the enum."""
+        return {e.name: e.value for e in cls}
+
+    @classmethod
+    def keys(cls):
+        """Returns a list of all the enum keys."""
+        return cls._member_names_
+
+    @classmethod
+    def values(cls):
+        """Returns a list of all the enum values."""
+        return list(cls._value2member_map_.keys())
+
+
 
 class GetItemName:
 
     def __init__(self, article):
         self.article = article
-    
+
     def get_data(self):
         try:
             name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})
@@ -36,7 +68,7 @@ class GetItemDiscountPrice:
 
     def __init__(self, article):
         self.article = article
-    
+
     def get_data(self):
         try:
             discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
@@ -55,12 +87,12 @@ class GetItemRegularPrice:
 
     def __init__(self, article):
         self.article = article
-    
+
     def get_data(self):
         try:
             regular_price = self.article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"})
             regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
-            return regular_price 
+            return regular_price
         except IndexError as e:
             return "NA"
         except ValueError as e:
@@ -73,7 +105,7 @@ class GetItemPercentageDiscount:
 
     def __init__(self, article):
         self.article = article
-    
+
     def get_data(self):
         try:
             percentage_discount = self.article.find_all(attrs={'class': "space--ml-1 size--all-l size--fromW3-xl"})
@@ -91,7 +123,7 @@ class GetItemUrl:
 
     def __init__(self, article):
         self.article = article
-    
+
     def get_data(self):
         try:
             item_url = self.article.find_all('a', href=True, text=True)
@@ -102,53 +134,37 @@ class GetItemUrl:
         except TypeError as e:
             raise TypeError(f"Invalid html class name (item_url): {e}")
 
-class Months(Enum):
-
-    sty = '01'
-    lut = '02'
-    mar = '03'
-    kwi = '04'
-    maj = '05'
-    cze = '06'
-    lip = '07'
-    sie = '08'
-    wrz = '09'
-    paz = '10'
-    paź = '10'
-    lis = '11'
-    gru = '12'
-
-    @classmethod
-    def to_dict(cls):
-        """Returns a dictionary representation of the enum."""
-        return {e.name: e.value for e in cls}
-    
-    @classmethod
-    def keys(cls):
-        """Returns a list of all the enum keys."""
-        return cls._member_names_
-    
-    @classmethod
-    def values(cls):
-        """Returns a list of all the enum values."""
-        return list(cls._value2member_map_.keys())
-
 
 class GetItemAddedDate:
 
     def __init__(self, article):
         self.article = article
 
-    def get_data(self):
+    def get_raw_data(self):
+
         try:
-            date_tag = self.article.find_all(attrs={'class': "metaRibbon lbox--v-1 boxAlign-ai--all-c overflow--wrap-off space--l-3 text--color-greyShade"})
-            return date_tag
+            date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
+            raw_string_list = date_class[0].get_text(strip=True, separator='_').split('_')
+            #date_tag = self.article.find_all(attrs={'class': "metaRibbon lbox--v-1 boxAlign-ai--all-c overflow--wrap-off space--l-3 text--color-greyShade"})
+            return raw_string_list
         except IndexError as e:
             raise IndexError(f"Index out of the range (item_url): {e}")
         except TypeError as e:
             raise TypeError(f"Invalid html class name (item_url): {e}")
 
-    def find_true_date(self, date_tag):
+    def get_data(self):
+
+        try:
+            filtered_list = self.clean_list()
+            date_string_likely = filtered_list[0]
+            prepared_data = self.data_format_conversion(date_string_likely)
+            return prepared_data
+
+        except TypeError as e:
+            raise TypeError(f"Invalid html class name (item_url): {e}")
+
+
+        """ def find_true_date(self, date_tag):
 
 
         try:
@@ -168,7 +184,7 @@ class GetItemAddedDate:
                     print("3")
                     return true_data
                 except Exception:
-                    print("bad3")
+                    print("bad3")"""
 
 
     def data_format_conversion(self, date_string_likely):
@@ -176,18 +192,19 @@ class GetItemAddedDate:
         old_dates_data_pattern = "[A-Za-z]+\s\d\d\.\s[0-9]+"
 
         try:
-            if date_string_likely.startswith("Zaktualizowano"):
-                date_string_likely = date_string_likely.lstrip("Zaktualizowano ") 
+            if date_string_likely.startswith("Zaktualizowano ") and date_string_likely.endswith(" temu"):
+                date_string_likely = date_string_likely.lstrip("Zaktualizowano ")
+                date_string_likely = date_string_likely.rstrip(" temu")
             elif date_string_likely.endswith("Lokalnie"):
-                date_string_likely = date_string_likely.rstrip("Lokalnie") 
+                date_string_likely = date_string_likely.rstrip("Lokalnie")
         except Exception:
             return date_string_likely
 
         try:
-            if date_string_likely.endswith(('min', 'g', 's', 'temu')):
+            if date_string_likely.endswith(('min', 'g', 's')):
                 prepared_data = date.today().strftime("%d-%m-%Y")
                 return prepared_data
-            elif date_string_likely.startswith(tuple(Months.keys())) and len(date_tag) < 8:      
+            elif date_string_likely.startswith(tuple(Months.keys())) and len(date_tag) < 8:
                 if len(date_string_likely[4:]) == 3:
                     day = date_string_likely[4:6]
                 else:
@@ -219,7 +236,7 @@ class GetItemAddedDate:
 
     def clean_list(self):
 
-        all_strings_list = self.get_strings_list_to_filter()
+        raw_string_list = self.get_raw_data()
         items_to_remove = list()
         filtered_list = list()
 
@@ -233,7 +250,7 @@ class GetItemAddedDate:
                     items_to_remove.append(string)
                 if string.startswith("Wysyłka"):
                     items_to_remove.append(string)
-            
+
             counts = Counter(items_to_remove)
 
             for string in all_strings_list:
@@ -241,16 +258,17 @@ class GetItemAddedDate:
                     counts[string] -= 1
                 else:
                     filtered_list.append(string)
-            
+
             return filtered_list
 
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
 
-    def check_missing_date(filtered_list):
+    def check_missing_date(self):
 
-        
+        filtered_list = self.clean_list()
+
         try:
             if len(filtered_list) == 0:
                 filtered_list.append("NA")
@@ -261,11 +279,11 @@ class GetItemAddedDate:
             raise TypeError(f"Input data must be a list: {e}")
 
 
-    def first_index_date_searching(self, date_tag):
+    """def first_index_date_searching(self, date_tag):
 
         output_data_pattern = "\d{2}[/.-]\d{2}[/.-]\d{4}"
 
-        
+
         #date = self.data_format_conversion(date_string_likely)
 
         try:
@@ -276,4 +294,4 @@ class GetItemAddedDate:
             else:
                 raise Exception
         except Exception as e:
-            print(e)
+            print(e)"""

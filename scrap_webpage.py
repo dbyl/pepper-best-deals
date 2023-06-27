@@ -7,7 +7,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 from enum import Enum, IntEnum
-from collections import Counter 
+from collections import Counter
+import get_info
 
 
 
@@ -22,9 +23,9 @@ class ScrapWebpage:
     def scrap_data(self):
         try:
             url_to_scrap = self.website_url + self.action_type + str(self.start_page)
-            driver = webdriver.Chrome('./chromedriver') 
+            driver = webdriver.Chrome('./chromedriver')
             driver.set_window_size(1400,1000)
-            driver.get(url_to_scrap) 
+            driver.get(url_to_scrap)
             time.sleep(0.7)
             page = driver.page_source
             soup = BeautifulSoup(page, 'html.parser')
@@ -53,8 +54,8 @@ class ScrapWebpage:
         except IndexError as e:
             raise IndexError("There aren't that many articles, try retrieve lower quantity of articles")
 
-        
-    
+
+
     def get_items_details(self):
 
         retrived_articles = self.infinite_scroll_handling()
@@ -67,7 +68,7 @@ class ScrapWebpage:
             item.append(GetItemDiscountPrice(article).get_data())
             item.append(GetItemPercentageDiscount(article).get_data())
             item.append(GetItemRegularPrice(article).get_data())
-            #item.append(GetItemAddedDate(article).get_data())
+            item.append(GetItemAddedDate(article).get_data())
             item.append(GetItemUrl(article).get_data())
             all_items.append(item)
 
@@ -89,5 +90,7 @@ class ScrapWebpage:
             for item in file:
                 article = item[:-1]
                 articles.append(article)
-        
+
         return articles"""
+
+
