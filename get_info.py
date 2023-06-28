@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, date
-
+import re
 from enum import Enum, IntEnum
 from collections import Counter
 
@@ -151,7 +151,6 @@ class GetItemAddedDate:
         try:
             date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
             raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
-            #date_tag = self.article.find_all(attrs={'class': "metaRibbon lbox--v-1 boxAlign-ai--all-c overflow--wrap-off space--l-3 text--color-greyShade"})
             return raw_string_list
         except IndexError as e:
             raise IndexError(f"Index out of the range (item_url): {e}")
@@ -162,36 +161,13 @@ class GetItemAddedDate:
 
         try:
             filtered_list = self.clean_list()
-            print(filtered_list)
+            filtered_list = self.check_missing_date()
             date_string_likely = filtered_list[0]
             prepared_data = self.data_format_conversion(date_string_likely)
             return prepared_data
 
         except TypeError as e:
             raise TypeError(f"Invalid html class name (item_url): {e}")
-
-
-        """ def find_true_date(self, date_tag):
-
-
-        try:
-            true_data = self.first_index_date_searching(date_tag)
-            print("1")
-            return true_data
-        except Exception:
-            print("bad1")
-            try:
-                true_data = self.second_index_date_searching(date_tag)
-                print("2")
-                return true_data
-            except Exception:
-                print("bad2")
-                try:
-                    true_data = self.third_index_date_searching(date_tag)
-                    print("3")
-                    return true_data
-                except Exception:
-                    print("bad3")"""
 
 
     def data_format_conversion(self, date_string_likely):
@@ -211,7 +187,7 @@ class GetItemAddedDate:
             if date_string_likely.endswith(('min', 'g', 's')):
                 prepared_data = date.today().strftime("%d-%m-%Y")
                 return prepared_data
-            elif date_string_likely.startswith(tuple(Months.keys())) and len(date_tag) < 8:
+            elif date_string_likely.startswith(tuple(Months.keys())) and len(date_string_likely) < 8:
                 if len(date_string_likely[4:]) == 3:
                     day = date_string_likely[4:6]
                 else:
@@ -225,6 +201,9 @@ class GetItemAddedDate:
                 month = Months.__members__[date_string_likely[0:3]].value
                 year = date_string_likely[8:13]
                 prepared_data = '-'.join([day, month, year])
+                return prepared_data
+            elif date_string_likely == 'NA': #need to fill NA with date between
+                prepared_data = date_string_likely
                 return prepared_data
         except KeyError as e:
             raise KeyError(f"Invalid name of the month {e}")
@@ -285,20 +264,3 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-
-    """def first_index_date_searching(self, date_tag):
-
-        output_data_pattern = "\d{2}[/.-]\d{2}[/.-]\d{4}"
-
-
-        #date = self.data_format_conversion(date_string_likely)
-
-        try:
-            date_string_likely = date_tag[0].get_text()
-            formatted_data = self.data_format_conversion(date_string_likely)
-            if bool(re.search(output_data_pattern, formatted_data)):
-                return formatted_data
-            else:
-                raise Exception
-        except Exception as e:
-            print(e)"""

@@ -1,7 +1,6 @@
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 import logging
 from bs4 import BeautifulSoup
-import re
 from datetime import datetime, timedelta, date
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -9,6 +8,7 @@ import time
 from enum import Enum, IntEnum
 from collections import Counter
 import get_info
+import csv
 
 
 
@@ -38,6 +38,7 @@ class ScrapWebpage:
             print(f"HTTPError occured: {e}. \nMake sure that website url is valid")
         except ReadTimeout as e:
             print(f"ReadTimeout occured: {e}. \nTry again later")
+
 
     def infinite_scroll_handling(self):
         try:
@@ -74,31 +75,23 @@ class ScrapWebpage:
 
         return all_items
 
-"""    def dump_articles_to_txt(self):
+    def save_data_to_csv(self):
 
-        retrived_articles = self.infinite_scroll_handling()
+        header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
+        data = self.get_items_details()
 
-        with open("scraped_data.txt", "w") as file:
-            for item in retrived_articles:
-                file.write(item)
+        with open('scraped_data.csv', 'w', encoding='UTF8') as file:
+            writer = csv.writer(file)
 
-    def read_articles_from_txt(self):
-
-        articles = list()
-
-        with open("scraped_data.txt", "r") as file:
-            for item in file:
-                article = item[:-1]
-                articles.append(article)
-
-        return articles"""
+            writer.writerow(header)
+            writer.writerows(data)
 
 
 
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 200
+articles_to_retrieve = 1000
 
-output = ScrapWebpage(website_url, action_type, articles_to_retrieve)
-print(output.get_items_details())
+output = ScrapWebpage(website_url, action_type, articles_to_retrieve, start_page)
+output.save_data_to_csv()
