@@ -1,3 +1,9 @@
+from datetime import datetime, timedelta, date
+
+from enum import Enum, IntEnum
+from collections import Counter
+
+
 
 class Months(Enum):
 
@@ -144,7 +150,7 @@ class GetItemAddedDate:
 
         try:
             date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
-            raw_string_list = date_class[0].get_text(strip=True, separator='_').split('_')
+            raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
             #date_tag = self.article.find_all(attrs={'class': "metaRibbon lbox--v-1 boxAlign-ai--all-c overflow--wrap-off space--l-3 text--color-greyShade"})
             return raw_string_list
         except IndexError as e:
@@ -156,6 +162,7 @@ class GetItemAddedDate:
 
         try:
             filtered_list = self.clean_list()
+            print(filtered_list)
             date_string_likely = filtered_list[0]
             prepared_data = self.data_format_conversion(date_string_likely)
             return prepared_data
@@ -227,9 +234,9 @@ class GetItemAddedDate:
 
         try:
             date_class = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
-            all_strings_list = date_class[0].get_text(strip=True, separator='_').split('_')
+            raw_string_list = date_class[0].get_text(strip=True, separator='_').split('_')
 
-            return all_strings_list
+            return raw_string_list
         except TypeError as e:
             raise TypeError(f"Invalid html class name (item_url): {e}")
 
@@ -241,7 +248,7 @@ class GetItemAddedDate:
         filtered_list = list()
 
         try:
-            for string in all_strings_list:
+            for string in raw_string_list:
                 if "/" in string:
                     items_to_remove.append(string)
                 if ":" in string:
@@ -253,7 +260,7 @@ class GetItemAddedDate:
 
             counts = Counter(items_to_remove)
 
-            for string in all_strings_list:
+            for string in raw_string_list:
                 if counts[string]:
                     counts[string] -= 1
                 else:

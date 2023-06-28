@@ -63,13 +63,13 @@ class ScrapWebpage:
         all_items = list()
         for article in retrived_articles:
             item = list()
-            item.append(GetItemId(article).get_data())
-            item.append(GetItemName(article).get_data())
-            item.append(GetItemDiscountPrice(article).get_data())
-            item.append(GetItemPercentageDiscount(article).get_data())
-            item.append(GetItemRegularPrice(article).get_data())
-            item.append(GetItemAddedDate(article).get_data())
-            item.append(GetItemUrl(article).get_data())
+            item.append(get_info.GetItemId(article).get_data())
+            item.append(get_info.GetItemName(article).get_data())
+            item.append(get_info.GetItemDiscountPrice(article).get_data())
+            item.append(get_info.GetItemPercentageDiscount(article).get_data())
+            item.append(get_info.GetItemRegularPrice(article).get_data())
+            item.append(get_info.GetItemAddedDate(article).get_data())
+            item.append(get_info.GetItemUrl(article).get_data())
             all_items.append(item)
 
         return all_items
@@ -94,3 +94,11 @@ class ScrapWebpage:
         return articles"""
 
 
+
+action_type = "/nowe?page="
+start_page = 1
+website_url = "https://www.pepper.pl"
+articles_to_retrieve = 200
+
+output = ScrapWebpage(website_url, action_type, articles_to_retrieve)
+print(output.get_items_details())
