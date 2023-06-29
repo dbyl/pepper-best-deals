@@ -257,6 +257,29 @@ class GetItemAddedDate:
 
         try:
             if len(filtered_list) == 0:
+
+
+                filtered_list.append("NA")
+                return filtered_list
+            else:
+                return filtered_list
+        except TypeError as e:
+            raise TypeError(f"Input data must be a list: {e}")
+    
+
+    def check_missing_date_1(self):
+
+        filtered_list = self.clean_list()
+
+        try:
+            if len(filtered_list) == 0:
+                url_with_item = GetItemUrl.get_data()
+                driver.get(url_with_article)
+                time.sleep(0.7)
+                page_with_item = driver.page_source
+                soup = BeautifulSoup(page_with_item, 'html.parser')
+                date_class = self.article.find_all('div', {"class":"space--mv-3"})
+                raw_string_list = date_class[0].get_text(strip=True, separator='_').split('_')
                 filtered_list.append("NA")
                 return filtered_list
             else:
@@ -264,3 +287,4 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
+\

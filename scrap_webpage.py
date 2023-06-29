@@ -63,6 +63,7 @@ class ScrapWebpage:
 
         all_items = list()
         for article in retrived_articles:
+            time.sleep(0.01)
             item = list()
             item.append(get_info.GetItemId(article).get_data())
             item.append(get_info.GetItemName(article).get_data())
@@ -91,7 +92,7 @@ class ScrapWebpage:
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 1000
+articles_to_retrieve = 2000
 
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, start_page)
 output.save_data_to_csv()
