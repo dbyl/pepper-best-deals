@@ -1,7 +1,12 @@
 from datetime import datetime, timedelta, date
 import re
+from bs4 import BeautifulSoup
 from enum import Enum, IntEnum
 from collections import Counter
+from selenium import webdriver
+import time
+
+
 
 
 
@@ -161,7 +166,7 @@ class GetItemAddedDate:
 
         try:
             filtered_list = self.clean_list()
-            filtered_list = self.check_missing_date()
+            filtered_list = self.check_missing_date_1()
             date_string_likely = filtered_list[0]
             prepared_data = self.data_format_conversion(date_string_likely)
             return prepared_data
@@ -203,6 +208,14 @@ class GetItemAddedDate:
                 prepared_data = '-'.join([day, month, year])
                 return prepared_data
             elif date_string_likely == 'NA': #need to fill NA with date between
+                date_string_to_list = self.check_missing_date_1()
+                if len(date_string_to_list[0]) == 2:
+                    day = date_string_to_list[0]
+                else:
+                    day = date_string_to_list[0].zfill(2)
+                month = Months.__members__[date_string_to_list[1]].value
+                year = date_string_to_list[2][:4]
+                prepared_data = '-'.join([str(day), month, year])
                 prepared_data = date_string_likely
                 return prepared_data
         except KeyError as e:
@@ -257,15 +270,13 @@ class GetItemAddedDate:
 
         try:
             if len(filtered_list) == 0:
-
-
                 filtered_list.append("NA")
                 return filtered_list
             else:
                 return filtered_list
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
-    
+
 
     def check_missing_date_1(self):
 
@@ -273,18 +284,21 @@ class GetItemAddedDate:
 
         try:
             if len(filtered_list) == 0:
-                url_with_item = GetItemUrl.get_data()
-                driver.get(url_with_article)
+                url_with_item = GetItemUrl.get_data(self)
+                driver = webdriver.Chrome('./chromedriver')
+                driver.get(url_with_item)
                 time.sleep(0.7)
                 page_with_item = driver.page_source
                 soup = BeautifulSoup(page_with_item, 'html.parser')
-                date_class = self.article.find_all('div', {"class":"space--mv-3"})
-                raw_string_list = date_class[0].get_text(strip=True, separator='_').split('_')
-                filtered_list.append("NA")
+                time.sleep(0.1)
+                date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
+                time.sleep(0.1)
+                filtered_list = date_string.split()
                 return filtered_list
             else:
                 return filtered_list
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-\
+
+
