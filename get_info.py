@@ -1,14 +1,11 @@
 from datetime import datetime, timedelta, date
 import re
 from bs4 import BeautifulSoup
+from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from enum import Enum, IntEnum
 from collections import Counter
 from selenium import webdriver
 import time
-
-
-
-
 
 class Months(Enum):
 
@@ -54,9 +51,9 @@ class GetItemName:
             name = name[0].get_text()
             return name
         except IndexError as e:
-            raise IndexError(f"Index out of the range (item_name): {e}")
+            raise IndexError(f"Index out of the range: {e}")
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_name): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemId:
@@ -70,9 +67,9 @@ class GetItemId:
             item_id = item_id.strip('thread_')
             return item_id
         except IndexError as e:
-            raise IndexError(f"Index out of the range (item_id): {e}")
+            raise IndexError(f"Index out of the range: {e}")
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_id): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemDiscountPrice:
@@ -90,7 +87,7 @@ class GetItemDiscountPrice:
         except ValueError as e:
             return "NA"
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_discount_price): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
 
@@ -109,7 +106,7 @@ class GetItemRegularPrice:
         except ValueError as e:
             return "NA"
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_regular_price): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemPercentageDiscount:
@@ -127,7 +124,7 @@ class GetItemPercentageDiscount:
         except ValueError as e:
             return "NA"
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_percentage_discount): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemUrl:
@@ -141,9 +138,9 @@ class GetItemUrl:
             item_url = item_url[0]['href']
             return item_url
         except IndexError as e:
-            raise IndexError(f"Index out of the range (item_url): {e}")
+            raise IndexError(f"Index out of the range: {e}")
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_url): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemAddedDate:
@@ -158,21 +155,25 @@ class GetItemAddedDate:
             raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
             return raw_string_list
         except IndexError as e:
-            raise IndexError(f"Index out of the range (item_url): {e}")
+            raise IndexError(f"Index out of the range: {e}")
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_url): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
     def get_data(self):
 
         try:
             filtered_list = self.clean_list()
-            filtered_list = self.check_missing_date_1()
+            filtered_list = self.check_missing_date()
             date_string_likely = filtered_list[0]
-            prepared_data = self.data_format_conversion(date_string_likely)
+            if date_string_likely == "NA":
+                prepared_data = self.fill_missing_date()
+                return prepared_data
+            else:
+                prepared_data = self.data_format_conversion(date_string_likely)
             return prepared_data
 
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_url): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
     def data_format_conversion(self, date_string_likely):
@@ -208,6 +209,9 @@ class GetItemAddedDate:
                 prepared_data = '-'.join([day, month, year])
                 return prepared_data
             elif date_string_likely == 'NA': #need to fill NA with date between
+                missing_date = date_string_likely
+                return missing_date
+            elif date_string_likely == 'NA': #need to fill NA with date between
                 date_string_to_list = self.check_missing_date_1()
                 if len(date_string_to_list[0]) == 2:
                     day = date_string_to_list[0]
@@ -218,6 +222,7 @@ class GetItemAddedDate:
                 prepared_data = '-'.join([str(day), month, year])
                 prepared_data = date_string_likely
                 return prepared_data
+
         except KeyError as e:
             raise KeyError(f"Invalid name of the month {e}")
 
@@ -230,7 +235,7 @@ class GetItemAddedDate:
 
             return raw_string_list
         except TypeError as e:
-            raise TypeError(f"Invalid html class name (item_url): {e}")
+            raise TypeError(f"Invalid html class name: {e}")
 
 
     def clean_list(self):
@@ -278,27 +283,45 @@ class GetItemAddedDate:
             raise TypeError(f"Input data must be a list: {e}")
 
 
-    def check_missing_date_1(self):
-
-        filtered_list = self.clean_list()
+    def fill_missing_date(self):
 
         try:
-            if len(filtered_list) == 0:
-                url_with_item = GetItemUrl.get_data(self)
-                driver = webdriver.Chrome('./chromedriver')
-                driver.get(url_with_item)
-                time.sleep(0.7)
-                page_with_item = driver.page_source
-                soup = BeautifulSoup(page_with_item, 'html.parser')
-                time.sleep(0.1)
-                date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
-                time.sleep(0.1)
-                filtered_list = date_string.split()
-                return filtered_list
+            url_with_item = GetItemUrl.get_data(self)
+            driver = webdriver.Chrome('./chromedriver')
+            driver.get(url_with_item)
+            time.sleep(0.7)
+            page_with_item = driver.page_source
+            soup = BeautifulSoup(page_with_item, 'html.parser')
+            return soup
+        except ConnectionError as e:
+            print(f"ConnectionError occured: {e}. \nTry again later")
+        except MissingSchema as e:
+            print(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+        except HTTPError as e:
+            print(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+        except ReadTimeout as e:
+            print(f"ReadTimeout occured: {e}. \nTry again later")
+
+            date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
+            time.sleep(0.1)
+            filtered_list = date_string.split()
+            day_string = filtered_list[0]
+            month_string = filtered_list[1]
+            year_string = filtered_list[2]
+
+            if len(day_string[0]) == 2:
+                day = day_string
             else:
-                return filtered_list
+                day = day_string.zfill(2)
+
+            month = Months.__members__[month_string].value
+            year = year_string
+            prepared_data = '-'.join([day, month, year])
+            return prepared_data
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
+
+
 
 
 
