@@ -9,18 +9,19 @@ from enum import Enum, IntEnum
 from collections import Counter
 import get_info
 import csv
+from typing import List, Union
 
 
 
 class ScrapWebpage:
 
-    def __init__(self, website_url, action_type, articles_to_retrieve, start_page=1):
+    def __init__(self, website_url: str, action_type: str, articles_to_retrieve: int, start_page: int = 1) -> None:
         self.website_url = website_url
         self.action_type = action_type
         self.articles_to_retrieve = articles_to_retrieve
         self.start_page = start_page
 
-    def scrap_data(self):
+    def scrap_data(self) -> str:
         try:
             url_to_scrap = self.website_url + self.action_type + str(self.start_page)
             driver = webdriver.Chrome('./chromedriver')
@@ -40,7 +41,7 @@ class ScrapWebpage:
             print(f"ReadTimeout occured: {e}. \nTry again later")
 
 
-    def infinite_scroll_handling(self):
+    def infinite_scroll_handling(self) -> List[str]:
         try:
             flag = True
             retrived_articles = list()
@@ -57,7 +58,7 @@ class ScrapWebpage:
 
 
 
-    def get_items_details(self):
+    def get_items_details(self) -> List[Union[str, float, int]]:
 
         retrived_articles = self.infinite_scroll_handling()
 
@@ -76,7 +77,7 @@ class ScrapWebpage:
 
         return all_items
 
-    def save_data_to_csv(self):
+    def save_data_to_csv(self) -> None:
 
         header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
         data = self.get_items_details()
@@ -92,6 +93,6 @@ class ScrapWebpage:
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 2000
+articles_to_retrieve = 120
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, start_page)
 output.save_data_to_csv()
