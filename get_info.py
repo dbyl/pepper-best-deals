@@ -7,7 +7,7 @@ from collections import Counter
 from selenium import webdriver
 import time
 from typing import List, Union
-
+import html5lib
 
 class Months(Enum):
 
@@ -49,8 +49,9 @@ class GetItemName:
 
     def get_data(self) -> str:
         try:
-            name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})
-            name = name[0].get_text()
+            name_to_clean = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})
+            name_to_clean = name_to_clean[0].get_text()
+            name = name_to_clean.replace('"', '').replace('„', '')
             return name
         except IndexError as e:
             raise IndexError(f"Index out of the range: {e}")
@@ -270,7 +271,7 @@ class GetItemAddedDate:
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source
-            soup = BeautifulSoup(page_with_item, 'html.parser')
+            soup = BeautifulSoup(page_with_item, 'html5lib')
         except ConnectionError as e:
             print(f"ConnectionError occured: {e}. \nTry again later")
         except MissingSchema as e:
@@ -282,7 +283,6 @@ class GetItemAddedDate:
 
         try:
             date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
-            time.sleep(0.1)
             filtered_list = date_string.split()
             day_string = filtered_list[0]
             month_string = filtered_list[1]
@@ -299,7 +299,7 @@ class GetItemAddedDate:
             return prepared_data
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
-        
+
 
 
 

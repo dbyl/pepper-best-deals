@@ -10,6 +10,8 @@ from collections import Counter
 import get_info
 import csv
 from typing import List, Union
+import logging
+import html5lib
 
 
 
@@ -29,7 +31,7 @@ class ScrapWebpage:
             driver.get(url_to_scrap)
             time.sleep(0.7)
             page = driver.page_source
-            soup = BeautifulSoup(page, 'html.parser')
+            soup = BeautifulSoup(page, 'html5lib')
             return soup
         except ConnectionError as e:
             print(f"ConnectionError occured: {e}. \nTry again later")
@@ -64,7 +66,6 @@ class ScrapWebpage:
 
         all_items = list()
         for article in retrived_articles:
-            time.sleep(0.05)
             item = list()
             item.append(get_info.GetItemId(article).get_data())
             item.append(get_info.GetItemName(article).get_data())
@@ -74,6 +75,10 @@ class ScrapWebpage:
             item.append(get_info.GetItemAddedDate(article).get_data())
             item.append(get_info.GetItemUrl(article).get_data())
             all_items.append(item)
+            print(get_info.GetItemName(article).get_data())
+            if '' in item:
+                logging.warning("Data retrieving failed. None values detected")
+                break
 
         return all_items
 
@@ -93,6 +98,6 @@ class ScrapWebpage:
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 120
+articles_to_retrieve = 100
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, start_page)
 output.save_data_to_csv()
