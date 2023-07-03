@@ -74,8 +74,10 @@ class ScrapWebpage:
             item.append(get_info.GetItemRegularPrice(article).get_data())
             item.append(get_info.GetItemAddedDate(article).get_data())
             item.append(get_info.GetItemUrl(article).get_data())
-            all_items.append(item)
-            print(get_info.GetItemName(article).get_data())
+            if item not in all_items:
+                all_items.append(item)
+            else:
+                continue
             if '' in item:
                 logging.warning("Data retrieving failed. None values detected")
                 break
@@ -88,7 +90,7 @@ class ScrapWebpage:
         data = self.get_items_details()
 
         with open('scraped_data.csv', 'w', encoding='UTF8') as file:
-            writer = csv.writer(file)
+            writer = csv.writer(file, quoting=csv.QUOTE_ALL)
 
             writer.writerow(header)
             writer.writerows(data)
@@ -98,6 +100,6 @@ class ScrapWebpage:
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 100
+articles_to_retrieve = 800
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, start_page)
 output.save_data_to_csv()

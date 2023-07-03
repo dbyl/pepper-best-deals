@@ -9,6 +9,8 @@ import time
 from typing import List, Union
 import html5lib
 
+
+
 class Months(Enum):
 
     sty = '01'
@@ -41,7 +43,6 @@ class Months(Enum):
         return list(cls._value2member_map_.keys())
 
 
-
 class GetItemName:
 
     def __init__(self, article: str) -> None:
@@ -49,9 +50,7 @@ class GetItemName:
 
     def get_data(self) -> str:
         try:
-            name_to_clean = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})
-            name_to_clean = name_to_clean[0].get_text()
-            name = name_to_clean.replace('"', '').replace('„', '')
+            name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
             return name
         except IndexError as e:
             raise IndexError(f"Index out of the range: {e}")
@@ -92,7 +91,6 @@ class GetItemDiscountPrice:
             return "NA"
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
-
 
 
 class GetItemRegularPrice:
@@ -138,8 +136,7 @@ class GetItemUrl:
 
     def get_data(self) -> str:
         try:
-            item_url = self.article.find_all('a', href=True, text=True)
-            item_url = item_url[0]['href']
+            item_url = self.article.find_all('a', {"class":"cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['href']
             return item_url
         except IndexError as e:
             raise IndexError(f"Index out of the range: {e}")
@@ -286,7 +283,7 @@ class GetItemAddedDate:
             filtered_list = date_string.split()
             day_string = filtered_list[0]
             month_string = filtered_list[1]
-            year_string = filtered_list[2]
+            year_string = filtered_list[2].strip(',')
 
             if len(day_string[0]) == 2:
                 day = day_string
