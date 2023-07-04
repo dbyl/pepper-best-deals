@@ -48,8 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "fontawesomefree",
-    "spotify_data",
+    "pepper_app",
 ]
 
 MIDDLEWARE = [
