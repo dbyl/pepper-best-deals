@@ -100,7 +100,8 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 DATABASES = {
     "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/localhost")
 }
-
+#database for docker, localhost for local
+""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
