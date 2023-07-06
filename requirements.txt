@@ -10,7 +10,6 @@ environ
 django-environ
 html5lib
 psycopg2-binary
-psycopg2
 pytest
 pytest-django
 docker
