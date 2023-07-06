@@ -98,7 +98,7 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/localhost")
+    "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/postgres")
 }
 
 """
