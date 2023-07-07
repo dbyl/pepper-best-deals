@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import PepperArticles, Statistics
+
+admin.site.register(PepperArticles)
+admin.site.register(Statistics)

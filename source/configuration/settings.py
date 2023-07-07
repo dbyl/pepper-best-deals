@@ -101,17 +101,7 @@ DATABASES = {
     "default": env.db(default="psql://postgres:postgres@127.0.0.1:5432/postgres")
 }
 
-"""
-DATABASES = {'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # Name of your database
-        'USER': 'postgres',      # PostgreSQL username
-        'PASSWORD': 'postgres',  # PostgreSQL password
-        'HOST': 'localhost',   # PostgreSQL server address (localhost if running locally)
-        'PORT': '5432',        # PostgreSQL server port
-    }
-}
-"""
+
 #database for docker, localhost for local
 ""
 

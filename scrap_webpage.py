@@ -17,7 +17,8 @@ import html5lib
 
 class ScrapWebpage:
 
-    def __init__(self, website_url: str, action_type: str, articles_to_retrieve: int, start_page: int = 1) -> None:
+    def __init__(self, website_url: str, action_type: str, articles_to_retrieve: int, 
+                start_page: int = 1, to_csv: bool = True, to_database: bool = True) -> None:
         self.website_url = website_url
         self.action_type = action_type
         self.articles_to_retrieve = articles_to_retrieve
@@ -81,6 +82,33 @@ class ScrapWebpage:
             if '' in item:
                 logging.warning("Data retrieving failed. None values detected")
                 break
+            """
+            if to_csv == True:
+
+                row = ",".join(item)
+
+                header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
+
+                def save_data_to_csv(self) -> None:
+                    with open('scraped_data.csv', 'a', encoding='UTF8') as file:
+                        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+                        writer.writerow(header)
+
+                        with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
+                            csv_reader = csv.reader(read_file)
+                            existing_rows = list(csv_reader)
+                            if row not in existing_rows:
+                                csv_writer.writerow(row)
+                                print("Row appended successfully.")
+                            else:
+                                print("Row already exists in the file.")
+
+            if to_pepperarticles_database == True:
+                pass
+
+
+
+            """    
 
         return all_items
 
