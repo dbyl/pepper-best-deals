@@ -12,12 +12,12 @@ import csv
 from typing import List, Union
 import logging
 import html5lib
-
+from pepper_app.populate_database import LoadItemDetailesToDatabase, LoadDataFromCsv
 
 
 class ScrapWebpage:
 
-    def __init__(self, website_url: str, action_type: str, articles_to_retrieve: int, 
+    def __init__(self, website_url: str, action_type: str, articles_to_retrieve: int,
                 start_page: int = 1, to_csv: bool = True, to_database: bool = True) -> None:
         self.website_url = website_url
         self.action_type = action_type
@@ -65,7 +65,7 @@ class ScrapWebpage:
 
         retrived_articles = self.infinite_scroll_handling()
 
-        all_items = list()
+        #all_items = list()
         for article in retrived_articles:
             item = list()
             item.append(get_info.GetItemId(article).get_data())
@@ -75,13 +75,22 @@ class ScrapWebpage:
             item.append(get_info.GetItemRegularPrice(article).get_data())
             item.append(get_info.GetItemAddedDate(article).get_data())
             item.append(get_info.GetItemUrl(article).get_data())
-            if item not in all_items:
-                all_items.append(item)
-            else:
-                continue
+        #    if item not in all_items:
+        #        all_items.append(item)
+        #    else:
+        #        continue
             if '' in item:
                 logging.warning("Data retrieving failed. None values detected")
                 break
+
+            if to_csv == True:
+                self.save_data_to_csv_1()
+
+
+            if to_pepperarticles_database == True:
+                LoadItem
+
+
             """
             if to_csv == True:
 
@@ -108,9 +117,23 @@ class ScrapWebpage:
 
 
 
-            """    
+            """
 
         return all_items
+
+    def save_data_to_csv_1(self) -> None:
+        with open('scraped_data.csv', 'a', encoding='UTF8') as file:
+            writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+            writer.writerow(header)
+
+            with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
+                csv_reader = csv.reader(read_file)
+                existing_rows = list(csv_reader)
+                if row not in existing_rows:
+                    csv_writer.writerow(row)
+                    logging.info("Row appended successfully.")
+                else:
+                    logging.info("Row already exists in the file.")
 
     def save_data_to_csv(self) -> None:
 

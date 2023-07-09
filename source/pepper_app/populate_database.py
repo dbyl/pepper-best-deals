@@ -12,12 +12,12 @@ class LoadItemDetailesToDatabase(BaseCommand):
 
     def __init__(self, item: List[str]) -> None:
         self.article = article
-    
+
     def load_to_db(self) -> None:
         bad = 0
         good = 0
-        header = ['item_id', 'name', 'discount_price', 
-                'percentage_discount', 'regular_price', 
+        header = ['item_id', 'name', 'discount_price',
+                'percentage_discount', 'regular_price',
                 'date_added', 'url']
         item_df = pd.DataFrame(columns=header, data=self.item)
         start = datetime.datetime.now
@@ -51,14 +51,14 @@ class LoadDataFromCsv(BaseCommand):
             "input", type=str, help="Choose directory path with input csv files"
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         path = options["input"]
         logging.info(f"Preparing data from {path}...")
         df = self.read_csv(path)
         self.load_to_db(df)
 
-    def read_csv(self, directory):
-        df = pd.read_csv(directory)
+    def read_csv(self, path: str) -> pd.DataFrame:
+        df = pd.read_csv(path)
         return df
 
     def load_to_db(self, df):
@@ -67,36 +67,18 @@ class LoadDataFromCsv(BaseCommand):
         start = datetime.datetime.now
         for _, row in df.iterrows():
             try:
-                region_obj, _ = Region.objects.get_or_create(
-                    name=row["region"],
-                )
-                rank_obj, _ = Rank.objects.get_or_create(
-                    name=row["rank"],
-                )
-                chart_obj, _ = Chart.objects.get_or_create(
-                    name=row["chart"],
-                )
-                artist_obj, _ = Artist.objects.get_or_create(
-                    name=row["artist"],
-                )
-                title_obj, _ = Title.objects.update_or_create(
-                    artist=artist_obj,
-                    name=row["title"],
-                )
-                spotifydata_obj, _ = SpotifyData.objects.update_or_create(
-                    title=title_obj,
-                    rank=rank_obj,
-                    date=row["date"],
-                    artist=artist_obj,
-                    region=region_obj,
-                    chart=chart_obj,
-                    streams=row["streams"],
+                pepperarticles_obj, _ = PepperArticles.objects.update_or_create(
+                    item_id = row["item_id"],
+                    name = row["name"],
+                    discount_price = row["discount_price"],
+                    percentage_discount = row["percentage_discount"],
+                    regular_price = row["regular_price"],
+                    date_added = row["date_added"],
+                    url = row["url"],
                 )
                 good += 1
                 now = datetime.datetime.now
-                print(
-                    f"goods: {good}, loading time: {start-now}",
-                )
+                logger.info(f"goods: {good}, loading time: {start-now}")
             except Exception as e:
                 bad += 1
                 with open("data_load_logging.txt", "w") as bad_row:
