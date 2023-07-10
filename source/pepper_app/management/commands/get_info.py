@@ -264,7 +264,7 @@ class GetItemAddedDate:
 
         try:
             url_with_item = GetItemUrl.get_data(self)
-            driver = webdriver.Chrome('./chromedriver')
+            driver = webdriver.Chrome()
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source

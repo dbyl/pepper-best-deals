@@ -2,17 +2,25 @@
 import datetime
 import logging
 import logging.config
+import os
+
+#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'source.configuration.settings.py')
+
+#django.setup()
+
 
 import pandas as pd
+from django.db import models
 from django.core.management import BaseCommand
-from models import PepperArticles, Statistics
+#from pepper_app.models import PepperArticles, Statistics
+
 
 
 
 
 class LoadItemDetailesToDatabase(BaseCommand):
 
-    def __init__(self, item: List[str]) -> None:
+    def __init__(self, item) -> None:
         self.article = article
 
     def load_to_db(self) -> None:

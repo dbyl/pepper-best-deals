@@ -7,13 +7,20 @@ from selenium.webdriver.common.keys import Keys
 import time
 from enum import Enum, IntEnum
 from collections import Counter
-import get_info
-import csv
 import os
+from get_info import GetItemAddedDate, GetItemDiscountPrice, GetItemId, GetItemName, GetItemPercentageDiscount, GetItemRegularPrice, GetItemUrl
+import csv
+
+
+
 from typing import List, Union
 import logging
 import html5lib
+
+
 from populate_database import LoadDataFromCsv, LoadDataFromCsv
+
+
 
 
 class ScrapWebpage:
@@ -31,7 +38,8 @@ class ScrapWebpage:
     def scrap_data(self) -> str:
         try:
             url_to_scrap = self.website_url + self.action_type + str(self.start_page)
-            driver = webdriver.Chrome('./chromedriver')
+
+            driver = webdriver.Chrome()
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)
@@ -69,16 +77,15 @@ class ScrapWebpage:
 
         retrived_articles = self.infinite_scroll_handling()
 
-        #all_items = list()
         for article in retrived_articles:
             item = list()
-            item.append(get_info.GetItemId(article).get_data())
-            item.append(get_info.GetItemName(article).get_data())
-            item.append(get_info.GetItemDiscountPrice(article).get_data())
-            item.append(get_info.GetItemPercentageDiscount(article).get_data())
-            item.append(get_info.GetItemRegularPrice(article).get_data())
-            item.append(get_info.GetItemAddedDate(article).get_data())
-            item.append(get_info.GetItemUrl(article).get_data())
+            item.append(GetItemId(article).get_data())
+            item.append(GetItemName(article).get_data())
+            item.append(GetItemDiscountPrice(article).get_data())
+            item.append(GetItemPercentageDiscount(article).get_data())
+            item.append(GetItemRegularPrice(article).get_data())
+            item.append(GetItemAddedDate(article).get_data())
+            item.append(GetItemUrl(article).get_data())
             if item not in all_items:
                 all_items.append(item)
             else:
@@ -88,23 +95,15 @@ class ScrapWebpage:
                 break
 
             if to_csv == True:
-                self.save_data_to_csv_1()
+                self.save_data_to_csv()
 
-            if to_pepperarticles_database == True:
+            if to_database == True:
                 LoadItemDetailesToDatabase.load_to_db(article)
 
-            """
-
-            if to_pepperarticles_database == True:
-                pass
 
 
-
-            """
-
-        return all_items
-
-    def save_data_to_csv_1(self) -> None:
+    def save_data_to_csv(self) -> None:
+        header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
         with open('scraped_data.csv', 'a', encoding='UTF8') as file:
             writer = csv.writer(file, quoting=csv.QUOTE_ALL)
             writer.writerow(header)
@@ -112,29 +111,21 @@ class ScrapWebpage:
             with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
                 csv_reader = csv.reader(read_file)
                 existing_rows = list(csv_reader)
-                if row not in existing_rows:
-                    csv_writer.writerow(row)
-                    logging.info("Row appended successfully.")
-                else:
-                    logging.info("Row already exists in the file.")
+                for row in existing_rows:
+                    if row not in existing_rows:
+                        csv_writer.writerow(row)
+                        logging.info("Row appended successfully.")
+                    else:
+                        logging.info("Row already exists in the file.")
 
-    def save_data_to_csv(self) -> None:
 
-        header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
-        data = self.get_items_details()
-
-        with open('scraped_data.csv', 'w', encoding='UTF8') as file:
-            writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-
-            writer.writerow(header)
-            writer.writerows(data)
 
 
 
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 400
+articles_to_retrieve = 50
 to_csv = False
 to_database = True
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, to_csv, to_database, start_page)
