@@ -18,7 +18,7 @@ import logging
 import html5lib
 
 
-from populate_database import LoadDataFromCsv, LoadDataFromCsv
+from populate_database import LoadItemDetailesToDatabase, LoadDataFromCsv
 
 
 
@@ -76,6 +76,7 @@ class ScrapWebpage:
     def get_items_details(self) -> List[Union[str, float, int]]:
 
         retrived_articles = self.infinite_scroll_handling()
+        all_items = list()
 
         for article in retrived_articles:
             item = list()
@@ -103,20 +104,24 @@ class ScrapWebpage:
 
 
     def save_data_to_csv(self) -> None:
-        header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
-        with open('scraped_data.csv', 'a', encoding='UTF8') as file:
-            writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-            writer.writerow(header)
 
-            with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
-                csv_reader = csv.reader(read_file)
-                existing_rows = list(csv_reader)
-                for row in existing_rows:
-                    if row not in existing_rows:
-                        csv_writer.writerow(row)
-                        logging.info("Row appended successfully.")
-                    else:
-                        logging.info("Row already exists in the file.")
+        try:
+            header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
+            with open('scraped_data.csv', 'a', encoding='UTF8') as file:
+                writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+                writer.writerow(header)
+
+                with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
+                    csv_reader = csv.reader(read_file)
+                    existing_rows = list(csv_reader)
+                    for row in existing_rows:
+                        if row not in existing_rows:
+                            csv_writer.writerow(row)
+                            logging.info("Row appended successfully.")
+                        else:
+                            logging.info("Row already exists in the file.")
+        except Exception as e:
+            logging.warning(e)
 
 
 
@@ -129,4 +134,4 @@ articles_to_retrieve = 50
 to_csv = False
 to_database = True
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, to_csv, to_database, start_page)
-output.save_data_to_csv()
+output.get_items_details()
