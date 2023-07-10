@@ -3,6 +3,8 @@ import sys
 from pathlib import Path
 import environ
 
+
+
 settings_ = """
 Django settings for mysite project.
 

@@ -9,20 +9,24 @@ from enum import Enum, IntEnum
 from collections import Counter
 import get_info
 import csv
+import os
 from typing import List, Union
 import logging
 import html5lib
-from pepper_app.populate_database import LoadItemDetailesToDatabase, LoadDataFromCsv
+from populate_database import LoadDataFromCsv, LoadDataFromCsv
 
 
 class ScrapWebpage:
 
     def __init__(self, website_url: str, action_type: str, articles_to_retrieve: int,
-                start_page: int = 1, to_csv: bool = True, to_database: bool = True) -> None:
+                to_csv: bool = False, to_database: bool = True, start_page: int = 1) -> None:
         self.website_url = website_url
         self.action_type = action_type
         self.articles_to_retrieve = articles_to_retrieve
+        self.to_database = to_database
+        self.to_csv = to_csv
         self.start_page = start_page
+
 
     def scrap_data(self) -> str:
         try:
@@ -75,10 +79,10 @@ class ScrapWebpage:
             item.append(get_info.GetItemRegularPrice(article).get_data())
             item.append(get_info.GetItemAddedDate(article).get_data())
             item.append(get_info.GetItemUrl(article).get_data())
-        #    if item not in all_items:
-        #        all_items.append(item)
-        #    else:
-        #        continue
+            if item not in all_items:
+                all_items.append(item)
+            else:
+                continue
             if '' in item:
                 logging.warning("Data retrieving failed. None values detected")
                 break
@@ -86,31 +90,10 @@ class ScrapWebpage:
             if to_csv == True:
                 self.save_data_to_csv_1()
 
-
             if to_pepperarticles_database == True:
-                LoadItem
-
+                LoadItemDetailesToDatabase.load_to_db(article)
 
             """
-            if to_csv == True:
-
-                row = ",".join(item)
-
-                header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
-
-                def save_data_to_csv(self) -> None:
-                    with open('scraped_data.csv', 'a', encoding='UTF8') as file:
-                        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-                        writer.writerow(header)
-
-                        with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
-                            csv_reader = csv.reader(read_file)
-                            existing_rows = list(csv_reader)
-                            if row not in existing_rows:
-                                csv_writer.writerow(row)
-                                print("Row appended successfully.")
-                            else:
-                                print("Row already exists in the file.")
 
             if to_pepperarticles_database == True:
                 pass
@@ -151,6 +134,8 @@ class ScrapWebpage:
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 800
-output = ScrapWebpage(website_url, action_type, articles_to_retrieve, start_page)
+articles_to_retrieve = 400
+to_csv = False
+to_database = True
+output = ScrapWebpage(website_url, action_type, articles_to_retrieve, to_csv, to_database, start_page)
 output.save_data_to_csv()

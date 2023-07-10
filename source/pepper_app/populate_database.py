@@ -5,7 +5,9 @@ import logging.config
 
 import pandas as pd
 from django.core.management import BaseCommand
-from pepper_app.models import PepperArticles, Statistics
+from models import PepperArticles, Statistics
+
+
 
 
 class LoadItemDetailesToDatabase(BaseCommand):
@@ -61,7 +63,7 @@ class LoadDataFromCsv(BaseCommand):
         df = pd.read_csv(path)
         return df
 
-    def load_to_db(self, df):
+    def load_to_db(self, df) -> None:
         bad = 0
         good = 0
         start = datetime.datetime.now
