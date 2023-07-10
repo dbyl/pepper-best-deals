@@ -73,7 +73,7 @@ class ScrapWebpage:
 
 
 
-    def get_items_details(self) -> List[Union[str, float, int]]:
+    def get_items_details(self) -> None:
 
         retrived_articles = self.infinite_scroll_handling()
         all_items = list()
@@ -99,7 +99,12 @@ class ScrapWebpage:
                 self.save_data_to_csv()
 
             if to_database == True:
-                LoadItemDetailesToDatabase.load_to_db(article)
+                try:
+                    print(item)
+                    LoadItemDetailesToDatabase(item).load_to_db()
+                except Exception as e:
+                    logging.warning(f"error: {e}")
+
 
 
 

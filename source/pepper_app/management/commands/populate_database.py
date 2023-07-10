@@ -10,9 +10,10 @@ import os
 
 
 import pandas as pd
-from django.db import models
+#from django.db import models
+from models import PepperArticles
 from django.core.management import BaseCommand
-#from pepper_app.models import PepperArticles, Statistics
+from pepper_app.models import PepperArticles, Statistics
 
 
 
@@ -21,7 +22,7 @@ from django.core.management import BaseCommand
 class LoadItemDetailesToDatabase(BaseCommand):
 
     def __init__(self, item) -> None:
-        self.article = article
+        self.item = item
 
     def load_to_db(self) -> None:
         bad = 0
@@ -29,7 +30,8 @@ class LoadItemDetailesToDatabase(BaseCommand):
         header = ['item_id', 'name', 'discount_price',
                 'percentage_discount', 'regular_price',
                 'date_added', 'url']
-        item_df = pd.DataFrame(columns=header, data=self.item)
+        data = self.item
+        item_df = pd.DataFrame([data], columns=header)
         start = datetime.datetime.now
         for _, row in item_df.iterrows():
             try:
@@ -42,6 +44,9 @@ class LoadItemDetailesToDatabase(BaseCommand):
                     date_added = row["date_added"],
                     url = row["url"],
                 )
+
+
+
                 good += 1
                 now = datetime.datetime.now
                 logger.info(f"goods: {good}, loading time: {start-now}")
