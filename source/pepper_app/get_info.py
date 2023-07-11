@@ -201,13 +201,13 @@ class GetItemAddedDate:
                     day = date_string_likely[4:5].zfill(2)
                 month = Months.__members__[date_string_likely[0:3]].value
                 year = str(date.today().year)
-                prepared_data = '-'.join([str(day), month, year])
+                prepared_data = '-'.join([year, month, day])
                 return prepared_data
             elif bool(re.search(old_dates_data_pattern, date_string_likely)):
                 day = date_string_likely[4:6]
                 month = Months.__members__[date_string_likely[0:3]].value
                 year = date_string_likely[8:13]
-                prepared_data = '-'.join([day, month, year])
+                prepared_data = '-'.join([year, month, day])
                 return prepared_data
 
 
@@ -292,7 +292,7 @@ class GetItemAddedDate:
 
             month = Months.__members__[month_string].value
             year = year_string
-            prepared_data = '-'.join([day, month, year])
+            prepared_data = '-'.join([year, month, day])
             return prepared_data
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")

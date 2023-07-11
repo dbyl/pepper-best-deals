@@ -4,15 +4,16 @@ import logging
 import logging.config
 import os
 
-#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'source.configuration.settings.py')
+#import django
 
+#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pepper_app.configuration.settings")
 #django.setup()
 
 
 import pandas as pd
 #from django.db import models
-from models import PepperArticles
-from django.core.management import BaseCommand
+#from models import PepperArticles
+from django.core.management import BaseCommand 
 from pepper_app.models import PepperArticles, Statistics
 
 

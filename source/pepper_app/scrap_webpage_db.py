@@ -8,8 +8,9 @@ import time
 from enum import Enum, IntEnum
 from collections import Counter
 import os
-from get_info import GetItemAddedDate, GetItemDiscountPrice, GetItemId, GetItemName, GetItemPercentageDiscount, GetItemRegularPrice, GetItemUrl
+from pepper_app.get_info import GetItemAddedDate, GetItemDiscountPrice, GetItemId, GetItemName, GetItemPercentageDiscount, GetItemRegularPrice, GetItemUrl
 import csv
+import pandas as pd
 
 
 
@@ -18,7 +19,7 @@ import logging
 import html5lib
 
 
-from populate_database import LoadItemDetailesToDatabase, LoadDataFromCsv
+from pepper_app.populate_database import LoadItemDetailesToDatabase, LoadDataFromCsv
 
 
 
@@ -96,11 +97,10 @@ class ScrapWebpage:
                 break
 
             if to_csv == True:
-                self.save_data_to_csv()
+                self.save_data_to_csv(item)
 
             if to_database == True:
                 try:
-                    print(item)
                     LoadItemDetailesToDatabase(item).load_to_db()
                 except Exception as e:
                     logging.warning(f"error: {e}")
@@ -108,25 +108,22 @@ class ScrapWebpage:
 
 
 
-    def save_data_to_csv(self) -> None:
+    def save_data_to_csv(self, item) -> None:
+        
+        columns = ['item_id', 'name', 'discount_price', 'percentage_discount', 
+                    'regular_price', 'date_added', 'url']
 
-        try:
-            header = ['item_id', 'name', 'discount_price', 'percentage_discount', 'regular_price', 'date_added', 'url']
-            with open('scraped_data.csv', 'a', encoding='UTF8') as file:
-                writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-                writer.writerow(header)
-
-                with open('scraped_data.csv', 'r', encoding='UTF8', newline='') as read_file:
-                    csv_reader = csv.reader(read_file)
-                    existing_rows = list(csv_reader)
-                    for row in existing_rows:
-                        if row not in existing_rows:
-                            csv_writer.writerow(row)
-                            logging.info("Row appended successfully.")
-                        else:
-                            logging.info("Row already exists in the file.")
-        except Exception as e:
-            logging.warning(e)
+        header = False
+        if not os.path.exists('scraped.csv'):
+            header=True
+            df = pd.DataFrame([item], columns=columns)
+            df.to_csv('scraped.csv', header=header, index=False, mode='a')
+        else:
+            header = False
+            df_e = pd.read_csv('scraped.csv')
+            df = pd.DataFrame([item], columns=columns)
+            if df['item_id'][0] not in df_e['item_id'].tolist():
+                df.to_csv('scraped.csv', header=header, index=False, mode='a')
 
 
 
@@ -135,8 +132,8 @@ class ScrapWebpage:
 action_type = "/nowe?page="
 start_page = 1
 website_url = "https://www.pepper.pl"
-articles_to_retrieve = 50
-to_csv = False
-to_database = True
+articles_to_retrieve = 10
+to_csv = True
+to_database = False
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, to_csv, to_database, start_page)
 output.get_items_details()
