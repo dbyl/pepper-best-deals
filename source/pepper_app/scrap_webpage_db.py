@@ -92,9 +92,9 @@ class ScrapWebpage:
                 all_items.append(item)
             else:
                 continue
-            if '' in item:
-                logging.warning("Data retrieving failed. None values detected")
-                break
+            #if '' in item:
+            #    logging.warning("Data retrieving failed. None values detected")
+            #    break
 
             if to_csv == True:
                 self.save_data_to_csv(item)
@@ -109,8 +109,8 @@ class ScrapWebpage:
 
 
     def save_data_to_csv(self, item) -> None:
-        
-        columns = ['item_id', 'name', 'discount_price', 'percentage_discount', 
+
+        columns = ['item_id', 'name', 'discount_price', 'percentage_discount',
                     'regular_price', 'date_added', 'url']
 
         header = False
@@ -134,6 +134,6 @@ start_page = 1
 website_url = "https://www.pepper.pl"
 articles_to_retrieve = 10
 to_csv = True
-to_database = False
+to_database = True
 output = ScrapWebpage(website_url, action_type, articles_to_retrieve, to_csv, to_database, start_page)
 output.get_items_details()

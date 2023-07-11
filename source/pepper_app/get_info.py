@@ -86,9 +86,9 @@ class GetItemDiscountPrice:
             discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
             return discount_price
         except IndexError as e:
-            return "NA"
+            return None
         except ValueError as e:
-            return "NA"
+            return None
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
@@ -104,9 +104,9 @@ class GetItemRegularPrice:
             regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
             return regular_price
         except IndexError as e:
-            return "NA"
+            return None
         except ValueError as e:
-            return "NA"
+            return None
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
@@ -122,9 +122,9 @@ class GetItemPercentageDiscount:
             percentage_discount = float(percentage_discount[0].get_text().strip('%'))
             return percentage_discount
         except IndexError as e:
-            return "NA"
+            return None
         except ValueError as e:
-            return "NA"
+            return None
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
@@ -192,7 +192,7 @@ class GetItemAddedDate:
 
         try:
             if date_string_likely.endswith(('min', 'g', 's')):
-                prepared_data = date.today().strftime("%d-%m-%Y")
+                prepared_data = date.today().strftime("%Y-%m-%d")
                 return prepared_data
             elif date_string_likely.startswith(tuple(Months.keys())) and len(date_string_likely) < 8:
                 if len(date_string_likely[4:]) == 3:
@@ -296,9 +296,5 @@ class GetItemAddedDate:
             return prepared_data
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
-
-
-
-
 
 

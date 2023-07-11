@@ -6,9 +6,9 @@ class PepperArticles(Model):
 
     item_id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=500)
-    discount_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
-    percentage_discount = models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    regular_price = models.DecimalField(max_digits=20, decimal_places=2, null=True)
+    discount_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    percentage_discount = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    regular_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     date_added = models.DateField()
     url = models.URLField(max_length = 300)
 

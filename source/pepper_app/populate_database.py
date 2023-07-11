@@ -13,7 +13,7 @@ import os
 import pandas as pd
 #from django.db import models
 #from models import PepperArticles
-from django.core.management import BaseCommand 
+from django.core.management import BaseCommand
 from pepper_app.models import PepperArticles, Statistics
 
 
@@ -50,7 +50,7 @@ class LoadItemDetailesToDatabase(BaseCommand):
 
                 good += 1
                 now = datetime.datetime.now
-                logger.info(f"goods: {good}, loading time: {start-now}")
+                logging.info(f"goods: {good}, loading time: {start-now}")
             except Exception as e:
                 bad += 1
                 with open("populating_db_errors.txt", "w") as bad_row:
@@ -94,7 +94,7 @@ class LoadDataFromCsv(BaseCommand):
                 )
                 good += 1
                 now = datetime.datetime.now
-                logger.info(f"goods: {good}, loading time: {start-now}")
+                logging.info(f"goods: {good}, loading time: {start-now}")
             except Exception as e:
                 bad += 1
                 with open("data_load_logging.txt", "w") as bad_row:
