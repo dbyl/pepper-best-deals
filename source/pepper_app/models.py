@@ -25,7 +25,7 @@ class ScrapingStatistics(Model):
     start_page = models.PositiveIntegerField()
     retrieved_articles_quantity = models.PositiveIntegerField()
     time_of_the_action = models.DateTimeField()
-    action_execution_datetime = models.DateTimeField()
+    action_execution_datetime = models.DurationField()
     searched_article = models.CharField(max_length=500)
     to_csv = models.BooleanField()
     to_database = models.BooleanField()

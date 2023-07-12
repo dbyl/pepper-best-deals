@@ -1,5 +1,6 @@
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 import logging
+from django.utils.timezone import utc
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, date
 from selenium import webdriver
@@ -87,7 +88,7 @@ class ScrapWebpage:
 
     def get_items_details(self) -> None:
 
-        start_time = datetime.now()
+        start_time = datetime.utcnow().replace(tzinfo=utc)
 
         retrived_articles = self.infinite_scroll_handling()
         all_items = list()
@@ -120,7 +121,7 @@ class ScrapWebpage:
                 except Exception as e:
                     logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
 
-        end_time = datetime.now()
+        end_time = datetime.utcnow().replace(tzinfo=utc)
         action_execution_datetime = end_time - start_time
 
         if to_statistics == True:
@@ -155,14 +156,14 @@ class ScrapWebpage:
 
         category_type = self.category_type
         start_page = str(self.start_page)
-        retrived_articles = str(self.articles_to_retrieve)
-        time_of_the_action = datetime.now()
+        retrived_articles_quantity = str(self.articles_to_retrieve)
+        time_of_the_action = datetime.utcnow().replace(tzinfo=utc)
         action_execution_datetime = action_execution_datetime
         searched_article = self.searched_article
         to_csv = self.to_csv
         to_database  = self.to_database
 
-        statistics_fields = [category_type, start_page, retrived_articles,
+        statistics_fields = [category_type, start_page, retrived_articles_quantity,
                             time_of_the_action, action_execution_datetime,
                             searched_article, to_csv, to_database]   #to constans in the future
 

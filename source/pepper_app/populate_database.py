@@ -60,7 +60,7 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
         self.stats_info = stats_info
 
     def load_to_db(self) -> None:
-        header = ['category_type', 'start_page', 'retrived_articles',
+        header = ['category_type', 'start_page', 'retrieved_articles_quantity',
                 'time_of_the_action', 'action_execution_datetime', 'searched_article',
                 'to_csv', 'to_database'] #to constans in the future
         data = self.stats_info
@@ -70,7 +70,7 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
                 scrapingstatistics_obj, _ = ScrapingStatistics.objects.get_or_create(
                     category_type = row["category_type"],
                     start_page = row["start_page"],
-                    retrived_articles = int(row["retrived_articles"]),
+                    retrieved_articles_quantity = int(row["retrieved_articles_quantity"]),
                     time_of_the_action = row["time_of_the_action"],
                     action_execution_datetime = row["action_execution_datetime"],
                     searched_article = row["searched_article"],
