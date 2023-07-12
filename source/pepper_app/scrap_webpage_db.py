@@ -92,9 +92,9 @@ class ScrapWebpage:
                 all_items.append(item)
             else:
                 continue
-            #if '' in item:
-            #    logging.warning("Data retrieving failed. None values detected")
-            #    break
+            if '' in item:
+                logging.warning("Data retrieving failed. None values detected")
+                break
 
             if to_csv == True:
                 self.save_data_to_csv(item)
@@ -104,8 +104,6 @@ class ScrapWebpage:
                     LoadItemDetailesToDatabase(item).load_to_db()
                 except Exception as e:
                     logging.warning(f"error: {e}")
-
-
 
 
     def save_data_to_csv(self, item) -> None:

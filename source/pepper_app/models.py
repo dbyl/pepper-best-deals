@@ -14,8 +14,8 @@ class PepperArticles(Model):
 
     def __str__(self):
 
-        fields = [self.item_id, self.name, self.discount_price, self.percentage_discount,
-                self.regular_price, self.date_added, self.url]
+        fields = [str(self.item_id), str(self.name), str(self.discount_price), str(self.percentage_discount),
+                str(self.regular_price), str(self.date_added), str(self.url)]
 
         return ', '.join(fields)
 
@@ -28,6 +28,6 @@ class Statistics(Model):
     action_execution_datetime = models.TimeField()
 
     def __str__(self):
-        fields = [self.action_type, self.retrieved_articles_quantity, self.searched_article,
-                self.time_of_the_action, self.action_execution_datetime]
+        fields = [str(self.action_type), str(self.retrieved_articles_quantity), str(self.searched_article),
+                str(self.time_of_the_action), str(self.action_execution_datetime)]
 

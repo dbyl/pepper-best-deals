@@ -3,21 +3,11 @@ import datetime
 import logging
 import logging.config
 import os
-
-#import django
-
-#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pepper_app.configuration.settings")
-#django.setup()
-
-
+import traceback
+import sys
 import pandas as pd
-#from django.db import models
-#from models import PepperArticles
 from django.core.management import BaseCommand
 from pepper_app.models import PepperArticles, Statistics
-
-
-
 
 
 class LoadItemDetailesToDatabase(BaseCommand):
@@ -36,17 +26,17 @@ class LoadItemDetailesToDatabase(BaseCommand):
         start = datetime.datetime.now
         for _, row in item_df.iterrows():
             try:
-                pepperarticles_obj, _ = PepperArticles.objects.update_or_create(
+                pepperarticles_obj, _ = PepperArticles.objects.get_or_create(
                     item_id = row["item_id"],
                     name = row["name"],
-                    discount_price = row["discount_price"],
-                    percentage_discount = row["percentage_discount"],
-                    regular_price = row["regular_price"],
+                        
+                    discount_price = self.na_discount_price(row),
+                    percentage_discount = self.na_percentage_discount(row),
+                    regular_price = self.na_regular_price(row),
+
                     date_added = row["date_added"],
                     url = row["url"],
                 )
-
-
 
                 good += 1
                 now = datetime.datetime.now
@@ -54,8 +44,26 @@ class LoadItemDetailesToDatabase(BaseCommand):
             except Exception as e:
                 bad += 1
                 with open("populating_db_errors.txt", "w") as bad_row:
-                    bad_row.write(f"Error message: {e} \n")
+                    bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
+    
+    def na_discount_price(self, row):
 
+        if row["discount_price"] == 'NA':
+            return None
+        else:
+            return float(row["discount_price"])
+        
+    def na_percentage_discount(self, row):
+        if row["percentage_discount"] == 'NA':
+            return None
+        else:
+            return float(row["percentage_discount"])
+
+    def na_regular_price(self, row):
+        if row["regular_price"] == 'NA':
+            return None
+        else:
+            return float(row["regular_price"])
 
 class LoadDataFromCsv(BaseCommand):
 

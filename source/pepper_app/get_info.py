@@ -86,9 +86,9 @@ class GetItemDiscountPrice:
             discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
             return discount_price
         except IndexError as e:
-            return None
+            return "NA"
         except ValueError as e:
-            return None
+            return "NA"
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
@@ -104,9 +104,9 @@ class GetItemRegularPrice:
             regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
             return regular_price
         except IndexError as e:
-            return None
+            return "NA"
         except ValueError as e:
-            return None
+            return "NA"
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
@@ -122,9 +122,9 @@ class GetItemPercentageDiscount:
             percentage_discount = float(percentage_discount[0].get_text().strip('%'))
             return percentage_discount
         except IndexError as e:
-            return None
+            return "NA"
         except ValueError as e:
-            return None
+            return "NA"
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
