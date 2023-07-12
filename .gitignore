@@ -165,3 +165,7 @@ models/
 chromedriver_linux64.zip
 google-chrome-stable_current_amd64.deb
 LICENSE.chromedriver
+populating_scrapstats_failed.txt
+populating_pepart_failed.txt
+populating_pepart_from_csv_failed.txt
+scraped.csv

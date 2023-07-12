@@ -19,15 +19,22 @@ class PepperArticles(Model):
 
         return ', '.join(fields)
 
-class Statistics(Model):
+class ScrapingStatistics(Model):
 
-    action_type = models.CharField(max_length=500)
+    category_type = models.CharField(max_length=500)
+    start_page = models.PositiveIntegerField()
     retrieved_articles_quantity = models.PositiveIntegerField()
-    searched_article = models.CharField(max_length=500)
     time_of_the_action = models.DateTimeField()
-    action_execution_datetime = models.TimeField()
+    action_execution_datetime = models.DateTimeField()
+    searched_article = models.CharField(max_length=500)
+    to_csv = models.BooleanField()
+    to_database = models.BooleanField()
+
 
     def __str__(self):
-        fields = [str(self.action_type), str(self.retrieved_articles_quantity), str(self.searched_article),
-                str(self.time_of_the_action), str(self.action_execution_datetime)]
+        fields = [str(self.category_type), str(self.start_page), str(self.retrieved_articles_quantity),
+                str(self.time_of_the_action), str(self.action_execution_datetime), str(self.searched_article),
+                str(self.to_csv), str(self.to_database)]
+
+        return ', '.join(fields)
 
