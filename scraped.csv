@@ -1,11 +1,131 @@
 item_id,name,discount_price,percentage_discount,regular_price,date_added,url
-698066,Plecak turystyczny Deuter Speed Lite 21,216.9,-10.0,240.33,2023-07-13,https://www.pepper.pl/promocje/plecak-turystyczny-deuter-speed-lite-21-698066
-698063,"Słuchawki TWS Apple AirPods Pro (gen. 2) €236,46",1049.88,NA,NA,2023-07-13,https://www.pepper.pl/promocje/apple-airpods-pro-gen-2-698063
-697989,Męska bluza rozpinana Puma Essentials - r. S - XL @MandM,124.0,-52.0,260.46,2023-07-13,https://www.pepper.pl/promocje/meska-bluza-rozpinana-puma-essentials-r-s-xl-at-mandm-697989
-698065,"Czapki, rękawiczki dziecięce Tedi",0.5,NA,NA,2023-07-13,https://www.pepper.pl/promocje/czapki-rekawiczki-dzieciece-tedi-698065
-698061,JYSK - przynieś własną torbę i otrzymaj rabat 15%,NA,NA,NA,2023-07-13,https://www.pepper.pl/kupony/jysk-przynies-wlasna-torbe-i-otrzymaj-rabat-15-698061
-698064,Żarówki Osram Led W5W Night Breaker 6000k,19.99,-67.0,60.0,2023-07-13,https://www.pepper.pl/promocje/zarowki-osram-led-w5w-night-breaker-6000k-698064
-698060,Wkłady do drukarek HP 302 XL Multipack,NA,-71.0,126.0,2023-07-13,https://www.pepper.pl/promocje/wklady-do-drukarek-hp-302-xl-multipack-698060
-698059,"Materac Westtune 71,84zł || 17,70$",71.84,-10.0,80.0,2023-07-13,https://www.pepper.pl/promocje/materac-westtune-698059
-698057,Zestaw 6 łyżeczek.,14.99,-44.0,27.0,2023-07-13,https://www.pepper.pl/promocje/zestaw-6-lyzeczek-698057
-698056,Słuchawki Apple AirPods Pro 2,1050.72,-17.0,1269.0,2023-07-13,https://www.pepper.pl/promocje/apple-airpods-pro-2-z-polskiego-amazoni-698056
+685067,Hulajnoga Elektryczna Kukirin G3 Pro,5669.0,NA,NA,2023-06-07,https://www.pepper.pl/promocje/hulajnoga-elektryczna-kukirin-g3-pro-najtaniej-na-rynku-685067
+685064,Wyślij paczkę z punktu do punktu już za 10zł z VAT,NA,-29.0,13.99,2023-06-07,https://www.pepper.pl/promocje/wyslij-paczke-z-punktu-do-punktu-juz-za-10zl-z-vat-685064
+685063,Słuchawki nauszne EDIFIER W800BT Plus Czarny,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/sluchawki-nauszne-edifier-w800bt-plus-czarny-685063
+685061,Amnesia: Collection @ Gra Nintendo Switch,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/amnesia-collection-at-switch-685061
+685060,Męska kurtka przeciwdeszczowa Regatta Pack It III + worek • M do XXL • darmowa dostawa dla Prime,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/meska-kurtka-przeciwdeszczowa-regatta-pack-it-iii-worek-m-do-xxl-darmowa-dostawa-dla-prime-685060
+685059,Lorenz Crunchips Sticks Ketchup 70g,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/lorenz-crunchips-sticks-ketchup-70g-685059
+685058,Tusz atrament EPSON 115 Szary L8180 L8160,NA,-21.0,62.0,2023-06-07,https://www.pepper.pl/promocje/tusz-atrament-epson-115-szary-l8180-l8160-685058
+685056,Laptop Gigabyte G5 MF i5-12500H 16GB 512SSD RTX4050 144Hz,NA,-7.0,4599.0,2023-06-07,https://www.pepper.pl/promocje/laptop-gigabyte-g5-mf-i5-12500h-16gb-512ssd-rtx4050-144hz-685056
+685055,"Baseus Metal Gleam 11w1 | Adapter HUB 11w1 USB-C do 2x HDMI, VGA, RJ45, Audio, 3x USB3.0, SD/TF, 100W",NA,-23.0,299.0,2023-06-07,https://www.pepper.pl/promocje/baseus-metal-gleam-11w1-adapter-hub-11w1-usb-c-do-2x-hdmi-vga-rj45-audio-3x-usb30-sdtf-100w-685055
+685054,Wibrator analny,NA,-46.0,96.0,2023-06-07,https://www.pepper.pl/promocje/wibrator-analny-685054
+685053,Najgrubsza Koszulka Adler Malfini Heavy XL,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/najgrubsza-koszulka-adler-malfini-heavy-685053
+685052,Stopki Town Land Kaufland,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/stopki-town-land-kaufland-685052
+685051,Etui Otterbox React iPhone 13 pro,NA,-76.0,79.0,2023-06-07,https://www.pepper.pl/promocje/otterbox-react-iphone-13-pro-685051
+685050,"Smartfon OPPO Find X5 Pro 5G - Smartphone 256GB, 12GB RAM, Dual Sim, Black - stan idealny - amazon.uk whd.",NA,-32.0,3999.0,2023-06-07,https://www.pepper.pl/promocje/smartfon-oppo-find-x5-pro-5g-smartphone-256gb-12gb-ram-dual-sim-black-stan-idealny-amazonuk-whd-685050
+685049,Dare - wafelek w czekoladzie,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/dare-wafelek-w-czekoladzie-685049
+685047,"Laptop DELL Inspiron 15 Ryzen 5-5625U | 15,6''-FHD | 8GB | 512GB | Win 11 | czarny",NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/laptop-dell-inspiron-15-ryzen-5-5625u-156-fhd-8gb-512gb-win-11-czarny-685047
+685045,"Antywirus ""Norton 360 Premium/DeLuxe"".",NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/antywirus-norton-685045
+685043,Feliway wkład/ wtyczka i wkład - feromony dla kota,NA,-70.0,89.44,2023-06-07,https://www.pepper.pl/promocje/feliway-wklad-wtyczka-i-wklad-feromony-dla-kota-685043
+685041,KICHLY 9 szklanych pojemników + pokrywki,NA,-7.0,89.99,2023-06-07,https://www.pepper.pl/promocje/kichly-9-szklanych-pojemnikow-pokrywki-685041
+685040,"Tidal Hi Fi Plus 3 miesiące za 7,30zł TYLKO NOWE KONTA",NA,-94.0,120.0,2023-06-07,https://www.pepper.pl/promocje/tidal-hi-fi-plus-3-miesiace-za-689zl-tylko-nowe-konta-685040
+685039,Karkówka grillowa mega paka,NA,-58.0,28.47,2023-06-07,https://www.pepper.pl/promocje/karkowka-grillowa-mega-paka-685039
+685037,"Apple Watch Ultra Alpine rozmiar M 3999 zł, w ratach 3 799,05 zł",NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/apple-watch-ultra-alpine-rozmiar-m-3999-zl-w-ratach-3-79905-zl-685037
+685036,"Relaxdays Markiza spadochronowa, wys. x szer.: 120 x 200 cm, wysuwana,",NA,-45.0,210.0,2023-06-07,https://www.pepper.pl/promocje/relaxdays-markiza-spadochronowa-wys-x-szer-120-x-200-cm-wysuwana-685036
+685035,OtterBox Slim Etui do iPhone 13 Pro MagSafe,NA,-67.0,113.26,2023-06-07,https://www.pepper.pl/promocje/otterbox-slim-etui-do-iphone-13-pro-magsafe-685035
+681196,Shadow of the Tomb Raider (Definitive Edition) XBOX LIVE Key TURKEY VPN @ Gra Xbox One,NA,NA,NA,,https://www.pepper.pl/promocje/shadow-of-the-tomb-raider-definitive-edition-xbox-live-key-turkey-vpn-at-xbox-one-681196
+685030,Myszka Logitech G305 Lightspeed Miętowa,NA,-38.0,209.0,2023-06-07,https://www.pepper.pl/promocje/myszka-logitech-g305-lightspeed-mietowa-685030
+685029,Hollister Co. 5 PAK - T-shirt z nadrukiem,NA,-30.0,239.0,2023-06-07,https://www.pepper.pl/promocje/hollister-co-5-pak-t-shirt-z-nadrukiem-685029
+685006,"Coccolino płyn do płukania pojemność 1,8 l.",NA,-13.0,15.98,2023-06-07,https://www.pepper.pl/promocje/coccolino-plyn-do-plukania-18-l-685006
+685028,Maty LYAPKO - aplikatory wielogłowe,NA,-10.0,336.6,2023-06-07,https://www.pepper.pl/promocje/maty-lyapko-aplikatory-wieloglowe-685028
+685027,Soundbar SAMSUNG SWA-9500S,NA,-10.0,949.0,2023-06-07,https://www.pepper.pl/promocje/satelitki-glosniki-do-grajbelki-samsung-swa-9500s-685027
+685026,"Torba Termiczna Plecak Termoizolacyjny - niebieska 12,5L",NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/torba-termiczna-plecak-termoizolacyjny-lodowka-turystyczna-wodoodporna-torba-na-plaze-piknik-przenosna-duza-chlodzaca-torba-meteor-685026
+684904,2 noce dla dwojga w Dworze Uphagena ARCHE w Gdańsku (w cenie śniadania i strefa wellness) @ Travelist,NA,-40.0,666.0,2023-06-07,https://www.pepper.pl/promocje/2-noce-dla-dwojga-w-dworze-uphagena-arche-w-gdansku-w-cenie-sniadania-i-strefa-wellness-at-travelist-684904
+685024,"Wrangler koszulka T -shirt S,XL2XL czerwony/Zólty M,LXL2XL,3XL",NA,-44.0,89.0,2023-06-07,https://www.pepper.pl/promocje/wrangler-koszulka-t-shirt-sxl2xl-czerwonyzolty-mlxl2xl3xl-685024
+685022,"Białko Great One Whey Isolate Protein Limited Black Edition 2000g lub 900g 55,20zł",116.4,-40.0,194.0,2023-06-07,https://www.pepper.pl/promocje/bialko-great-one-whey-isolate-protein-limited-black-edition-2000-g-685022
+685021,Męskie buty Asics,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/meskie-buty-asics-685021
+685020,Dishonored: Death of the Outsider Deluxe Bundle XBOX LIVE Key ARGENTINA VPN @ Xbox One,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/dishonored-death-of-the-outsider-deluxe-bundle-xbox-live-key-argentina-vpn-at-xbox-one-685020
+685019,Izolat białka w dobrej cenie,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/izolat-bialka-w-dobrej-cenie-685019
+685017,"Awokado Hass 0,90zl/szt @Kaufland",NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/awokado-hass-090zlszt-685017
+685016,Męski zegarek HUGO Smash 1530134. Dostawa Amazon Prime.,NA,-31.0,468.0,2023-06-07,https://www.pepper.pl/promocje/zegarek-hugo-smash-1530134-685016
+685014,"Konsola Sony PlayStation 5 Digital Edition za 2198 zł (możliwe 2088,10 zł) w RTV Euro AGD",NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/sony-playstation-5-digital-edition-za-2198-zl-mozliwe-208810-zl-w-rtv-euro-agd-685014
+685013,Wózek platformowy 300kg,NA,-39.0,399.75,2023-06-07,https://www.pepper.pl/promocje/wozek-platformowy-300kg-685013
+683878,Assassin's Creed: Origins (Gold Edition) XBOX LIVE Key ARGENTINA VPN @ Xbox One,NA,NA,NA,,https://www.pepper.pl/promocje/assassins-creed-origins-gold-edition-xbox-live-key-argentina-vpn-at-xbox-one-683878
+685012,Rebel Gra planszowa Cywilizacja: Poprzez Wieki (3 Edycja),NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/rebel-gra-planszowa-cywilizacja-poprzez-wieki-3-edycja-685012
+685011,Karta graficzna Asrock Radeon RX 6600 Challenger D 8GB,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/karta-graficzna-asrock-radeon-rx-6600-challenger-d-8gb-685011
+681317,Assassin's Creed: Odyssey (Ultimate Edition) XBOX LIVE Key ARGENTINA VPN @ Xbox One,NA,NA,NA,,https://www.pepper.pl/promocje/assassins-creed-odyssey-ultimate-edition-xbox-live-key-argentina-vpn-at-xbox-one-681317
+685010,Smartfon Samsung Galaxy S23 Ultra 12/512GB,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/samsung-galaxy-s23-ultra-12512gb-685010
+685008,Suplement diety 4F FUEL VEGA IMMUNITY COMPLEX 60 kapsułek. BIEDRONKA,NA,-75.0,39.99,2023-06-07,https://www.pepper.pl/promocje/suplement-diety-4f-fuel-vega-immunity-complex-60-kapsulek-biedronka-685008
+685009,Gra It Takes Two PS4 / PS5 za 200 TRY (37 zł) - Turecki PS Store,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/gra-it-takes-two-ps4-ps5-za-200-try-37-zl-turecki-ps-store-685009
+685007,Tabletki do zmywarki OXO 120 SZT. 25gr za sztukę @Kaufland,NA,NA,NA,2023-06-07,https://www.pepper.pl/promocje/tabletki-do-zmywarki-oxo-120-szt-25gr-za-sztuke-at-kaufland-685007
+685003,"BezMięsny - Pakiet Urodzinowy 1,54 kg",NA,-43.0,105.0,2023-06-07,https://www.pepper.pl/promocje/bezmiesny-pakiet-urodzinowy-154-kg-685003
+697476,Świętokrzyskie Centrum Onkologii zaprasza na bezpłatne badania płuc,NA,NA,NA,2023-07-12,https://www.pepper.pl/promocje/swietokrzyskie-centrum-onkologii-zaprasza-na-bezplatne-badania-pluc-697476
+697474,Promocje na pendrivy X-kom,99.0,-34.0,151.0,2023-07-12,https://www.pepper.pl/promocje/promocje-na-pendrivy-x-kom-697474
+697469,"SHI BA ZI ZUO 8-calowy chiński nóż szefa kuchni, cienki lekki nóż kuchenny, ze stali nierdzewnej, F208-2",NA,-56.0,229.49,2023-07-12,https://www.pepper.pl/promocje/shi-ba-zi-zuo-8-calowy-chinski-noz-szefa-kuchni-cienki-lekki-noz-kuchenny-ze-stali-nierdzewnej-f208-2-697469
+697472,NOCO GENIUSPRO25 Automatyczna Inteligentna Ładowarka 25 A,NA,-41.0,2750.0,2023-07-12,https://www.pepper.pl/promocje/noco-geniuspro25-automatyczna-inteligentna-ladowarka-25-a-697472
+697471,3mk Uchwyt Rowerowy Bike Holder Pro,NA,-26.0,39.26,2023-07-12,https://www.pepper.pl/promocje/3mk-uchwyt-rowerowy-bike-holder-pro-697471
+697470,Remington prostownica S3500 - PRIME,NA,-25.0,79.99,2023-07-12,https://www.pepper.pl/promocje/remington-prostownica-s3500-prime-697470
+697468,Gardena obrzeże do trawnika 20 cm x 9m Amazon (prime day),NA,-57.0,57.61,2023-07-12,https://www.pepper.pl/promocje/gardena-obrzeze-do-trawnika-20-cm-x-9m-amazon-prime-day-697468
+697467,Mouse bungee Xtrfy B4,NA,-65.0,55.0,2023-07-12,https://www.pepper.pl/promocje/mouse-bungee-xtrfy-b4-697467
+697466,SteelSeries Apex 3 Gamingowa klawiatura RGB,NA,-15.0,269.0,2023-07-12,https://www.pepper.pl/promocje/steelseries-apex-3-gamingowa-klawiatura-rgb-697466
+697465,"Wundermix – wkładka do wyciskarki parowej Simsafix. Thermomix,lidlomix",NA,NA,NA,2023-07-12,https://www.pepper.pl/promocje/wundermix-wkladka-do-wyciskarki-parowej-simsafix-thermomixlidlomix-697465
+697464,Podkładka pod mysz Mionix ALIOTH L,NA,-65.0,39.99,2023-07-12,https://www.pepper.pl/promocje/mionix-alioth-l-697464
+697461,LEGO Star Wars Hełm Lorda Dartha Vadera @Amazon.fr 53.42€,NA,-10.0,265.0,2023-07-12,https://www.pepper.pl/promocje/lego-star-wars-helm-lorda-dartha-vadera-at-amazonfr-48eur-697461
+697462,Bezpłatne półkolonie letnie dla dzieci na terenie Prusic,NA,NA,NA,2023-07-12,https://www.pepper.pl/promocje/bezplatne-polkolonie-letnie-dla-dzieci-na-terenie-prusic-697462
+697460,Silver Monkey Sprężone powietrze 400ml,9.0,-55.0,19.99,2023-07-12,https://www.pepper.pl/promocje/silver-monkey-sprezone-powietrze-400ml-697460
+697454,Plecak Nike Sportswear,219.0,NA,NA,2023-07-12,https://www.pepper.pl/promocje/plecak-nike-sportswear-697454
+697456,"Stacja dokująca Ugreen 9 in 1 Windows i Mac (2 x HDMI i 2 x DP 4K@60Hz, Ethernet, USB-C, USB) @ Amazon",NA,-25.0,799.0,2023-07-12,https://www.pepper.pl/promocje/stacja-dokujaca-ugreen-9-in-1-windows-i-mac-2-x-hdmi-i-2-x-dp-4k-at-60hz-ethernet-usb-c-usb-at-amazon-697456
+697450,Wafle Grześki Mega Kakaowe przy zakupie 4 @Delfin,0.99,-34.0,1.49,2023-07-12,https://www.pepper.pl/promocje/wafle-grzeski-mega-kakaowe-przy-zakupie-4-697450
+697451,eufy RoboVac G30 Hybrid robot odkurzający z funkcją mopowania,NA,-30.0,1599.0,2023-07-12,https://www.pepper.pl/promocje/eufy-robovac-g30-hybrid-robot-odkurzajacy-z-funkcja-mopowania-697451
+697452,Laptop ASUS TUF Gaming A16 FA617NS R7-7735HS/16GB/1TB/RX7600S/W11,5499.0,-5.0,5799.0,2023-07-12,https://www.pepper.pl/promocje/laptop-asus-tuf-gaming-a16-fa617ns-r7-7735hs16gb1tbrx7600sw11-697452
+697448,Pamięć RAM Corsair Vengeance RGB 32GB (2x16GB) DDR5 5200MHz CL40 [DOŻYWOTNIA GWARANCJA],489.0,-5.0,513.0,2023-07-12,https://www.pepper.pl/promocje/corsair-vengeance-rgb-32gb-2x16gb-ddr5-5200mhz-cl40-dozywotnia-gwarancja-697448
+697447,Słuchawki dla dzieci Philips TAK460 zielone,NA,-23.0,349.0,2023-07-12,https://www.pepper.pl/promocje/sluchawki-dla-dzieci-philips-tak460-zielone-697447
+697444,"Vicloon zestaw mini kosza do koszykówki z 2 przyssawkami, 5 piłek, zabawka wodna, dla dzieci",NA,-65.0,43.98,2023-07-12,https://www.pepper.pl/promocje/vicloon-zestaw-mini-kosza-do-koszykowki-z-2-przyssawkami-5-pilek-zabawka-wodna-dla-dzieci-697444
+697443,"Listwa zasilająca antyprzepięciowa Philips 6 gniazd z uziemieniem, 4x USB, USB-C",139.0,-18.0,169.0,2023-07-12,https://www.pepper.pl/promocje/listwa-zasilajaca-antyprzepieciowa-philips-6-gniazd-z-uziemieniem-4x-usb-usb-c-697443
+697442,Klocki LEGO 21054 Architecture - Biały Dom (1483 elementy),266.0,-18.0,325.0,2023-07-12,https://www.pepper.pl/promocje/lego-21054-architecture-bialy-dom-697442
+697439,Number block 11-20 - zabawka edukacyjna,NA,-28.0,150.0,2023-07-12,https://www.pepper.pl/promocje/number-block-11-20-zabawka-edukacyjna-697439
+697441,Kask rowerowy ABUS Macator MIPS za 230zł @ Limango,229.99,-23.0,300.0,2023-07-12,https://www.pepper.pl/promocje/kask-rowerowy-abus-macator-mips-za-230zl-at-limango-697441
+697440,Głośnik bezprzewodowy Sony XG500,NA,NA,NA,2023-07-12,https://www.pepper.pl/promocje/glosnik-bezprzewodowy-sony-xg500-697440
+697438,Mikrofon Creative Live! Mic M3,129.0,-48.0,249.0,2023-07-12,https://www.pepper.pl/promocje/mikrofon-creative-live-mic-m3-697438
+697437,Męskie buty Geox U Ponente od 154 zł - różne kolory @Amazon,208.99,-42.0,359.99,2023-07-12,https://www.pepper.pl/promocje/meskie-buty-geox-u-ponente-od-20899-zl-at-amazon-697437
+697435,Uchwyt monitora z tacą pod laptopa,NA,-25.0,199.99,2023-07-12,https://www.pepper.pl/promocje/uchwyt-monitora-z-taca-pod-laptopa-697435
+697436,"Gra planszowa Mattel Blokus Trigon (BGG 6.9) - Gra rodzinna, logiczna (Prime Day)",NA,-38.0,99.0,2023-07-12,https://www.pepper.pl/promocje/gra-planszowa-mattel-blokus-trigon-bgg-69-gra-rodzinna-logiczna-prime-day-697436
+697434,BabyBjorn zabawka do leżaczka Googly Eyes,NA,-27.0,219.0,2023-07-12,https://www.pepper.pl/promocje/babybjorn-zabawka-do-lezaczka-googly-eyes-697434
+697433,BabyBjorn leżaczek Bliss Mesh antracytowy + zabawka Googly Eyes,899.0,-26.0,1209.0,2023-07-12,https://www.pepper.pl/promocje/babybjorn-lezaczek-bliss-mesh-antracytowy-zabawka-googly-eyes-697433
+697431,LAMPA SOLARNA LED Z CZUJNIKIEM RUCHU I ZMIERZCHU,99.0,NA,NA,2023-07-12,https://www.pepper.pl/promocje/lampa-solarna-led-z-czujnikiem-ruchu-i-zmierzchu-697431
+697430,Leżaczek BabyBjorn Bliss 3D,749.0,-25.0,999.0,2023-07-12,https://www.pepper.pl/promocje/lezaczek-babybjorn-bliss-3d-697430
+697429,Leżaczek Babybjörn Bliss/Balance Soft,649.0,-25.0,869.0,2023-07-12,https://www.pepper.pl/promocje/lezaczek-babybjorn-blissbalance-soft-697429
+697428,"Laktator Neno Uno (dwufazowy, elektryczny) @ Morele",133.0,-20.0,166.0,2023-07-12,https://www.pepper.pl/promocje/laktator-neno-uno-dwufazowy-elektryczny-at-morele-697428
+697427,LEGO 60378 City - Ciężarówka i laboratorium badawcze,NA,-5.0,280.0,2023-07-12,https://www.pepper.pl/promocje/lego-60378-city-ciezarowka-i-laboratorium-badawcze-697427
+697426,[Amazon.de] Levoit Odkurzacz akumulatorowy z mini turboszczotką i 2 filtrami HEPA €175.7,NA,-12.0,887.68,2023-07-12,https://www.pepper.pl/promocje/amazonde-levoit-odkurzacz-akumulatorowy-z-mini-turboszczotka-i-2-filtrami-hepa-697426
+697425,"HUION WH1409 V2 tablet graficzny z 8192 poziomami czułości nacisku, 12 przycisków ekspresowych połączonych z funkcją Tilt",NA,-40.0,649.99,2023-07-12,https://www.pepper.pl/promocje/huion-wh1409-v2-tablet-graficzny-z-8192-poziomami-czulosci-nacisku-12-przyciskow-ekspresowych-polaczonych-z-funkcja-tilt-697425
+697424,Buty Geox U SIRON W C - MOCCASINS Mężczyźni - 48% - Amazon.pl,NA,-50.0,444.0,2023-07-12,https://www.pepper.pl/promocje/buty-geox-u-siron-w-c-moccasins-mezczyzni-48-amazonpl-697424
+697423,Rowery Enduro / DH Trek Slash 7 2023+ pedały Line Elite Gratis!,14499.0,-27.0,19799.0,2023-07-12,https://www.pepper.pl/promocje/rowery-enduro-dh-trek-slash-7-2023-pedaly-line-elite-gratis-697423
+697422,"Statyw fotograficzny podróżny, trójnóg 163 cm K&F Concept K234A0 (BI234M) + głowica kulowa",NA,-20.0,259.0,2023-07-12,https://www.pepper.pl/promocje/statyw-fotograficzny-podrozny-trojnog-163-cm-kf-concept-k234a0-bi234m-glowica-kulowa-697422
+697421,8 dni w Bułgarii za 612 zł/os (29.08-5.09)! Hotel ze śniadaniami + loty z Katowic w cenie (możliwe 600 zł/os),612.81,NA,NA,2023-07-12,https://www.pepper.pl/promocje/8-dni-w-bulgarii-za-612-zlos-2908-509-w-cenie-hotel-3-ze-sniadaniami-loty-z-katowic-mozliwe-600-zlos-697421
+697420,Piłka do koszykówki Spalding TF500 r.7,NA,-19.0,229.0,2023-07-12,https://www.pepper.pl/promocje/pilka-do-koszykowki-spalding-tf500-r7-697420
+697419,"Micro PC Dell 7050 Tiny i3 6100T 2 x 3,2 GHz (2 rdzenie / 4 wątki) 8GB RAM 128GB SSD M.2 WIN10",333.33,NA,NA,2023-07-12,https://www.pepper.pl/promocje/micro-pc-dell-7050-tiny-i36100t-2-x-32-ghz-2-rdzenie-4-watki-8gb-ram-128gb-ssd-m2-win10-697419
+697418,Rower trekkingowy elektryczny Romet ERT 201 D 2022 rama 19 cali,8789.0,-27.0,11999.0,2023-07-12,https://www.pepper.pl/promocje/rower-trekkingowy-elektryczny-romet-ert-201-d-2022-rama-19-cali-697418
+697416,Naklejki 3d dla dzieci 500 sztuk za 19zł @ Amazon.pl,NA,-53.0,40.0,2023-07-12,https://www.pepper.pl/promocje/naklejki-3d-dla-dzieci-500-sztuk-za-19zl-at-amazonpl-697416
+697415,VASAGLE - biurko 60 x 140 z elektryczną regulacją wysokości (+ szuflada i gniazdko) @ Amazon,899.0,-31.0,1299.0,2023-07-12,https://www.pepper.pl/promocje/vasagle-biurko-60-x-140-z-elektryczna-regulacja-wysokosci-szuflada-i-gniazdko-at-amazon-697415
+697413,Apple Watch Ultra,NA,NA,NA,2023-07-12,https://www.pepper.pl/promocje/apple-watch-ultra-ocean-polnoc-697413
+697412,Hot Wheels City zestaw Goryl Toksyczny Atak GTT94,NA,-36.0,218.7,2023-07-12,https://www.pepper.pl/promocje/hot-wheels-city-goryl-toksyczny-atak-zestaw-do-zabawy-z-wielkim-gorylem-stacja-benzynowa-warsztatem-samochodowym-swiatlam-697412
+697411,Dysk Zewnętrzny HDD Seagate FireCuda Gaming HDD 5TB USB 3.2 Gen. 1 RGB (3-letnia usługa odzyskania danych) @ Amazon,NA,-13.0,599.0,2023-07-12,https://www.pepper.pl/promocje/dysk-zewnetrzny-hdd-seagate-firecuda-gaming-hdd-5tb-usb-32-gen-1-rgb-3-letnia-usluga-odzyskania-danych-at-amazon-697411
+697410,Zestaw narzędzi vorel 216 elementów,298.0,-25.0,398.0,2023-07-12,https://www.pepper.pl/promocje/zestaw-narzedzi-vorel-216-elementow-697410
+697409,Obudowa ENDORFY Regnum 400 ARGB,NA,-11.0,439.0,2023-07-12,https://www.pepper.pl/promocje/obudowa-endorfy-regnum-400-argb-697409
+697407,"Urządzenie wielofunkcyjne BROTHER DCP-B7520DW Gwarancja 3 lata po rejestracji, dystrybucja PL",988.0,NA,NA,2023-07-12,https://www.pepper.pl/promocje/brother-dcp-b7520dw-gwarancja-3-lata-po-rejestracji-dystrybucja-pl-697407
+697405,LEGO Technic 42107 Ducati Panigale V4 @Amazon.fr 41.72€,NA,-19.0,234.0,2023-07-12,https://www.pepper.pl/promocje/lego-technic-42107-ducati-panigale-v4-at-amazonfr-4172eur-697405
+697400,"Super cena w Bricomanie na Agregat prądotwórczy 2,8kW PGG3000X Pezal",999.0,NA,NA,2023-07-12,https://www.pepper.pl/promocje/super-cena-w-bricomanie-na-agregat-pradotworczy-28kw-pgg3000x-pezal-697400
+697402,Oczyszczacz powietrza jonizator Olimpia Splendind,NA,-15.0,895.0,2023-07-12,https://www.pepper.pl/promocje/oczyszczacz-powietrza-jonizator-olimpia-splendind-697402
+697401,"System monitoringu Reolink RLK16-1200D8-A (16 kanałow, 8 kamer Dome IP 12MP 4K, NVR 4TB) @ Amazon",NA,-34.0,7679.99,2023-07-12,https://www.pepper.pl/promocje/system-monitoringu-reolink-rlk16-1200d8-a-16-kanalow-8-kamer-dome-ip-12mp-4k-nvr-4tb-at-amazon-697401
+697399,Automatyczny gramofon analogowy Denon DP-300F @ Amazon,NA,-19.0,1349.0,2023-07-12,https://www.pepper.pl/promocje/automatyczny-gramofon-analogowy-denon-dp-300f-at-amazon-697399
+697397,[ Nintendo Switch ] Beholgar Collector's Edition @ Amazon,NA,-21.0,299.0,2023-07-12,https://www.pepper.pl/promocje/nintendo-switch-beholgar-collectors-edition-at-amazon-697397
+697395,Telewizor 65 cali TCL 65C735 QLED 144Hz 3599 zł Media Expert,3599.99,-16.0,4299.99,2023-07-12,https://www.pepper.pl/promocje/telewizor-65-cali-tcl-65c735-qled-144hz-3599-zl-media-expert-697395
+697396,"Prime day- TESSAN Podwójna Wtyczka do Gniazda, Gniazdo Wielokrotne Gniazdo USB C",NA,-30.0,99.99,2023-07-12,https://www.pepper.pl/promocje/prime-day-tessan-podwojna-wtyczka-do-gniazda-gniazdo-wielokrotne-gniazdo-usb-c-697396
+697394,Tablet Lenovo Tab M8 TB300 3GB/32GB LTE +ETUI +FOLIA,549.0,-5.0,579.0,2023-07-12,https://www.pepper.pl/promocje/lenovo-tab-m8-tb300-3gb32gb-lte-etui-folia-697394
+697390,Dodatkowe 20% rabatu na wszystkie artykuły/JYSK/kampania promocyjna „Wielkie Otwarcie”,NA,NA,NA,2023-07-12,https://www.pepper.pl/kupony/dodatkowe-20-rabatu-na-wszystkie-artykulyjyskkampania-promocyjna-wielkie-otwarcie-697390
+697389,Apple Macbook Pro 16 M1 16GB 512SSD SpaceGray,8999.0,-5.0,9499.0,2023-07-12,https://www.pepper.pl/promocje/apple-macbook-pro-16-m1-16gb-512ssd-spacegray-697389
+697393,Affinity V2 Universal Licence za 472 zł - (cena dla posiadających V1),472.49,NA,NA,2023-07-12,https://www.pepper.pl/promocje/affinity-v2-universal-licence-za-472-zl-cena-dla-posiadajacych-v1-697393
+697392,[ Nintendo Switch ] Cat Quest Pawsome Pack (1+2) @ Amazon,NA,-42.0,149.0,2023-07-12,https://www.pepper.pl/promocje/nintendo-switch-cat-quest-pawsome-pack-12-at-amazon-697392
+697377,garmin edge 1040,2202.0,NA,NA,2023-07-12,https://www.pepper.pl/promocje/garmin-edge-1040-697377
+697388,Bluza Guess -małe logo,149.0,NA,NA,2023-07-12,https://www.pepper.pl/promocje/bluza-guess-male-logo-697388
+697387,"Wild freedom karma mokra dla kota - puszka 200 g za 3,8 zł (z kodem jeszcze mniej)",3.8,NA,NA,2023-07-12,https://www.pepper.pl/promocje/wild-freedom-karma-mokra-dla-kota-puszka-200-g-za-38-zl-z-kodem-jeszcze-mniej-697387
+697385,Melissa & Doug Zabawka zestaw dentysty za 114zł @ Amazon.pl,NA,-28.0,160.0,2023-07-12,https://www.pepper.pl/promocje/melissa-doug-zabawka-zestaw-dentysty-za-114zl-at-amazonpl-697385
+697384,"Papier toaletowy 12 rolek XXL: 0,84zł rolka",9.99,NA,NA,2023-07-12,https://www.pepper.pl/promocje/papier-toaletowy-12-rolek-xxl-084zl-rolka-697384
+697382,Mysz Logitech G502 X PLUS LIGHTSPEED biała,449.0,-18.0,549.0,2023-07-12,https://www.pepper.pl/promocje/logitech-g502-x-plus-biala-697382
+697381,"Komplet sztućców Villeroy und Boch Ella - 24-częściowy zestaw, częściowo pozłacane (można myć w zmywarce) @ Amazon",NA,-27.0,1160.0,2023-07-12,https://www.pepper.pl/promocje/komplet-sztuccow-villeroy-und-boch-ella-24-czesciowy-zestaw-czesciowo-pozlacane-mozna-myc-w-zmywarce-at-amazon-697381
+697379,Gra karciana Eksplodujące Minionki,32.99,-23.0,42.99,2023-07-12,https://www.pepper.pl/promocje/gra-karciana-eksplodujace-minionki-697379
+697378,WSZYSTKIE PIWA DESPERADOS - 40% TANIEJ PRZY ZAKUPIE 6 BUTELEK,NA,NA,NA,2023-07-12,https://www.pepper.pl/kupony/wszystkie-piwa-desperados-40-taniej-przy-zakupie-6-butelek-697378
+697373,"Owolovo Mus tropikalny Mix 4 Smaków 200g x 40 sztuk tj. 2,87zł/szt albo z kodem rabatowym 2,37zł/szt",114.99,-12.0,130.99,2023-07-12,https://www.pepper.pl/promocje/owolovo-mus-tropikalny-mix-4-smakow-200g-x-40-sztuk-tj-287zlszt-697373
+697376,Karta graficzna PowerColor Radeon RX 6700 XT Fighter 12GB + gra Starfield,1564.09,NA,NA,2023-07-12,https://www.pepper.pl/promocje/karta-graficzna-powercolor-radeon-rx-6700-xt-fighter-12gb-gra-697376
+697372,"Cała oferta -50%, książki już od 4 złotych",NA,NA,NA,2023-07-12,https://www.pepper.pl/promocje/cala-oferta-50-ksiazki-juz-od-4-zlotych-697372

@@ -46,7 +46,7 @@ class ScrapWebpage:
             if self.category_type == "search":
                 searched_article = str(self.searched_article.replace(" ","%20"))
                 url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?q=",
-                                        str(self.start_page), searched_article, "&page=", str(self.start_page)])
+                                        searched_article, "&page=", str(self.start_page)])
         except Exception as e:
             logging.warning(f"Invalid category type name, category must be 'nowe' or 'search':\
                             {e}\n Tracking: {traceback.format_exc()}")
@@ -75,6 +75,10 @@ class ScrapWebpage:
             retrived_articles = list()
             while flag:
                 soup = self.scrap_data()
+                flag = self.check_if_last_page(soup)
+                if flag == False:
+                    logging.warning("Error!")
+                    break
                 articles = soup.find_all('article')
                 retrived_articles += articles
                 if len(retrived_articles) >= self.articles_to_retrieve:
@@ -102,7 +106,6 @@ class ScrapWebpage:
             item.append(GetItemRegularPrice(article).get_data())
             item.append(GetItemAddedDate(article).get_data())
             item.append(GetItemUrl(article).get_data())
-
             if item not in all_items:
                 all_items.append(item)
             else:
@@ -139,7 +142,7 @@ class ScrapWebpage:
 
         header = False
         if not os.path.exists('scraped.csv'):
-            header=True
+            header = True
             df = pd.DataFrame([item], columns=columns)
             df.to_csv('scraped.csv', header=header, index=False, mode='a')
         else:
@@ -150,7 +153,7 @@ class ScrapWebpage:
                 df.to_csv('scraped.csv', header=header, index=False, mode='a')
 
 
-    def get_scraping_stats_info(self, action_execution_datetime) -> List[Union[str, int, bool, float]]:
+    def get_scraping_stats_info(self, action_execution_datetime: datetime) -> List[Union[str, int, bool, float]]:
 
         stats_info = list()
 
@@ -172,17 +175,45 @@ class ScrapWebpage:
 
         return stats_info
 
+    def check_if_last_page(self, soup: str) -> bool:
+
+        """Check 'nowe' category to verify if scraped page is the last one."""
+        try:
+            searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
+            if searched_ending_string.startswith("Ups"):
+                logging.warning("No more pages to scrap.")
+                return False
+        except:
+            return True
+
+
+        """Check 'search' category to verify if scraped page is the last one."""
+        try:
+            searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
+            searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
+
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("Okazje()"))
+            print(searched_ending_string)
+            print(searched_articles_number)
+            if searched_ending_string.startswith("Ups") and searched_articles_number > 0:
+                logging.warning("No more pages to scrap.")
+                return False
+        except:
+            return True
+
+    def check_if_no_found_items(self, soup: str) -> bool:
+        pass
 
 
 
 
 
-
-category_type = "nowe"
-start_page = 1
-articles_to_retrieve = 10
+category_type = "search"
+start_page = 21
+searched_article = "samsung s23"
+articles_to_retrieve = 80
 to_csv = True
 to_database = True
 to_statistics = True
-output = ScrapWebpage(category_type, articles_to_retrieve, to_csv, to_database, to_statistics, start_page)
+output = ScrapWebpage(category_type, articles_to_retrieve, to_csv, to_database, to_statistics, start_page, searched_article)
 output.get_items_details()
