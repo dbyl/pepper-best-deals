@@ -1,8 +1,7 @@
 from django.db import models
-from django.db.models import Model
 
 
-class PepperArticles(Model):
+class PepperArticle(models.Model):
 
     item_id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=500)
@@ -19,7 +18,7 @@ class PepperArticles(Model):
 
         return ', '.join(fields)
 
-class ScrapingStatistics(Model):
+class ScrapingStatistic(models.Model):
 
     category_type = models.CharField(max_length=500)
     start_page = models.PositiveIntegerField()

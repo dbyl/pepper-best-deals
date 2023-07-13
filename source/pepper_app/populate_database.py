@@ -6,10 +6,10 @@ import traceback
 import sys
 import pandas as pd
 from django.core.management import BaseCommand
-from pepper_app.models import PepperArticles, ScrapingStatistics
+from pepper_app.models import PepperArticle, ScrapingStatistic
 
 
-class LoadItemDetailesToDatabase(BaseCommand):
+class LoadItemDetailToDatabase(BaseCommand):
 
     def __init__(self, item) -> None:
         self.item = item
@@ -22,7 +22,7 @@ class LoadItemDetailesToDatabase(BaseCommand):
         item_df = pd.DataFrame([data], columns=header)
         for _, row in item_df.iterrows():
             try:
-                pepperarticles_obj, _ = PepperArticles.objects.get_or_create(
+                pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
                     item_id = row["item_id"],
                     name = row["name"],
                     discount_price = self.na_discount_price(row),
@@ -54,7 +54,7 @@ class LoadItemDetailesToDatabase(BaseCommand):
         else:
             return float(row["regular_price"])
 
-class LoadScrapingStatisticsToDatabase(BaseCommand):
+class LoadScrapingStatisticToDatabase(BaseCommand):
 
     def __init__(self, stats_info) -> None:
         self.stats_info = stats_info
@@ -67,7 +67,7 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
         stats_info_df = pd.DataFrame([data], columns=header)
         for _, row in stats_info_df.iterrows():
             try:
-                scrapingstatistics_obj, _ = ScrapingStatistics.objects.get_or_create(
+                scrapingstatistic_obj, _ = ScrapingStatistic.objects.get_or_create(
                     category_type = row["category_type"],
                     start_page = row["start_page"],
                     retrieved_articles_quantity = int(row["retrieved_articles_quantity"]),
@@ -104,7 +104,7 @@ class LoadDataFromCsv(BaseCommand):
     def load_to_db(self, df) -> None:
         for _, row in df.iterrows():
             try:
-                pepperarticles_obj, _ = PepperArticles.objects.get_or_create(
+                pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
                     item_id = row["item_id"],
                     name = row["name"],
                     discount_price = row["discount_price"],

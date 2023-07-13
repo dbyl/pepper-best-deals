@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import PepperArticles, ScrapingStatistics
+from .models import PepperArticle, ScrapingStatistic
 
-admin.site.register(PepperArticles)
-admin.site.register(ScrapingStatistics)
+admin.site.register(PepperArticle)
+admin.site.register(ScrapingStatistic)

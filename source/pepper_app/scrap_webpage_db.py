@@ -20,7 +20,7 @@ import logging
 import html5lib
 
 
-from pepper_app.populate_database import LoadItemDetailesToDatabase, LoadDataFromCsv, LoadScrapingStatisticsToDatabase
+from pepper_app.populate_database import LoadItemDetailToDatabase, LoadDataFromCsv, LoadScrapingStatisticToDatabase
 
 
 
@@ -117,7 +117,7 @@ class ScrapWebpage:
 
             if to_database == True:
                 try:
-                    LoadItemDetailesToDatabase(item).load_to_db()
+                    LoadItemDetailToDatabase(item).load_to_db()
                 except Exception as e:
                     logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
 
@@ -127,7 +127,7 @@ class ScrapWebpage:
         if to_statistics == True:
             try:
                 stats_info = self.get_scraping_stats_info(action_execution_datetime)
-                LoadScrapingStatisticsToDatabase(stats_info).load_to_db()
+                LoadScrapingStatisticToDatabase(stats_info).load_to_db()
             except Exception as e:
                 logging.warning(f"Populating ScrapingStatistics table failed: {e}\n Tracking: {traceback.format_exc()}")
 
