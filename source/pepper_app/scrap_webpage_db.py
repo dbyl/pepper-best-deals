@@ -29,7 +29,7 @@ class ScrapWebpage:
 
     def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool = False,
                 to_database: bool = False, to_statistics: bool = True, start_page: int = 1,
-                searched_article: str = 'NA') -> None:
+                searched_article: str = 'NA', scrap_continuously: bool = False, scrap_choosen_data: bool = False) -> None:
         self.category_type = category_type
         self.articles_to_retrieve = articles_to_retrieve
         self.to_database = to_database
@@ -37,13 +37,17 @@ class ScrapWebpage:
         self.to_statistics = to_statistics
         self.start_page = start_page
         self.searched_article = searched_article
+        self.scrap_continuously = scrap_continuously
+        self.scrap_choosen_data = scrap_choosen_data
 
     def scrap_data(self) -> str:
 
         try:
-            if self.category_type == "nowe":
+            if self.scrap_continuously == True:
+                url_to_scrap = "https://www.pepper.pl/nowe"
+            elif self.category_type == "nowe":
                 url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?page=", str(self.start_page)])
-            if self.category_type == "search":
+            elif self.category_type == "search":
                 searched_article = str(self.searched_article.replace(" ","%20"))
                 url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?q=",
                                         searched_article, "&page=", str(self.start_page)])
@@ -70,7 +74,7 @@ class ScrapWebpage:
 
 
     def infinite_scroll_handling(self) -> List[str]:
-        
+
         flag = True
         retrived_articles = list()
 
@@ -95,13 +99,29 @@ class ScrapWebpage:
                 flag = False
                 return retrived_articles[:self.articles_to_retrieve]
             self.start_page += 1
-            
 
-    def get_items_details(self) -> None:
+
+    def get_items_details_depending_on_the_function(self) -> None:
+
+
+        if self.scrap_continuously == True and self.scrap_choosen_data == False:
+            flag = True
+            while flag == True:
+                retrived_articles = self.check_for_new_items_continuously()
+                self.get_items_details(retrived_articles)
+        elif self.scrap_continuously == False and self.scrap_choosen_data == True:
+            retrived_articles = self.infinite_scroll_handling()
+            self.get_items_details(retrived_articles)
+        else:
+            logging.warning("E")
+
+        #what of scrap_continuously == True and scrap_choosen_data == True?
+
+
+    def get_items_details(self, retrived_articles) -> None:
 
         start_time = datetime.utcnow().replace(tzinfo=utc)
 
-        retrived_articles = self.infinite_scroll_handling()
         all_items = list()
 
         try:
@@ -131,7 +151,6 @@ class ScrapWebpage:
                         logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
 
         except Exception as e:
-            print(retrived_articles)
             logging.warning(f"Errr1:\
                         {e}\n Tracking: {traceback.format_exc()}")
 
@@ -176,10 +195,12 @@ class ScrapWebpage:
         searched_article = self.searched_article
         to_csv = self.to_csv
         to_database  = self.to_database
+        scrap_continuously = self.scrap_continuously
+        scrap_choosen_data = self.scrap_choosen_data
 
         statistics_fields = [category_type, start_page, retrived_articles_quantity,
                             time_of_the_action, action_execution_datetime,
-                            searched_article, to_csv, to_database]   #to constans in the future
+                            searched_article, to_csv, to_database, scrap_continuously, scrap_choosen_data]   #to constans in the future
 
         for field in statistics_fields:
             stats_info.append(field)
@@ -225,20 +246,31 @@ class ScrapWebpage:
         except:
             return True
 
-    def check_for_new_items_continuously(self) -> None:
+    def check_for_new_items_continuously(self) -> List[str]:
 
-        pass 
+        retrived_articles = list()
+
+        soup = self.scrap_data()
+        time.sleep(20)
+        articles = soup.find_all('article')
+        retrived_articles += articles
+
+        return retrived_articles
 
 
 
 
 
-category_type = "search"
-start_page = 1
+
+category_type = "nowe"
+start_page = 2
 searched_article = "fsdfsdfsdf"
-articles_to_retrieve = 70
+articles_to_retrieve = 50
 to_csv = True
 to_database = True
 to_statistics = True
-output = ScrapWebpage(category_type, articles_to_retrieve, to_csv, to_database, to_statistics, start_page, searched_article)
-output.get_items_details()
+scrap_continuously = False
+scrap_choosen_data = True
+output = ScrapWebpage(category_type, articles_to_retrieve, to_csv,
+                        to_database, to_statistics, start_page, searched_article, scrap_continuously, scrap_choosen_data)
+output.get_items_details_depending_on_the_function()

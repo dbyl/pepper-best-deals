@@ -62,7 +62,7 @@ class LoadScrapingStatisticToDatabase(BaseCommand):
     def load_to_db(self) -> None:
         header = ['category_type', 'start_page', 'retrieved_articles_quantity',
                 'time_of_the_action', 'action_execution_datetime', 'searched_article',
-                'to_csv', 'to_database'] #to constans in the future
+                'to_csv', 'to_database', 'scrap_continuously', 'scrap_choosen_data'] #to constans in the future
         data = self.stats_info
         stats_info_df = pd.DataFrame([data], columns=header)
         for _, row in stats_info_df.iterrows():
@@ -73,13 +73,21 @@ class LoadScrapingStatisticToDatabase(BaseCommand):
                     retrieved_articles_quantity = int(row["retrieved_articles_quantity"]),
                     time_of_the_action = row["time_of_the_action"],
                     action_execution_datetime = row["action_execution_datetime"],
-                    searched_article = row["searched_article"],
+                    searched_article = self.if_no_search_item(row),
                     to_csv = bool(row["to_csv"]),
                     to_database = bool(row["to_database"]),
+                    scrap_continuously = bool(row["scrap_continuously"]),
+                    scrap_choosen_data = bool(row["scrap_choosen_data"])
                 )
             except Exception as e:
                 with open("populating_scrapstats_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
+
+    def if_no_search_item(self, row):
+        if row["category_type"] == 'nowe':
+            return None
+        else:
+            return row["searched_article"]
 
 class LoadDataFromCsv(BaseCommand):
 
