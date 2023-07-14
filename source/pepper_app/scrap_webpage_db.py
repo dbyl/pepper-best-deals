@@ -70,25 +70,32 @@ class ScrapWebpage:
 
 
     def infinite_scroll_handling(self) -> List[str]:
-        try:
-            flag = True
-            retrived_articles = list()
-            while flag:
-                soup = self.scrap_data()
-                flag = self.check_if_last_page(soup)
-                if flag == False:
-                    logging.warning("Error!")
-                    break
+        
+        flag = True
+        retrived_articles = list()
+
+        while flag:
+            soup = self.scrap_data()
+
+            flag = self.check_if_last_page(soup)
+            if flag == False:
+                return retrived_articles[:self.articles_to_retrieve]
+
+            flag = self.check_if_no_items_found(soup)
+            if flag == False:
+                return retrived_articles[:self.articles_to_retrieve]
+
+            if flag == True:
                 articles = soup.find_all('article')
                 retrived_articles += articles
-                if len(retrived_articles) >= self.articles_to_retrieve:
-                    flag = False
-                    return retrived_articles[:self.articles_to_retrieve]
-                self.start_page += 1
-        except IndexError as e:
-            raise IndexError("There aren't that many articles, try retrieve lower quantity of articles")
+            else:
+                return retrived_articles[:self.articles_to_retrieve]
 
-
+            if len(retrived_articles) >= self.articles_to_retrieve:
+                flag = False
+                return retrived_articles[:self.articles_to_retrieve]
+            self.start_page += 1
+            
 
     def get_items_details(self) -> None:
 
@@ -97,32 +104,36 @@ class ScrapWebpage:
         retrived_articles = self.infinite_scroll_handling()
         all_items = list()
 
-        for article in retrived_articles:
-            item = list()
-            item.append(GetItemId(article).get_data())
-            item.append(GetItemName(article).get_data())
-            item.append(GetItemDiscountPrice(article).get_data())
-            item.append(GetItemPercentageDiscount(article).get_data())
-            item.append(GetItemRegularPrice(article).get_data())
-            item.append(GetItemAddedDate(article).get_data())
-            item.append(GetItemUrl(article).get_data())
-            if item not in all_items:
-                all_items.append(item)
-            else:
-                continue
+        try:
+            for article in retrived_articles:
+                item = list()
+                item.append(GetItemId(article).get_data())
+                item.append(GetItemName(article).get_data())
+                item.append(GetItemDiscountPrice(article).get_data())
+                item.append(GetItemPercentageDiscount(article).get_data())
+                item.append(GetItemRegularPrice(article).get_data())
+                item.append(GetItemAddedDate(article).get_data())
+                item.append(GetItemUrl(article).get_data())
+                if item not in all_items:
+                    all_items.append(item)
 
-            if '' in item:
-                logging.warning("Data retrieving failed. None values detected")
-                break
+                if '' in item:
+                    logging.warning("Data retrieving failed. None values detected")
+                    break
 
-            if to_csv == True:
-                self.save_data_to_csv(item)
+                if to_csv == True:
+                    self.save_data_to_csv(item)
 
-            if to_database == True:
-                try:
-                    LoadItemDetailToDatabase(item).load_to_db()
-                except Exception as e:
-                    logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
+                if to_database == True:
+                    try:
+                        LoadItemDetailToDatabase(item).load_to_db()
+                    except Exception as e:
+                        logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
+
+        except Exception as e:
+            print(retrived_articles)
+            logging.warning(f"Errr1:\
+                        {e}\n Tracking: {traceback.format_exc()}")
 
         end_time = datetime.utcnow().replace(tzinfo=utc)
         action_execution_datetime = end_time - start_time
@@ -177,7 +188,8 @@ class ScrapWebpage:
 
     def check_if_last_page(self, soup: str) -> bool:
 
-        """Check 'nowe' category to verify if scraped page is the last one."""
+        """Checking 'nowe' category to verify if the scraped page is the last one."""
+
         try:
             searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
             if searched_ending_string.startswith("Ups"):
@@ -187,31 +199,44 @@ class ScrapWebpage:
             return True
 
 
-        """Check 'search' category to verify if scraped page is the last one."""
+        """Checking 'search' category to verify if the scraped page is the last one."""
+
         try:
             searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
             searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
-
-            searched_articles_number = int(searched_articles_number.replace(" ","").strip("Okazje()"))
-            print(searched_ending_string)
-            print(searched_articles_number)
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
             if searched_ending_string.startswith("Ups") and searched_articles_number > 0:
                 logging.warning("No more pages to scrap.")
                 return False
         except:
             return True
 
-    def check_if_no_found_items(self, soup: str) -> bool:
-        pass
+    def check_if_no_items_found(self, soup: str) -> bool:
+
+        """Checking if searched item was found."""
+
+        try:
+            searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
+            searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
+            if searched_ending_string.startswith("Ups") and searched_articles_number == 0:
+                logging.warning("The searched item was not found.")
+                return False
+        except:
+            return True
+
+    def check_for_new_items_continuously(self) -> None:
+
+        pass 
 
 
 
 
 
 category_type = "search"
-start_page = 21
-searched_article = "samsung s23"
-articles_to_retrieve = 80
+start_page = 1
+searched_article = "fsdfsdfsdf"
+articles_to_retrieve = 70
 to_csv = True
 to_database = True
 to_statistics = True
