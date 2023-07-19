@@ -1,35 +1,40 @@
-from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-import logging
-from django.utils.timezone import utc
-from bs4 import BeautifulSoup
-from datetime import datetime, timedelta, date
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from datetime import datetime
-import time
-from enum import Enum, IntEnum
-from collections import Counter
-import os
-from pepper_app.get_info import GetItemAddedDate, GetItemDiscountPrice, GetItemId, GetItemName, GetItemPercentageDiscount, GetItemRegularPrice, GetItemUrl
-import csv
-import pandas as pd
-import traceback
 import sys
-from typing import List, Union
+import csv
+import os
+import time
 import logging
 import html5lib
-
-
-from pepper_app.populate_database import LoadItemDetailToDatabase, LoadDataFromCsv, LoadScrapingStatisticToDatabase
+import pandas as pd
+import traceback
+from datetime import datetime, timedelta, date
+from typing import List, Union
+from bs4 import BeautifulSoup
+from enum import Enum, IntEnum
+from collections import Counter
+from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
+from django.utils.timezone import utc
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from pepper_app.get_info import (GetItemAddedDate,
+                                GetItemDiscountPrice,
+                                GetItemId,
+                                GetItemName,
+                                GetItemPercentageDiscount,
+                                GetItemRegularPrice,
+                                GetItemUrl)
+from pepper_app.populate_database import (LoadItemDetailToDatabase,
+                                        LoadDataFromCsv,
+                                        LoadScrapingStatisticToDatabase)
 
 
 
 
 class ScrapWebpage:
 
-    def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool = False,
-                to_database: bool = False, to_statistics: bool = True, start_page: int = 1,
-                searched_article: str = 'NA', scrap_continuously: bool = False, scrap_choosen_data: bool = False) -> None:
+
+    def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool=False,
+                to_database: bool=False, to_statistics: bool=True, start_page: int=1,
+                searched_article: str='NA', scrap_continuously: bool=False, scrap_choosen_data: bool=False) -> None:
         self.category_type = category_type
         self.articles_to_retrieve = articles_to_retrieve
         self.to_database = to_database
@@ -41,7 +46,25 @@ class ScrapWebpage:
         self.scrap_choosen_data = scrap_choosen_data
 
     def scrap_data(self) -> str:
+        try:
+            driver = webdriver.Chrome()
+            driver.set_window_size(1400,1000)
+            url_to_scrap = self.select_url()
+            driver.get(url_to_scrap)
+            time.sleep(0.7)
+            page = driver.page_source
+            soup = BeautifulSoup(page, "html5lib")
+            return soup
+        except ConnectionError as e:
+            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
+        except MissingSchema as e:
+            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+        except HTTPError as e:
+            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+        except ReadTimeout as e:
+            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")
 
+    def select_url(self) -> str:
         try:
             if self.scrap_continuously == True:
                 url_to_scrap = "https://www.pepper.pl/nowe"
@@ -55,55 +78,34 @@ class ScrapWebpage:
             logging.warning(f"Invalid category type name, category must be 'nowe' or 'search':\
                             {e}\n Tracking: {traceback.format_exc()}")
 
-        try:
-            driver = webdriver.Chrome()
-            driver.set_window_size(1400,1000)
-            driver.get(url_to_scrap)
-            time.sleep(0.7)
-            page = driver.page_source
-            soup = BeautifulSoup(page, "html5lib")
-            return soup
-        except ConnectionError as e:
-            print(f"ConnectionError occured: {e}. \nTry again later")
-        except MissingSchema as e:
-            print(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
-        except HTTPError as e:
-            print(f"HTTPError occured: {e}. \nMake sure that website url is valid")
-        except ReadTimeout as e:
-            print(f"ReadTimeout occured: {e}. \nTry again later")
-
-
     def infinite_scroll_handling(self) -> List[str]:
+        try:
+            flag = True
+            retrived_articles = list()
+            while flag:
+                soup = self.scrap_data()
+                flag = self.check_if_last_page(soup)
+                if flag == False:
+                    return retrived_articles[:self.articles_to_retrieve]
 
-        flag = True
-        retrived_articles = list()
+                flag = self.check_if_no_items_found(soup)
+                if flag == False:
+                    return retrived_articles[:self.articles_to_retrieve]
+                if flag == True:
+                    articles = soup.find_all('article')
+                    retrived_articles += articles
+                else:
+                    return retrived_articles[:self.articles_to_retrieve]
 
-        while flag:
-            soup = self.scrap_data()
-
-            flag = self.check_if_last_page(soup)
-            if flag == False:
-                return retrived_articles[:self.articles_to_retrieve]
-
-            flag = self.check_if_no_items_found(soup)
-            if flag == False:
-                return retrived_articles[:self.articles_to_retrieve]
-
-            if flag == True:
-                articles = soup.find_all('article')
-                retrived_articles += articles
-            else:
-                return retrived_articles[:self.articles_to_retrieve]
-
-            if len(retrived_articles) >= self.articles_to_retrieve:
-                flag = False
-                return retrived_articles[:self.articles_to_retrieve]
-            self.start_page += 1
-
+                if len(retrived_articles) >= self.articles_to_retrieve:
+                    flag = False
+                    return retrived_articles[:self.articles_to_retrieve]
+                self.start_page += 1
+        except Exception as e:
+            logging.warning(f"Infinite scroll failed:\
+                            {e}\n Tracking: {traceback.format_exc()}")
 
     def get_items_details_depending_on_the_function(self) -> None:
-
-
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
             flag = True
             while flag == True:
@@ -113,17 +115,12 @@ class ScrapWebpage:
             retrived_articles = self.infinite_scroll_handling()
             self.get_items_details(retrived_articles)
         else:
-            logging.warning("E")
-
-        #what of scrap_continuously == True and scrap_choosen_data == True?
-
+            logging.warning(f"Matching get_items_details depending on the selected \
+                            functionality failed: {e}\n Tracking: {traceback.format_exc()}")
 
     def get_items_details(self, retrived_articles) -> None:
-
         start_time = datetime.utcnow().replace(tzinfo=utc)
-
         all_items = list()
-
         try:
             for article in retrived_articles:
                 item = list()
@@ -136,20 +133,16 @@ class ScrapWebpage:
                 item.append(GetItemUrl(article).get_data())
                 if item not in all_items:
                     all_items.append(item)
-
                 if '' in item:
                     logging.warning("Data retrieving failed. None values detected")
                     break
-
                 if to_csv == True:
                     self.save_data_to_csv(item)
-
                 if to_database == True:
                     try:
                         LoadItemDetailToDatabase(item).load_to_db()
                     except Exception as e:
                         logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
-
         except Exception as e:
             logging.warning(f"Errr1:\
                         {e}\n Tracking: {traceback.format_exc()}")
