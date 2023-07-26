@@ -1,51 +1,121 @@
 item_id,name,discount_price,percentage_discount,regular_price,date_added,url
-698594,Soundbar DENON DHT-S416,913.99,-16.0,1085.0,2023-07-14,https://www.pepper.pl/promocje/soundbar-denon-dht-s416-698594
-698593,Winyl Adele 30 2LP,69.97,-44.0,125.63,2023-07-14,https://www.pepper.pl/promocje/winyl-adele-30-2lp-698593
-698592,Zegarek męski Orient FFAB0000DB9 automatyczny,NA,NA,NA,2023-07-14,https://www.pepper.pl/promocje/zegarek-meski-orient-fab0000db9-automatyczny-698592
-698591,"Bokserki męskie 3 sztuki, kilka wersji kolorystycznych",23.9,NA,NA,2023-07-14,https://www.pepper.pl/promocje/bokserki-meskie-3-sztuki-kilka-wersji-kolorystycznych-698591
-698520,Słuchawki bezprzewodowe JBL Tune 520 BT za 179 zł @Media Markt,179.0,-18.0,216.99,2023-07-14,https://www.pepper.pl/promocje/sluchawki-bezprzewodowe-jbl-tune-520-bt-za-179-zl-at-media-markt-698520
-698514,"Ładowarka sieciowa SBS 20W Czarny + kabel + organizer (lub z bezprzewodową ładowarką za 69,99 zł) @ Media Markt",49.99,-29.0,69.99,2023-07-14,https://www.pepper.pl/promocje/ladowarka-sieciowa-sbs-20w-czarny-kabel-organizer-at-media-markt-698514
-698590,"Basen Intex Mandarin Swim Center 57181, 229x147x46cm (Amazon oraz Allegro)",70.1,NA,NA,2023-07-14,https://www.pepper.pl/promocje/basen-intex-mandarin-swim-center-57181-229x147x46cm-698590
-698532,Hulajnoga elektryczna NIU KQi3 Sport (Biała lub Czarna) @ Media Markt,1999.0,-17.0,2399.0,2023-07-14,https://www.pepper.pl/promocje/hulajnoga-elektryczna-niu-kqi3-sport-biala-lub-czarna-at-media-markt-698532
-698587,Buty koszykarskie Adidas Cross Em Up 5 (33.5-40),107.99,NA,NA,2023-07-14,https://www.pepper.pl/promocje/buty-koszykarskie-adidas-cross-em-up-5-335-40-698587
-698585,Karta Graficzna Sapphire AMD RADEON RX7600 PULSE GAMING 8GB,1262.62,NA,NA,2023-07-14,https://www.pepper.pl/promocje/karta-graficzna-sapphire-amd-radeon-rx7600-pulse-gaming-8gb-698585
-698584,Koncentrat płynu do spryskiwaczy W5 lemon 250ml 1:100(na 25L),2.99,-33.0,4.49,2023-07-14,https://www.pepper.pl/promocje/koncentrat-plynu-do-spryskiwaczy-w5-lemon-250ml-1100na-25l-698584
-698583,Milwaukee M18BH-0 Młotowiertarka 18V,966.96,-19.0,1190.0,2023-07-14,https://www.pepper.pl/promocje/milwaukee-m18bh-0-mlotowiertarka-18v-698583
-698582,"Książki z cyklu ""Z Mgły Zrodzony"" (tom 2, 3 i 7)",NA,-60.0,37.05,2023-07-14,https://www.pepper.pl/promocje/ksiazki-z-cyklu-z-mgly-zrodzony-tom-2-3-i-7-698582
-698581,"PKO BP 7.5% na koncie oszczędnościowym, do 100 000zł , nowe środki",NA,NA,NA,2023-07-14,https://www.pepper.pl/promocje/pko-bp-konto-oszczednosciowe-na-75-do-100-000zl-nowe-srodki-698581
-698575,"Płyn do płukania Silan supreme pleasure i inne @Biedronka, Białystok",9.99,-33.0,14.99,2023-07-14,https://www.pepper.pl/promocje/silna-supreme-pleasure-i-inne-698575
-698579,Ptasie mleczko za 1 zł przy zakupach za min. 199 zł @Lidl,1.0,-93.0,14.0,2023-07-14,https://www.pepper.pl/promocje/ptasie-mleczko-za-1-zl-698579
-698521,"Promocja na drony DJI, np. Mini 3 Pro z DJI RC za 3399 zł, Mini 3 FMC z DJI RC za 3219 zł, więcej w opisie @ Media Markt",3399.0,-21.0,4290.0,2023-07-14,https://www.pepper.pl/promocje/promocja-na-drony-dji-np-mini-3-pro-z-dji-rc-za-3399-zl-mini-3-fmc-z-dji-rc-za-3219-zl-wiecej-w-opisie-at-media-markt-698521
-698578,Oxenfree @ Steam,7.19,NA,NA,2023-07-14,https://www.pepper.pl/promocje/oxenfree-at-steam-698578
-698576,Pad Nintendo Joy-Con 2-Pack (neon purple/neon orange) lub (blue/neon yellow),279.0,NA,NA,2023-07-14,https://www.pepper.pl/promocje/pad-nintendo-joy-con-2-pack-neon-purpleneon-orange-lub-blueneon-yellow-698576
-698574,"Tabletki do zmywarki Fairy Platinum 0,67gr za tabletkę @InPost Fresh",99.99,NA,NA,2023-07-14,https://www.pepper.pl/promocje/fairy-platinum-067gr-za-tabletke-at-inpost-fresh-698574
-698572,"ODDAJ KREW lipcowe WTORKI I PIĄTKI/Bydgoszcz,Brodnica, Grudziądz, Inowrocław, Toruń/PREZENTY koszulki, torby, kubki",NA,NA,NA,2023-07-14,https://www.pepper.pl/promocje/oddaj-krew-lipcowe-wtorki-i-piatkibydgoszczbrodnica-grudziadz-inowroclaw-torunprezenty-koszulki-torby-kubki-698572
-698573,"Monitor LG 31,5’’ UltraFine Display Ergo 4K z HDR10 32UN880P-B",NA,-13.0,2299.0,2023-07-14,https://www.pepper.pl/promocje/monitor-lg-315-ultrafine-display-ergo-4k-z-hdr10-32un880p-b-698573
-698571,Odkurzacz BOSCH BCH3K2301 Flexxo Gen 2,NA,-17.0,839.0,2023-07-14,https://www.pepper.pl/promocje/odkurzacz-bosch-bch3k2301-flexxo-gen-2-698571
-698567,Magazyn energii Powerbank EcoFlow Delta Pro 3600 Wh TYLKO W APCE MOBILNEJ X-KOM,9999.0,-20.0,12499.0,2023-07-14,https://www.pepper.pl/promocje/ecoflow-delta-pro-698567
-698561,"Projektor laserowy CASIRIS A6 4K (ultra krótki rzut, 2200 ANSI, Android TV, 3/32GB, 5G-WIFI, HDR 10, 150"") | Wysyłka z CZ |",7951.0,-14.0,9299.0,2023-07-14,https://www.pepper.pl/promocje/projektor-laserowy-casiris-a6-4k-ultra-krotki-rzut-2200-ansi-android-tv-332gb-5g-wifi-hdr-10-150-wysylka-z-cz-698561
-698566,"Ebooki Brandona Sandersona (m.in. seria Archiwum Burzowego Światła) po 12,90 i 14,90 zł/szt",12.9,NA,NA,2023-07-14,https://www.pepper.pl/promocje/ebooki-brandona-sandersona-min-seria-archiwum-burzowego-swiatla-po-1290-i-1490-zlszt-698566
-698565,"FISCHER Mini pompka powietrza z manometrem, do wszystkich zaworów (AV, DV, SV), podwójna pompka, wykonana z aluminium, bardzo kompaktowa",32.12,-31.0,46.5,2023-07-14,https://www.pepper.pl/promocje/fischer-mini-pompka-powietrza-z-manometrem-do-wszystkich-zaworow-av-dv-sv-podwojna-pompka-wykonana-z-aluminium-bardzo-kompaktowa-698565
-698564,"Żel do prania Wirek, 1l , 31gr za pranie, mocny skład, produkt polski @Netto",5.15,-28.0,7.15,2023-07-14,https://www.pepper.pl/promocje/zel-do-prania-wirek-1l-31gr-za-pranie-mocny-sklad-produkt-polski-at-netto-698564
-698562,Przedłużenia gwarancji do 5 lat na wszystkie nowe myjki ciśnieniowe Kärcher Home & Garden,NA,NA,NA,2023-07-14,https://www.pepper.pl/promocje/przedluzenia-gwarancji-do-5-lat-na-wszystkie-nowe-myjki-cisnieniowe-karcher-home-garden-698562
-698560,Dysk KIOXIA Exceria G2 2TB SSD,NA,-41.0,507.0,2023-07-14,https://www.pepper.pl/promocje/dysk-kioxia-exceria-g2-2tb-698560
-698559,Etui Samsung Galaxy A53 EF-QA536TT Soft Clear Cover,16.99,-66.0,49.99,2023-07-14,https://www.pepper.pl/promocje/etui-samsung-galaxy-a53-ef-qa536tt-soft-clear-cover-698559
-698557,12 sztuk końcówek do szczoteczek Oclean rozne zestawy kolorystyczne,24.85,NA,NA,2023-07-14,https://www.pepper.pl/promocje/12-sztuk-koncowek-do-szczoteczek-oclean-rozne-zestawy-kolorystyczne-698557
-698556,"Telewizor 55"" QLED Samsung Neo QLED 55QN95B",4799.0,-6.0,5099.0,2023-07-14,https://www.pepper.pl/promocje/telewizor-55-qled-samsung-neo-qled-55qn95b-698556
-698555,Płyta gazowa SMITH&BROWN SHO-G461-BPP4,399.99,-20.0,499.99,2023-07-14,https://www.pepper.pl/promocje/plyta-gazowa-smithbrown-sho-g461-bpp4-698555
-698554,Dysk SSD Kioxia EXCERIA 500GB M.2 PCIe,109.99,NA,NA,2023-07-14,https://www.pepper.pl/promocje/dysk-ssd-kioxia-exceria-500gb-m2-pcie-698554
-698553,mOkazja Voucher Bolt 3 x 99% (max 20 zł) za zamówienie przejazdu i opłacenie go kartą mBanku do 31.07.2023 r.,NA,NA,NA,2023-07-14,https://www.pepper.pl/kupony/mokazja-voucher-bolt-3-x-99-max-20-zl-za-zamowienie-przejazdu-i-oplacenie-go-karta-mbanku-do-31072023-r-698553
-698552,Książka Francuskie samobójstwo Eric Zemmour,25.88,-34.0,39.0,2023-07-14,https://www.pepper.pl/promocje/francuskie-samobojstwo-eric-zemmour-698552
-698551,"Call of Duty: Modern Warfare II - Cross-Gen Bundle za 91,70 zł z Tureckiego PS Store @ PS4 / PS5",91.7,-52.0,191.95,2023-07-14,https://www.pepper.pl/promocje/call-of-duty-modern-warfare-ii-cross-gen-bundle-za-9170-zl-z-tureckiego-ps-store-at-ps4-ps5-698551
-698549,Noclegi w 3-gwiazdkowy hotelu Antares*** w Gdyni od 299 PLN za noc ze śniadaniem @ Triverna,299.0,-33.0,447.0,2023-07-14,https://www.pepper.pl/promocje/noclegi-w-3-gwiazdkowy-hotelu-antares-w-gdyni-od-299-pln-za-noc-ze-sniadaniem-at-triverna-698549
-698545,Klawiatura mechaniczna Cooler Master SK652 RGB Low Profile RED,169.0,-15.0,199.0,2023-07-14,https://www.pepper.pl/promocje/klawiatura-mechaniczna-cooler-master-sk652-rgb-low-profile-red-698545
-698544,Karta graficzna PNY RTX 4070 Ti Verto 12GB GDDR6X (bulk),NA,-13.0,3779.0,2023-07-14,https://www.pepper.pl/promocje/karta-graficzna-pny-rtx-4070-ti-verto-12gb-gddr6x-bulk-698544
-698522,2 noce dla dwojga w Hotelu Zamek na Skale (k. Lądka-Zdroju) ze śniadaniami @ Travelist,338.0,-53.0,718.0,2023-07-14,https://www.pepper.pl/promocje/2-noce-dla-dwojga-w-hotelu-zamek-na-skale-k-ladka-zdroju-ze-sniadaniami-at-travelist-698522
-698542,"Telewizor HISENSE 65U7HQ 65"" ULED 4K VIDAA Dolby Atmos 120Hz Full Array HDMI 2.1",3999.99,NA,NA,2023-07-14,https://www.pepper.pl/promocje/telewizor-hisense-65u7hq-65-uled-4k-vidaa-dolby-atmos-120hz-full-array-hdmi-21-698542
-698539,OXENFREE II: Lost Signals za darmo z abonamentem Netflix @ Google Play / iOS,NA,NA,0.01,2023-07-14,https://www.pepper.pl/promocje/oxenfree-ii-lost-signals-za-darmo-z-abonamentem-netflix-at-google-play-ios-698539
-698537,"Tulipan Negro Czarny żel do kąpieli 650 mililitrów, opakowanie 6 butelek",NA,NA,NA,2023-07-14,https://www.pepper.pl/promocje/tulipan-negro-czarny-zel-do-kapieli-650-mililitrow-opakowanie-6-butelek-698537
-698538,Kawa Tchibo ziarnista 1 kg różne rodzaje,59.0,NA,NA,2023-07-14,https://www.pepper.pl/promocje/kawa-tchibo-ziarnista-1-kg-rozne-rodzaje-698538
-698534,Dysk SSD Kioxia EXCERIA 250GB M.2 PCIe,69.99,-30.0,99.99,2023-07-14,https://www.pepper.pl/promocje/dysk-ssd-kioxia-exceria-250gb-m2-pcie-698534
-698536,Gra planszowa Ilos aleplanszówki,49.0,-51.0,99.0,2023-07-14,https://www.pepper.pl/promocje/gra-ilosc-aleplanszowki-698536
-698533,Wibrator (dildo) dla kobiet sterowany aplikacją,27.28,-34.0,41.34,2023-07-14,https://www.pepper.pl/promocje/wibrator-dildo-dla-kobiet-sterowany-aplikacja-698533
-698531,Klocki LEGO 75288 Star Wars - AT-AT,NA,-44.0,611.0,2023-07-14,https://www.pepper.pl/promocje/lego-75288-star-wars-at-at-698531
+702294,Feel Free Pink Petals Rose - zestaw,34.99,-40.0,57.99,2023-07-26,https://www.pepper.pl/promocje/feel-free-pink-petals-rose-zestaw-702294
+702295,Komplet bawełnianej pościeli w kratę - 160x200 / 70x80 cm dwa kolory,55.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/komplet-bawelnianej-poscieli-w-krate-160x200-70x80-cm-dwa-kolory-702295
+702293,Kamień do pizzy @ Lidl,19.14,-40.0,31.9,2023-07-26,https://www.pepper.pl/promocje/kamien-do-pizzy-w-lidlu-702293
+702291,Rower MTB SENSA Merano Evo SLE powietrzny amor 1x12 napęd sztywne osie za 3999 zł,3999.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/rower-mtb-sensa-merano-evo-sle-powietrzny-amor-1x12-naped-sztywne-osie-za-3999-zl-702291
+702290,Kask rowerowy Uvex I-VO 3D,125.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/kask-rowerowy-uvex-i-vo-3d-702290
+702289,Spodnie dresowe adidas Essentials Tapered Pants,84.5,NA,NA,2023-07-26,https://www.pepper.pl/promocje/spodnie-dresowe-adidas-essentials-tapered-pants-702289
+702288,Kolorowe skarpetki 5-pak Cropp,15.99,-20.0,19.99,2023-07-26,https://www.pepper.pl/promocje/kolorowe-skarpetki-5-pak-cropp-702288
+700996,"Resident Evil Village / Resident Evil 8 za 34,60 zł / Resident Evil 8 Gold Edition za 50,77 zł - TURKEY VPN @ Xbox One",34.6,NA,NA,2023-07-26,https://www.pepper.pl/promocje/resident-evil-village-resident-evil-8-za-3530-zl-resident-evil-village-resident-evil-8-gold-edition-turkey-vpn-za-61-zl-at-xbox-one-700996
+702284,Otwarcie Aldi Gniezno - bon o wartości 100zl za wydane 100zl,NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/otwarcie-aldi-gniezno-bon-o-wartosci-100zl-za-wydane-100zl-702284
+702285,Kupon na 10 zł przy zakupach za 49 zł dla nowych użytkowników aplikacji Polomarket,NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/kupon-na-10-zl-przy-zakupach-za-49-zl-dla-nowych-uzytkownikow-aplikacji-polomarket-702285
+702286,"Bolt karnet na hulajnogi 22zl za 7dni, bez limitu odblokowań. Warszawa",22.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/bolt-karnet-na-hulajnogi-22zl-za-7dni-bez-limitu-odblokowan-warszawa-702286
+702282,"Fasolka szparagowa, 6,99/ kg. Biedronka",6.99,-53.0,14.99,2023-07-26,https://www.pepper.pl/promocje/fasolka-szparagowa-699-kg-biedronka-702282
+702281,"Buty sportowe Pull&Bear rozm. 43, 45",34.9,-65.0,99.0,2023-07-26,https://www.pepper.pl/promocje/buty-sportowe-pullbear-rozm-43-45-702281
+702276,MacBook Air 8/256 z kartami alerabat 4239zł,4399.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/macbook-air-8256-z-kartami-alerabat-702276
+702280,Filet z piersi kurczaka kg @Biedronka,12.99,-46.0,23.9,2023-07-26,https://www.pepper.pl/promocje/filet-z-piersi-kurczaka-kg-at-biedronka-702280
+702279,Lody Carte D'Or 850 ml - 1000 ml Drugi tańszy produkt za 1 zł @Biedronka,NA,NA,NA,2023-07-26,https://www.pepper.pl/kupony/lody-carte-dor-850-ml-1000-ml-drugi-tanszy-produkt-za-1-zl-at-biedronka-702279
+702278,Call of Duty WWII Gold Edition XBOX LIVE Key ARGENTINA VPN @ Xbox One,17.19,NA,NA,2023-07-26,https://www.pepper.pl/promocje/call-of-duty-wwii-gold-edition-xbox-live-key-argentina-vpn-at-xbox-one-702278
+702275,"Przeceny na kilka mocniejszych alkoholi w Szczecinie Carrefour Turzyn: Bacardi, Chopin, Bombay, Hendrick's, Auchentoshan",NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/przeceny-na-kilka-mocniejszych-alkoholi-w-szczecinie-carrefour-turzyn-bacardi-chopin-bombay-hendricks-auchentoshan-702275
+702274,Włoskie wino półwytrawne Lidl,6.12,NA,NA,2023-07-26,https://www.pepper.pl/promocje/wloskie-wino-polwytrawne-z-lidla-702274
+702273,Piwo Kasztelan but.zw. 500ml 10+10 gratis @Biedronka,1.57,-50.0,3.15,2023-07-26,https://www.pepper.pl/promocje/piwo-kasztelan-butzw-500ml-1010-gratis-at-biedronka-702273
+702272,Maszynka do strzyżenia włosów Enchen Boost B,35.9,-27.0,49.0,2023-07-26,https://www.pepper.pl/promocje/maszynka-do-strzyzenia-wlosow-enchen-boost-b-702272
+702270,Jacuzzi Hawaii z HydroJet w Selgros,2447.7,NA,NA,2023-07-26,https://www.pepper.pl/promocje/jacuzzi-hawaii-z-hydrojet-w-selgros-702270
+702269,"Chleb Polski 500g, tradycyjny bez konserwantów bez wzmacniaczy smaku, 1.99 @Dino",1.99,-20.0,2.49,2023-07-26,https://www.pepper.pl/promocje/chleb-polski-500g-tradycyjny-bez-konserwantow-bez-wzmacniaczy-smaku-at-dino-702269
+702268,Kask szosowy BELL Formula MIPS,289.0,-9.0,319.0,2023-07-26,https://www.pepper.pl/promocje/kask-szosowy-bell-formula-mips-702268
+702265,XIAOMI Odtwarzacz multimedialny TV Box S 2 Gen (możliwe 217zł),237.0,-12.0,269.0,2023-07-26,https://www.pepper.pl/promocje/xiaomi-odtwarzacz-multimedialny-tv-box-s-2-gen-702265
+702267,"PlayStation Plus Essential - sierpnień 2023: PGA Tour 2K23, Dreams, Death’s Door (PS4, PS5)",NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/playstation-plus-essential-sierpnien-2023-pga-tour-2k23-dreams-deaths-door-702267
+702266,Traktor John Deere X167R,NA,-4.0,24000.0,2023-07-26,https://www.pepper.pl/promocje/traktor-john-deere-x167r-702266
+702261,"6x głowica termostatyczna Moes TRV ZigBee 3.0 Tuya ($16,16 za sztukę) | Wysyłka z CN | $96.99 @ Banggood",NA,-50.0,781.07,2023-07-26,https://www.pepper.pl/promocje/6x-glowica-termostatyczna-moes-trv-zigbee-30-tuya-1616-za-sztuke-wysylka-z-cn-9699-at-banggood-702261
+702262,Golf US Polo Assn.,128.7,-70.0,429.0,2023-07-26,https://www.pepper.pl/promocje/golf-us-polo-assn-702262
+702259,Wino czerwone półsłodkie hiszpańskie En Tu Casa O En La Mia Lidl,5.05,NA,NA,2023-07-26,https://www.pepper.pl/promocje/wino-czerwone-polslodkie-hiszpanskie-en-tu-casa-o-en-la-mia-lidl-702259
+702257,Woda mineralna Cisowianka 1.5l wszystkie rodzaje 8+4 gratis,1.59,NA,NA,2023-07-26,https://www.pepper.pl/promocje/woda-mineralna-cisowianka-15l-wszystkie-rodzaje-84-gratis-702257
+702250,Hulajnoga elektryczna KuKirin G2 Max,2587.67,-19.0,3200.0,2023-07-26,https://www.pepper.pl/promocje/kukirin-g2-max-702250
+702255,Assassin's Creed Valhalla AR VPN Activated XBOX One / Xbox Series X|S CD Key - wymagany VPN,19.22,NA,NA,2023-07-26,https://www.pepper.pl/promocje/assassins-creed-valhalla-ar-vpn-activated-xbox-one-xbox-series-xs-cd-key-wymagany-vpn-702255
+702253,Głośniki komputerowe Genesis Helium 300BT (NCS-1716) @Morele,179.0,-22.0,229.0,2023-07-26,https://www.pepper.pl/promocje/glosniki-komputerowe-genesis-helium-300bt-ncs-1716-at-morele-702253
+702252,Gra South Park: The Stick of Truth AR XBOX One / XBOX Series X|S CD Key - wymagany VPN,4.8,NA,NA,2023-07-26,https://www.pepper.pl/promocje/south-park-the-stick-of-truth-ar-xbox-one-xbox-series-xs-cd-key-wymagany-vpn-702252
+702247,Sabbiarelli zestaw do kolorowania piaskiem (różne wzory),NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/sabbiarelli-zestaw-do-kolorowania-piaskiem-rozne-wzory-702247
+702245,Materac Mimas multi silver 180x200,929.0,-44.0,1669.0,2023-07-26,https://www.pepper.pl/promocje/materac-mimas-multi-silver-180x20-702245
+702242,Rower szosowy Scott Addict 10 eTap AXS,12374.0,-22.0,15799.0,2023-07-26,https://www.pepper.pl/promocje/rower-szosowy-scott-addict-10-etap-axs-702242
+702243,"Puzzle 13500 elementów 173 zł, Uniwersum Marvela, kolaż z bohaterami /Puzzle 13500 el. The Journey of Thousand Miles 184 zł",173.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/puzzle-13500-elementow-173-zl-uniwersum-marvela-kolaz-z-bohaterami-puzzle-13500-el-the-journey-of-thousand-miles-184-zl-702243
+702241,"Plecak na laptopa Genesis PALLAD 410 15.6"" (NBG-1947) @ Morele",99.0,-29.0,139.0,2023-07-26,https://www.pepper.pl/promocje/plecak-na-laptopa-genesis-pallad-410-156-nbg-1947-at-morele-702241
+702235,Lampki na monitor zbiorcza np: blitzwolf cml2 air,56.0,-37.0,89.0,2023-07-26,https://www.pepper.pl/promocje/lampki-na-monitor-zbiorcza-np-blitzwolf-cml2-air-702235
+702240,Pralko-suszarka HISENSE WDQR1014EVAJM Autodozowanie,2399.0,-23.0,3099.0,2023-07-26,https://www.pepper.pl/promocje/pralko-suszarka-hisense-wdqr1014evajm-autodozowanie-702240
+702239,"Listwa zasilająca Tessan 6 w 1, kostka, 3x USB, przełącznik",79.99,-43.0,139.98,2023-07-26,https://www.pepper.pl/promocje/listwa-zasilajaca-tessan-6-w-1-kostka-3x-usb-przelacznik-702239
+702238,Mleko UHT 1.5% Mlekovita (przy zakupie 12) | Lidl,2.39,-36.0,3.75,2023-07-26,https://www.pepper.pl/promocje/mleko-uht-15-mlekovita-przy-zakupie-12-lidl-702238
+702237,Pralka ELECTROLUX MEW6FN448XP PerfectCare 600 8 kg 1400 obr,1699.99,-23.0,2199.0,2023-07-26,https://www.pepper.pl/promocje/pralka-electrolux-mew6fn448xp-perfectcare-600-8-kg-1400-obr-702237
+702236,Drabina aluminiowa 5 stopni Drabest,119.0,-20.0,149.0,2023-07-26,https://www.pepper.pl/promocje/drabina-aluminiowa-5-stopni-drabest-702236
+702233,Galaxy Tab S9 12/256GB- 3600 (lub 3680) zł + 450 zł cashback przedpremiera - możliwe 3150 zł,3999.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/galaxy-tab-s9-12256gb-3600-lub-3680-zl-450-zl-cashback-przedpremiera-mozliwe-3150-zl-702233
+702234,Słuchawki dokanałowe REALME Buds Air 3 Nitro Blue,179.99,-47.0,339.99,2023-07-26,https://www.pepper.pl/promocje/sluchawki-dokanalowe-realme-buds-air-3-nitro-blue-702234
+702232,Rower szosowy Trek Emonda SL6 Di2,14544.0,-24.0,19235.0,2023-07-26,https://www.pepper.pl/promocje/rower-szosowy-trek-emonda-sl6-di2-702232
+702231,Papier toaletowy 8 sztuk za 5.99zł @Polo market (cena za opakowanie przy zakupie 2),5.99,-20.0,7.49,2023-07-26,https://www.pepper.pl/promocje/papier-toaletowy-8-sztuk-za-599zl-at-polo-market-702231
+702230,"22 AWS Courses: AWS Certified Solutions Architect Associate, Professional, Cloud Practitioner, Machine Learning, Security, SysOps & More",29.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/22-aws-courses-aws-certified-solutions-architect-associate-professional-cloud-practitioner-machine-learning-security-sysops-more-702230
+702225,"Chipsy, chrupki i tortille TOP drugi 50% taniej",NA,NA,NA,2023-07-26,https://www.pepper.pl/kupony/chipsy-chrupki-i-tortille-top-drugi-50-taniej-702225
+702223,"Ser żółty gouda 16,99 zł/kg",16.79,-35.0,25.7,2023-07-26,https://www.pepper.pl/promocje/ser-zolty-gouda-1699-zlkg-702223
+702221,"Cukier 3,89zł/kg MWZ 29zł",3.89,-35.0,5.99,2023-07-26,https://www.pepper.pl/promocje/cukier-bialy-389zlkg-mwz-29zl-702221
+702220,Smartwatch Galaxy Watch 6 i 6 classic w przedsprzedazy z Odkup,1499.0,-12.0,1699.0,2023-07-26,https://www.pepper.pl/promocje/galaxy-watch-6-i-6-classic-w-przedsprzedazy-z-odkup-702220
+702226,KAZAR - Kody Rabatowe,NA,NA,NA,2023-07-26,https://www.pepper.pl/kupony/kazar-kody-rabatowe-702226
+702224,"Stanley Miara Zwijana, Wielokolorowy, 5 m",13.3,NA,NA,2023-07-26,https://www.pepper.pl/promocje/stanley-miara-zwijana-wielokolorowy-5-m-702224
+702213,Intermarche. Jajka z wolnego wybiegu po 85 groszy za sztukę.,16.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/jajka-z-wolnego-wybiegu-702213
+702219,Wózek głęboko-spacerowy Recaro Celona i Recaro Sadena za 1899zł (sześć kolorów) @ babyhit.pl,1899.0,-44.0,3388.0,2023-07-26,https://www.pepper.pl/promocje/wozek-gleboko-spacerowy-recaro-celona-i-recaro-sadena-za-1899zl-szesc-kolorow-at-babyhitpl-702219
+702217,Kenia ***Hotel ze śniadaniami 4zl za pokój,NA,-96.0,99.0,2023-07-26,https://www.pepper.pl/promocje/kenia-hotel-ze-sniadaniami-4zl-za-pokoj-702217
+702214,Sok jabłkowy Riviva 1L 3+3 gratis @Biedronka,1.49,-49.0,2.94,2023-07-26,https://www.pepper.pl/promocje/sok-jablkowy-riviva-1l-33-gratis-at-biedronka-702214
+702208,"Proszek do prania, 5kg Lavender Nice, 32 gr za pranie @Leclerc",19.99,-26.0,26.99,2023-07-26,https://www.pepper.pl/promocje/proszek-do-prania-5kg-lavender-nice-32-gr-za-pranie-at-leclerc-702208
+702206,Banany 1kg @Biedronka,2.49,NA,NA,2023-07-26,https://www.pepper.pl/promocje/banany-1kg-at-biedronka-702206
+702161,Cyrkulator do gotowania Sous vide,99.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/cyrkulator-do-gotowania-sous-vide-702161
+702205,Bułka Grahamka po 29 groszy za sztukę @Leclerc (MWZ 49zł),0.29,-51.0,0.59,2023-07-26,https://www.pepper.pl/promocje/bulka-grahamka-po-29-groszy-at-leclerc-702205
+702203,Lodówka SAMSUNG RB36T602DB1 EF No frost 193.5cm Grafitowa,2490.0,-14.0,2899.0,2023-07-26,https://www.pepper.pl/promocje/lodowka-samsung-rb36t602db1-ef-no-frost-1935cm-grafitowa-702203
+702202,Procesor AMD Ryzen 5 3600 TRAY,277.09,NA,NA,2023-07-26,https://www.pepper.pl/promocje/amd-ryzen-5-3600-tray-702202
+702201,"Zmywarka Whirlpool WIO 3C23 E 6.5 - 59,8cm - automatyczne otwieranie drzwi",1406.27,-11.0,1589.0,2023-07-26,https://www.pepper.pl/promocje/zmywarka-whirlpool-wio-3c23-e-65-598cm-automatyczne-otwieranie-drzwi-702201
+702195,Kawa ziarnista Gimoka,26.55,NA,NA,2023-07-26,https://www.pepper.pl/promocje/kawa-ziarnista-gimoka-702195
+702193,Erytrytol Erytrol 1kg ( naturalny słodzik ),10.29,NA,NA,2023-07-26,https://www.pepper.pl/promocje/erytrytol-erytrol-1kg-naturalny-slodzik-702193
+702194,Pieluchy Dada Extra care 1+1 gratis,NA,NA,NA,2023-07-26,https://www.pepper.pl/kupony/dada-extra-care-11-gratis-702194
+702192,"Piwo Heineken 0,5l (cena za sztukę przy zakupie 15)",3.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/piwo-heineken-702192
+702196,"Tezenis wyprzedaże do -70% / biustonosz 22,49 z 74,99zl",22.49,-70.0,74.99,2023-07-26,https://www.pepper.pl/promocje/tezenis-wyprzedaze-do-70-biustonosz-2249-z-7499zl-702196
+702187,"Stacja zasilania TOPSHAK TS-PS1500 (440 000 mAh, 1408 Wh, PD100W) $435.99",1741.0,-30.0,2499.0,2023-07-26,https://www.pepper.pl/promocje/stacja-zasilania-topshak-ts-ps1500-440-000-mah-1408-wh-pd100w-702187
+702191,"Papier toaletowy, 8 rolek za 5.99 @Aldi",5.99,-20.0,7.49,2023-07-26,https://www.pepper.pl/promocje/papier-toaletowy-8-rolek-za-599-at-aldi-702191
+702190,Gra Celeste @ Epic Games,17.25,-75.0,69.0,2023-07-26,https://www.pepper.pl/promocje/celeste-at-epic-games-702190
+702189,Rakieta tenisowa HEAD RADICAL S 234131,NA,-15.0,549.99,2023-07-26,https://www.pepper.pl/promocje/rakieta-tenisowa-head-radical-s-234131-702189
+702188,"Serial krymimalny ""07 Zgłoś się. Rekonstrukcja cyfrowa 10 DVD. Porucznik Borewicz. Polski James Bond PRLu (druga wersja obraz 4:3 za 79 zł)",69.42,NA,NA,2023-07-26,https://www.pepper.pl/promocje/serial-07-zglos-rekonstrukcja-cyfrowa-porucznik-borewicz-polski-james-bond-prlu-druga-wersja-obraz-43-za-79-zl-702188
+702183,Karta graficzna Gainward RTX 4070 Ti Panther 12GB,NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/rtx-4070-ti-panther-12gb-702183
+702185,Sok 100% tłoczony jabłkowo-wiśniowy (30% soku tłoczonego wiśniowego) 3l,9.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/sok-tloczony-jablkowo-wisniowy-30-soku-tloczonego-wisniowego-3l-702185
+702184,Frytkownica niskotłuszczowa Blaupunkt AFD601 1500 W + Spinner gratis,341.77,-7.0,369.0,2023-07-26,https://www.pepper.pl/promocje/frytkownica-niskotluszczowa-blaupunkt-afd601-1500-w-spinner-gratis-702184
+702181,"Bezprzewodowy odkurzacz pionowy Proscenic P11 Smart (650 ml zbiornik, 30 KPa, 450 W) / $108,78 @ Geekbuying.com",434.56,-27.0,599.0,2023-07-26,https://www.pepper.pl/promocje/bezprzewodowy-odkurzacz-pionowy-proscenic-p11-smart-650-ml-zbiornik-30-kpa-450-w-at-geekbuyingcom-702181
+702180,Fasolka szparagowa luz 1kg @Netto,7.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/fasolka-szparagowa-luz-1kg-at-netto-702180
+702179,"Maxi-Cosi Fotelik samochodowy ""Mica Pro Eco I-Size""",1241.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/maxi-cosi-mica-pro-eco-702179
+702178,DRON DJI Mavic Air 3,5249.0,-3.0,5399.0,2023-07-26,https://www.pepper.pl/promocje/dron-dji-mavic-air-3-702178
+702177,Karta graficzna PNY RTX 3060 Ti 8GB,1449.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/karta-graficzna-pny-rtx-3060-ti-8gb-702177
+702176,"Borówka opakowanie 500g 1kg=15,98zł @Netto",7.99,NA,NA,2023-07-26,https://www.pepper.pl/promocje/borowka-opakowanie-500g-1kg1598zl-at-netto-702176
+702175,"Zegarek Garmin Forerunner 255 Basic , koperta 46 mm, kolor szary [ 254,25 € + wysyłka 5,99 € ]",1127.5,NA,NA,2023-07-26,https://www.pepper.pl/promocje/zegarek-garmin-forerunner-255-basic-koperta-46-mm-kolor-szary-25425-eur-wysylka-599-eur-702175
+702173,Samyang Carbonara / Hot Chicken Flavor Ramen,7.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/samyang-carbonara-hot-chicken-flavor-ramen-702173
+702172,Sierpień: 2 noce dla dwóch osób w Boutique Hotel's we Wrocławiu ze śniadaniami @ Travelist,418.0,-18.0,511.0,2023-07-26,https://www.pepper.pl/promocje/sierpien-2-noce-dla-dwoch-osob-w-boutique-hotels-we-wroclawiu-ze-sniadaniami-at-travelist-702172
+702168,[winyl] Rammstein - Zick Zack,NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/vinyl-rammstein-zick-zack-702168
+702167,Loveboxxx zestaw startowy - fioletowe gadżety,172.99,-40.0,290.0,2023-07-26,https://www.pepper.pl/promocje/loveboxxx-zestaw-startowy-fioletowe-gadzety-dla-szukajacych-mocnych-wrazen-d-702167
+702166,Przedsprzedaż Samsung Galaxy,NA,NA,NA,2023-07-26,https://www.pepper.pl/kupony/przedsprzedaz-samsung-galaxy-702166
+702164,YOUR MUSIC FESTIVAL 2023 - WEJŚCIE FREE ( Drzewica woj. łódzkie),NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/your-music-festival-2023-wejscie-free-drzewica-woj-lodzkie-702164
+702163,"Klimatyzator Split, Pompa ciepła powietrze - powietrze BEKO BEHPGH 3500W 120/BEHPGH 121 WiFi z usługą montażu @ MediaExpert",3499.0,-14.0,4049.0,2023-07-26,https://www.pepper.pl/promocje/klimatyzator-split-pompa-ciepla-powietrze-powietrze-beko-behpgh-3500w-120behpgh-121-wifi-z-usluga-montazu-at-mediaexpert-702163
+702162,"Składany panel solarny KROAK K-SP02 60W 19.8V (DC, USB-C, USB, 350*340 mm) | Wysyłka z ES | $39.99 @ Banggood",159.85,-27.0,219.79,2023-07-26,https://www.pepper.pl/promocje/skladany-panel-solarny-kroak-k-sp02-60w-198v-dc-usb-c-usb-350340-mm-wysylka-z-es-3999-at-banggood-702162
+702160,zegarek Casio MTP-VD01BL-5BVUDF,113.05,NA,NA,2023-07-26,https://www.pepper.pl/promocje/zegarek-casio-mtp-vd01bl-5bvudf-702160
+702159,Taśma bokserka Everlast 450 cm za 25zł @ Amazon.pl,NA,-77.0,110.0,2023-07-26,https://www.pepper.pl/promocje/tasma-bokserka-everlast-450-cm-za-25zl-at-amazonpl-702159
+702158,"40+ Za Darmo Kindle eBooks: Automated Machine Learning, David Copperfield, Housewife Assassin, Japanese, Quesadilla, Pasta, Egyptian & More",NA,NA,0.01,2023-07-26,https://www.pepper.pl/promocje/40-za-darmo-kindle-ebooks-automated-machine-learning-david-copperfield-housewife-assassin-japanese-quesadilla-pasta-egyptian-more-702158
+701848,Banany kg @Lidl,2.79,-60.0,6.99,2023-07-26,https://www.pepper.pl/promocje/banany-kg-at-lidl-701848
+702156,Ostrza Philips One Blade 3x za 109 zl z przesyłka AMAZON,109.0,-31.0,159.0,2023-07-26,https://www.pepper.pl/promocje/ostrza-philips-one-blade-3x-za-109-zl-z-przesylka-amazon-702156
+702154,Hamulce MTB Sram CODE R,640.0,-42.0,1100.0,2023-07-26,https://www.pepper.pl/promocje/hamulce-mtb-sram-code-r-702154
+702153,Frytkownica beztłuszczowa Ninja AF160EU,499.0,-34.0,755.0,2023-07-26,https://www.pepper.pl/promocje/frytkownica-beztluszczowa-ninja-af160eu-702153
+702152,Koszula Wrangler 27mw Loud Craft W5MSLW87A - 50% w sklepie fashionjeans.pl,199.0,-50.0,399.0,2023-07-26,https://www.pepper.pl/promocje/koszula-wrangler-27mw-loud-craft-w5mslw87a-50-w-sklepie-fashionjeanspl-702152
+702150,ebook W sidłach nawyku - Russell A. Poldrack,14.9,-48.0,28.44,2023-07-26,https://www.pepper.pl/promocje/ebook-w-sidlach-nawyku-russell-a-poldrack-702150
+702118,OBD GPS Tracker do samochodu,83.53,-80.0,417.59,2023-07-26,https://www.pepper.pl/promocje/obd-gps-tracker-702118
+702151,Tabletki do zmywarek FINISH Power Essential Lemon - 224 szt.,83.98,-6.0,89.0,2023-07-26,https://www.pepper.pl/promocje/tabletki-do-zmywarek-finish-power-essential-lemon-224-szt-702151
+702149,Biurko ULTRADESK LEVEL V2 - kolejny raz mocna obniżka | EURO RTV,699.0,-18.0,849.0,2023-07-26,https://www.pepper.pl/promocje/biurko-ultradesk-level-v2-kolejny-raz-mocna-obnizka-euro-rtv-702149
+702147,Kurtka Tommy Jeans,279.0,-72.0,1000.0,2023-07-26,https://www.pepper.pl/promocje/kurtka-tommy-jeans-702147
+702148,VPN - HideMyAss - 3 letnia subskrypcja za ~55 zł - oferta tylko do końca dnia!,NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/vpn-hidemyass-3-letnia-subskrypcja-za-55-zl-oferta-tylko-do-konca-dnia-702148
+702145,Karta graficzna Sapphire Pulse Radeon RX 7900 XT 20GB + Starfield Premium (możliwe 3689 zł),3739.0,NA,NA,2023-07-26,https://www.pepper.pl/promocje/karta-graficzna-sapphire-pulse-radeon-rx-7900-xt-20gb-starfield-premium-mozliwe-3689-zl-702145
+702144,"Piwo Harnaś 0,5l za 2,39 przy zakupie 3butelek - Delikatesy",NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/piwo-harnas-05l-za-239-przy-zakupie-3butelek-delokatesy-702144
+702146,Piwo Desperados 20 w cenie 10,2.64,-49.0,5.2,2023-07-26,https://www.pepper.pl/promocje/piwo-desperados-20-w-cenie-10-702146
+702143,"Jack Wolfskin DNA TUNDRA JKT - Kurtka puchowa, dwa kolory",289.0,-42.0,500.0,2023-07-26,https://www.pepper.pl/promocje/jack-wolfskin-dna-tundra-jkt-kurtka-puchowa-dwa-kolory-702143
+702142,Dysk SSD Crucial X8 2TB,459.0,-9.0,504.95,2023-07-26,https://www.pepper.pl/promocje/crucial-x8-2tb-702142
+702137,Darmowe webinarium dla biegaczy,NA,NA,NA,2023-07-26,https://www.pepper.pl/promocje/darmowe-webinarium-dla-biegaczy-702137
+702141,"NITEO WIERTARKO-WKRĘTARKA, AKUMULATOROWA, 12 V MAX",115.0,-32.0,169.0,2023-07-26,https://www.pepper.pl/promocje/niteo-wiertarko-wkretarka-akumulatorowa-12-v-max-702141
+702140,Szlifierka do ścian i podłóg Niteo Tools 1050W 230V (6-stopniowa regulacja) @ Bedronka Home,199.0,-29.0,279.0,2023-07-26,https://www.pepper.pl/promocje/szlifierka-do-scian-i-podlog-niteo-tools-1050w-230v-6-stopniowa-regulacja-at-bedronka-home-702140
+702138,Basen rozporowy Bestway fast sete,135.5,-32.0,200.0,2023-07-26,https://www.pepper.pl/promocje/basen-rozporowy-bestway-fast-sete-702138
+702136,"Uchwyt samochodowy do kratki wentylacyjnej - Baseus Gravity za 3,83$",15.29,-61.0,39.37,2023-07-26,https://www.pepper.pl/promocje/uchwyt-samochodowy-do-kratki-wentylacji-baseus-gravuty-za-383-702136

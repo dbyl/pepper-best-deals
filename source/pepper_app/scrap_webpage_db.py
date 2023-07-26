@@ -68,12 +68,15 @@ class ScrapWebpage:
         try:
             if self.scrap_continuously == True:
                 url_to_scrap = "https://www.pepper.pl/nowe"
+                return url_to_scrap
             elif self.category_type == "nowe":
                 url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?page=", str(self.start_page)])
+                return url_to_scrap
             elif self.category_type == "search":
                 searched_article = str(self.searched_article.replace(" ","%20"))
                 url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?q=",
                                         searched_article, "&page=", str(self.start_page)])
+                return url_to_scrap
         except Exception as e:
             logging.warning(f"Invalid category type name, category must be 'nowe' or 'search':\
                             {e}\n Tracking: {traceback.format_exc()}")
@@ -258,7 +261,7 @@ class ScrapWebpage:
 category_type = "nowe"
 start_page = 2
 searched_article = "fsdfsdfsdf"
-articles_to_retrieve = 50
+articles_to_retrieve = 120
 to_csv = True
 to_database = True
 to_statistics = True
@@ -266,4 +269,6 @@ scrap_continuously = False
 scrap_choosen_data = True
 output = ScrapWebpage(category_type, articles_to_retrieve, to_csv,
                         to_database, to_statistics, start_page, searched_article, scrap_continuously, scrap_choosen_data)
+
+output.select_url()
 output.get_items_details_depending_on_the_function()
