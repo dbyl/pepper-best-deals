@@ -13,7 +13,7 @@ from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from django.utils.timezone import utc
-from constans import CSV_COLUMNS
+from pepper_app.constans import CSV_COLUMNS
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pepper_app.get_info import (GetItemAddedDate,
@@ -23,14 +23,14 @@ from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemPercentageDiscount,
                                 GetItemRegularPrice,
                                 GetItemUrl)
-from pepper_app.populate_database import (LoadItemDetailToDatabase,
+from pepper_app.populate_database import (LoadItemDetailsToDatabase,
                                         LoadDataFromCsv,
-                                        LoadScrapingStatisticToDatabase)
+                                        LoadScrapingStatisticsToDatabase)
 
 
 
 
-class ScrapWebpage:
+class ScrapPage:
 
 
     def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool=False,
@@ -68,7 +68,7 @@ class ScrapWebpage:
     def select_url(self) -> str:
         try:
             if self.scrap_continuously == True:
-                url_to_scrap = "https://www.pepper.pl/nowe"
+                url_to_scrap = "".join(["https://www.pepper.pl/", "nowe"])
                 return url_to_scrap
             elif self.category_type == "nowe":
                 url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?page=", str(self.start_page)])
@@ -88,11 +88,11 @@ class ScrapWebpage:
             retrived_articles = list()
             while flag:
                 soup = self.scrap_data()
-                flag = self.check_if_last_page(soup)
+                flag = CheckConditions(soup).check_if_last_page()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
 
-                flag = self.check_if_no_items_found(soup)
+                flag = CheckConditions(soup).check_if_no_items_found()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
                 if flag == True:
@@ -113,7 +113,7 @@ class ScrapWebpage:
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
             flag = True
             while flag == True:
-                retrived_articles = self.check_for_new_items_continuously()
+                retrived_articles = self.scrap_continuously_by_refreshing_page()
                 self.get_items_details(retrived_articles)
         elif self.scrap_continuously == False and self.scrap_choosen_data == True:
             retrived_articles = self.infinite_scroll_handling()
@@ -143,12 +143,9 @@ class ScrapWebpage:
                 if to_csv == True:
                     self.save_data_to_csv(item)
                 if to_database == True:
-                    try:
-                        LoadItemDetailToDatabase(item).load_to_db()
-                    except Exception as e:
-                        logging.warning(f"Populating PepperArticles table failed: {e}\n Tracking: {traceback.format_exc()}")
+                    LoadItemDetailsToDatabase(item).load_to_db()
         except Exception as e:
-            logging.warning(f"Errr1:\
+            logging.warning(f"Getting item details failed :\
                         {e}\n Tracking: {traceback.format_exc()}")
 
         end_time = datetime.utcnow().replace(tzinfo=utc)
@@ -157,24 +154,27 @@ class ScrapWebpage:
         if to_statistics == True:
             try:
                 stats_info = self.get_scraping_stats_info(action_execution_datetime)
-                LoadScrapingStatisticToDatabase(stats_info).load_to_db()
+                LoadScrapingStatisticsToDatabase(stats_info).load_to_db()
             except Exception as e:
                 logging.warning(f"Populating ScrapingStatistics table failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
     def save_data_to_csv(self, item) -> None:
 
-        header = False
-        if not os.path.exists('scraped.csv'):
-            header = True
-            df = pd.DataFrame([item], columns=CSV_COLUMNS)
-            df.to_csv('scraped.csv', header=header, index=False, mode='a')
-        else:
+        try:
             header = False
-            df_e = pd.read_csv('scraped.csv')
-            df = pd.DataFrame([item], columns=CSV_COLUMNS)
-            if df['item_id'][0] not in df_e['item_id'].tolist():
+            if not os.path.exists('scraped.csv'):
+                header = True
+                df = pd.DataFrame([item], columns=CSV_COLUMNS)
                 df.to_csv('scraped.csv', header=header, index=False, mode='a')
+            else:
+                header = False
+                df_e = pd.read_csv('scraped.csv')
+                df = pd.DataFrame([item], columns=CSV_COLUMNS)
+                if df['item_id'][0] not in df_e['item_id'].tolist():
+                    df.to_csv('scraped.csv', header=header, index=False, mode='a')
+        except Exception as e:
+            logging.warning(f"Saving data to csv failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
     def get_scraping_stats_info(self, action_execution_datetime: datetime) -> List[Union[str, int, bool, float]]:
@@ -201,40 +201,8 @@ class ScrapWebpage:
 
         return stats_info
 
-    def check_if_last_page(self, soup: str) -> bool:
-        """Checking 'nowe' category to verify if the scraped page is the last one."""
-        try:
-            searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
-            if searched_ending_string.startswith("Ups"):
-                logging.warning("No more pages to scrap.")
-                return False
-        except:
-            return True
 
-        """Checking 'search' category to verify if the scraped page is the last one."""
-        try:
-            searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
-            searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
-            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
-            if searched_ending_string.startswith("Ups") and searched_articles_number > 0:
-                logging.warning("No more pages to scrap.")
-                return False
-        except:
-            return True
-
-    def check_if_no_items_found(self, soup: str) -> bool:
-        """Checking if searched item was found."""
-        try:
-            searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
-            searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
-            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
-            if searched_ending_string.startswith("Ups") and searched_articles_number == 0:
-                logging.warning("The searched item was not found.")
-                return False
-        except:
-            return True
-
-    def check_for_new_items_continuously(self) -> List[str]:
+    def scrap_continuously_by_refreshing_page(self) -> List[str]:
 
         retrived_articles = list()
 
@@ -246,7 +214,45 @@ class ScrapWebpage:
         return retrived_articles
 
 
+class CheckConditions:
 
+
+    def __init__(self, soup: BeautifulSoup) -> None:
+        self.soup = soup
+
+
+    def check_if_last_page(self) -> bool:
+        """Checking 'nowe' category to verify if the scraped page is the last one."""
+        try:
+            searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
+            if searched_ending_string.startswith("Ups"):
+                logging.warning("No more pages to scrap.")
+                return False
+        except:
+            return True
+
+        """Checking 'search' category to verify if the scraped page is the last one."""
+        try:
+            searched_ending_string = self.soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
+            searched_articles_number = self.soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
+            if searched_ending_string.startswith("Ups") and searched_articles_number > 0:
+                logging.warning("No more pages to scrap.")
+                return False
+        except:
+            return True
+
+    def check_if_no_items_found(self) -> bool:
+        """Checking if searched item was found."""
+        try:
+            searched_ending_string = self.soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
+            searched_articles_number = self.soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
+            if searched_ending_string.startswith("Ups") and searched_articles_number == 0:
+                logging.warning("The searched item was not found.")
+                return False
+        except:
+            return True
 
 
 
@@ -259,7 +265,7 @@ to_database = True
 to_statistics = True
 scrap_continuously = False
 scrap_choosen_data = True
-output = ScrapWebpage(category_type, articles_to_retrieve, to_csv,
+output = ScrapPage(category_type, articles_to_retrieve, to_csv,
                         to_database, to_statistics, start_page, searched_article, scrap_continuously, scrap_choosen_data)
 
 output.select_url()

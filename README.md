@@ -22,7 +22,7 @@ python source/manage.py runserver
 new_terminal
 python source/manage.py shell
 
-exec(open("source/pepper_app/scrap_webpage_db.py").read())
+exec(open("source/pepper_app/scrap.py").read())
 
 
 

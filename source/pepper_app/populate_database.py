@@ -1,7 +1,7 @@
 import datetime
 import logging
 import logging.config
-from constans import DATA_DF_HEADER, STATS_DF_HEADER
+from pepper_app.constans import DATA_HEADER, STATS_HEADER
 import os
 import traceback
 import sys
@@ -10,14 +10,14 @@ from django.core.management import BaseCommand
 from pepper_app.models import PepperArticle, ScrapingStatistic
 
 
-class LoadItemDetailToDatabase(BaseCommand):
+class LoadItemDetailsToDatabase(BaseCommand):
 
     def __init__(self, item) -> None:
         self.item = item
 
     def load_to_db(self) -> None:
         data = self.item
-        item_df = pd.DataFrame([data], columns=DATA_DF_HEADER)
+        item_df = pd.DataFrame([data], columns=DATA_HEADER)
         for _, row in item_df.iterrows():
             try:
                 pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
@@ -52,14 +52,14 @@ class LoadItemDetailToDatabase(BaseCommand):
         else:
             return float(row["regular_price"])
 
-class LoadScrapingStatisticToDatabase(BaseCommand):
+class LoadScrapingStatisticsToDatabase(BaseCommand):
 
     def __init__(self, stats_info) -> None:
         self.stats_info = stats_info
 
     def load_to_db(self) -> None:
         data = self.stats_info
-        stats_info_df = pd.DataFrame([data], columns=STATS_DF_HEADER)
+        stats_info_df = pd.DataFrame([data], columns=STATS_HEADER)
         for _, row in stats_info_df.iterrows():
             try:
                 scrapingstatistic_obj, _ = ScrapingStatistic.objects.get_or_create(

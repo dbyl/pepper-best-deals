@@ -47,6 +47,10 @@ LOGGING = {
     "version": 1,
     "handlers": {"console": {"class": "logging.StreamHandler", "stream": sys.stdout}},
     "root": {"handlers": ["console"], "level": "DEBUG"},
+    "loggers": {
+        "asyncio": {
+            "level": "WARNING",
+        }}
 }
 
 LOGIN_URL = "login"
