@@ -1,6 +1,7 @@
 import datetime
 import logging
 import logging.config
+from constans import DATA_DF_HEADER, STATS_DF_HEADER
 import os
 import traceback
 import sys
@@ -15,11 +16,8 @@ class LoadItemDetailToDatabase(BaseCommand):
         self.item = item
 
     def load_to_db(self) -> None:
-        header = ['item_id', 'name', 'discount_price',
-                'percentage_discount', 'regular_price',
-                'date_added', 'url']  #to constans in the future
         data = self.item
-        item_df = pd.DataFrame([data], columns=header)
+        item_df = pd.DataFrame([data], columns=DATA_DF_HEADER)
         for _, row in item_df.iterrows():
             try:
                 pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
@@ -60,11 +58,8 @@ class LoadScrapingStatisticToDatabase(BaseCommand):
         self.stats_info = stats_info
 
     def load_to_db(self) -> None:
-        header = ['category_type', 'start_page', 'retrieved_articles_quantity',
-                'time_of_the_action', 'action_execution_datetime', 'searched_article',
-                'to_csv', 'to_database', 'scrap_continuously', 'scrap_choosen_data'] #to constans in the future
         data = self.stats_info
-        stats_info_df = pd.DataFrame([data], columns=header)
+        stats_info_df = pd.DataFrame([data], columns=STATS_DF_HEADER)
         for _, row in stats_info_df.iterrows():
             try:
                 scrapingstatistic_obj, _ = ScrapingStatistic.objects.get_or_create(

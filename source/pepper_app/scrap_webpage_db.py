@@ -13,6 +13,7 @@ from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from django.utils.timezone import utc
+from constans import CSV_COLUMNS
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pepper_app.get_info import (GetItemAddedDate,
@@ -163,18 +164,15 @@ class ScrapWebpage:
 
     def save_data_to_csv(self, item) -> None:
 
-        columns = ['item_id', 'name', 'discount_price', 'percentage_discount',
-                    'regular_price', 'date_added', 'url'] #to constans in the future
-
         header = False
         if not os.path.exists('scraped.csv'):
             header = True
-            df = pd.DataFrame([item], columns=columns)
+            df = pd.DataFrame([item], columns=CSV_COLUMNS)
             df.to_csv('scraped.csv', header=header, index=False, mode='a')
         else:
             header = False
             df_e = pd.read_csv('scraped.csv')
-            df = pd.DataFrame([item], columns=columns)
+            df = pd.DataFrame([item], columns=CSV_COLUMNS)
             if df['item_id'][0] not in df_e['item_id'].tolist():
                 df.to_csv('scraped.csv', header=header, index=False, mode='a')
 
@@ -204,9 +202,7 @@ class ScrapWebpage:
         return stats_info
 
     def check_if_last_page(self, soup: str) -> bool:
-
         """Checking 'nowe' category to verify if the scraped page is the last one."""
-
         try:
             searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
             if searched_ending_string.startswith("Ups"):
@@ -215,9 +211,7 @@ class ScrapWebpage:
         except:
             return True
 
-
         """Checking 'search' category to verify if the scraped page is the last one."""
-
         try:
             searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
             searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
@@ -229,9 +223,7 @@ class ScrapWebpage:
             return True
 
     def check_if_no_items_found(self, soup: str) -> bool:
-
         """Checking if searched item was found."""
-
         try:
             searched_ending_string = soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
             searched_articles_number = soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()

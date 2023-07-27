@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, date
 import re
 from bs4 import BeautifulSoup
+import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from enum import Enum, IntEnum
 from collections import Counter
@@ -270,13 +271,13 @@ class GetItemAddedDate:
             page_with_item = driver.page_source
             soup = BeautifulSoup(page_with_item, 'html5lib')
         except ConnectionError as e:
-            print(f"ConnectionError occured: {e}. \nTry again later")
+            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
         except MissingSchema as e:
-            print(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
         except HTTPError as e:
-            print(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
         except ReadTimeout as e:
-            print(f"ReadTimeout occured: {e}. \nTry again later")
+            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")
 
         try:
             date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
