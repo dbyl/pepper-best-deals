@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  database:
+    image: postgres:14.2-alpine
+    env_file: .env-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    volumes:
+     - pgadmin-data:/var/lib/pgadmin
+
+  web:
+    build:
+      context: .
+      args:
+        - DEV=true
+    command: >
+      sh -c "python source/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    env_file: source/.env
+
+volumes:
+  db-data:
+  pgadmin-data:
