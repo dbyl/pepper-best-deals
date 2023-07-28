@@ -1,19 +1,21 @@
 import os
+from pathlib import Path
 
 import environ
 
 
 class CustomEnvironment:
-    env = environ.Env()
 
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+    env = environ.Env(DEBUG=(bool, False))
+    environ.Env.read_env()
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    environ.Env.read_env(BASE_DIR / ".env")
 
     _debug = env.str("DEBUG")
-    _secret_key = env.str("SECRET_KEY")
+    _secret_key = env("SECRET_KEY")
     _url = env.str("URL")
-    _database_url = env.str("DATABASE_URL")
-    _allowed_hosts = env.str("ALLOWED_HOSTS")
+    _database_url = env.db("DATABASE_URL")
+    _allowed_hosts = env.list("ALLOWED_HOSTS")
     _email = env.str("EMAIL")
     _email_password = env.str("EMAIL_PASSWORD")
 

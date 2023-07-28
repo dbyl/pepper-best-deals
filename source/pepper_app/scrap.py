@@ -13,7 +13,6 @@ from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from django.utils.timezone import utc
-from pepper_app.constans import CSV_COLUMNS
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pepper_app.get_info import (GetItemAddedDate,
@@ -26,6 +25,9 @@ from pepper_app.get_info import (GetItemAddedDate,
 from pepper_app.populate_database import (LoadItemDetailsToDatabase,
                                         LoadDataFromCsv,
                                         LoadScrapingStatisticsToDatabase)
+from pepper_app.environment_config import CustomEnvironment
+from pepper_app.constans import CSV_COLUMNS, STATS_HEADER
+
 
 
 
@@ -68,14 +70,14 @@ class ScrapPage:
     def select_url(self) -> str:
         try:
             if self.scrap_continuously == True:
-                url_to_scrap = "".join(["https://www.pepper.pl/", "nowe"])
+                url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
                 return url_to_scrap
             elif self.category_type == "nowe":
-                url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?page=", str(self.start_page)])
+                url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?page=", str(self.start_page)])
                 return url_to_scrap
             elif self.category_type == "search":
                 searched_article = str(self.searched_article.replace(" ","%20"))
-                url_to_scrap = "".join(["https://www.pepper.pl/", self.category_type, "?q=",
+                url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?q=",
                                         searched_article, "&page=", str(self.start_page)])
                 return url_to_scrap
         except Exception as e:
@@ -192,11 +194,7 @@ class ScrapPage:
         scrap_continuously = self.scrap_continuously
         scrap_choosen_data = self.scrap_choosen_data
 
-        statistics_fields = [category_type, start_page, retrived_articles_quantity,
-                            time_of_the_action, action_execution_datetime,
-                            searched_article, to_csv, to_database, scrap_continuously, scrap_choosen_data]   #to constans in the future
-
-        for field in statistics_fields:
+        for field in STATS_HEADER:
             stats_info.append(field)
 
         return stats_info
