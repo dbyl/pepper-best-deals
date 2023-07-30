@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, date
 import re
 from bs4 import BeautifulSoup, Tag
-
 import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from enum import Enum, IntEnum
@@ -10,6 +9,8 @@ from selenium import webdriver
 import time
 from typing import List, Union
 import html5lib
+import traceback
+
 
 
 
@@ -54,10 +55,8 @@ class GetItemName:
         try:
             name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
             return name
-        except IndexError as e:
-            raise IndexError(f"Index out of the range: {e}")
-        except TypeError as e:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item name failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
 class GetItemId:
@@ -71,10 +70,8 @@ class GetItemId:
             item_id = item_id.strip('thread_')
             item_id = int(item_id)
             return item_id
-        except IndexError as e:
-            raise IndexError(f"Index out of the range: {e}")
-        except TypeError as e:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item id failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
 class GetItemDiscountPrice:
@@ -85,16 +82,15 @@ class GetItemDiscountPrice:
     def get_data(self) -> Union[float, str]:
         try:
             discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
-            discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+            if len(discount_price) > 0:
+                discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+            else:
+                """The attribute does not exist or the class name is invalid."""
+                discount_price = "NA"
             return discount_price
-        except IndexError:
-            discount_price = "NA"
-            return discount_price
-        except ValueError:
-            discount_price = "NA"
-            return discount_price
-        except TypeError:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item discount price failed: {e}\n Tracking: {traceback.format_exc()}")
+
 
 
 class GetItemRegularPrice:
@@ -105,16 +101,15 @@ class GetItemRegularPrice:
     def get_data(self) -> Union[float, str]:
         try:
             regular_price = self.article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"})
-            regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+            if len(regular_price) > 0:
+                regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+            else:
+                """The attribute does not exist or the class name is invalid."""
+                regular_price = "NA"
             return regular_price
-        except IndexError as e:
-            regular_price = "NA"
-            return regular_price
-        except ValueError as e:
-            regular_price = "NA"
-            return regular_price
-        except TypeError as e:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item regular price failed: {e}\n Tracking: {traceback.format_exc()}")
+
 
 
 class GetItemPercentageDiscount:
@@ -125,16 +120,14 @@ class GetItemPercentageDiscount:
     def get_data(self) -> Union[float, str]:
         try:
             percentage_discount = self.article.find_all(attrs={'class': "space--ml-1 size--all-l size--fromW3-xl"})
-            percentage_discount = float(percentage_discount[0].get_text().strip('%'))
+            if len(percentage_discount) > 0:
+                percentage_discount = float(percentage_discount[0].get_text().strip('%'))
+            else:
+                """The attribute does not exist or the class name is invalid."""
+                percentage_discount = "NA"
             return percentage_discount
-        except IndexError as e:
-            percentage_discount = "NA"
-            return percentage_discount
-        except ValueError as e:
-            percentage_discount = "NA"
-            return percentage_discount
-        except TypeError as e:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item percentage discount failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
 class GetItemUrl:
@@ -146,10 +139,8 @@ class GetItemUrl:
         try:
             item_url = self.article.find_all('a', {"class":"cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['href']
             return item_url
-        except IndexError as e:
-            raise IndexError(f"Index out of the range: {e}")
-        except TypeError as e:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item url failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
 class GetItemAddedDate:
@@ -163,10 +154,8 @@ class GetItemAddedDate:
             date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
             raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
             return raw_string_list
-        except IndexError as e:
-            raise IndexError(f"Index out of the range: {e}")
-        except TypeError as e:
-            raise TypeError(f"Invalid html class name: {e}")
+        except Exception as e:
+            logging.warning(f"Getting item added date failed: {e}\n Tracking: {traceback.format_exc()}")
 
     def get_data(self) -> str:
 
@@ -187,7 +176,7 @@ class GetItemAddedDate:
 
     def data_format_conversion(self, date_string_likely: str) -> str:
 
-        old_dates_data_pattern = "[A-Za-z]+\s\d\d\.\s[0-9]+"
+        old_dates_data_pattern = r"[A-Za-z]+\s\d\d\.\s[0-9]+"
 
         try:
             if date_string_likely.startswith("Zaktualizowano ") and date_string_likely.endswith(" temu"):
