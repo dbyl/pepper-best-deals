@@ -168,4 +168,5 @@ LICENSE.chromedriver
 populating_scrapstats_failed.txt
 populating_pepart_failed.txt
 populating_pepart_from_csv_failed.txt
+jupyter_to_test.ipynb
 scraped.csv

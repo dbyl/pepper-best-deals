@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, date
 import re
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
+
 import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from enum import Enum, IntEnum
@@ -46,7 +47,7 @@ class Months(Enum):
 
 class GetItemName:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> str:
@@ -61,12 +62,12 @@ class GetItemName:
 
 class GetItemId:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> int:
         try:
-            item_id = self.article["id"]
+            item_id = self.article.find_all(attrs={'class': "thread cept-thread-item thread--type-list imgFrame-container--scale thread--deal"})[0]['id']
             item_id = item_id.strip('thread_')
             item_id = int(item_id)
             return item_id
@@ -78,7 +79,7 @@ class GetItemId:
 
 class GetItemDiscountPrice:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> Union[float, str]:
@@ -86,17 +87,19 @@ class GetItemDiscountPrice:
             discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
             discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
             return discount_price
-        except IndexError as e:
-            return "NA"
-        except ValueError as e:
-            return "NA"
-        except TypeError as e:
+        except IndexError:
+            discount_price = "NA"
+            return discount_price
+        except ValueError:
+            discount_price = "NA"
+            return discount_price
+        except TypeError:
             raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemRegularPrice:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> Union[float, str]:
@@ -105,16 +108,18 @@ class GetItemRegularPrice:
             regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
             return regular_price
         except IndexError as e:
-            return "NA"
+            regular_price = "NA"
+            return regular_price
         except ValueError as e:
-            return "NA"
+            regular_price = "NA"
+            return regular_price
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemPercentageDiscount:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> Union[float, str]:
@@ -123,16 +128,18 @@ class GetItemPercentageDiscount:
             percentage_discount = float(percentage_discount[0].get_text().strip('%'))
             return percentage_discount
         except IndexError as e:
-            return "NA"
+            percentage_discount = "NA"
+            return percentage_discount
         except ValueError as e:
-            return "NA"
+            percentage_discount = "NA"
+            return percentage_discount
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
 
 class GetItemUrl:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> str:
@@ -147,7 +154,7 @@ class GetItemUrl:
 
 class GetItemAddedDate:
 
-    def __init__(self, article: str) -> None:
+    def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_raw_data(self) -> List[str]:
