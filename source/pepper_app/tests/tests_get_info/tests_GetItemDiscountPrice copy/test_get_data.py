@@ -30,7 +30,7 @@ def test_article_type(article):
 
 
 def test_get_data_returns_correct_discount_price_if_exists(article):
-    """Test retriving correct id."""
+    """Test retriving correct discount price."""
     discount_price = GetItemDiscountPrice(article).get_data()
     assert discount_price == 91.63
     assert isinstance(discount_price, float)
@@ -38,7 +38,7 @@ def test_get_data_returns_correct_discount_price_if_exists(article):
 
 
 def test_get_data_returns_correct_discount_price_if_not_exists(article_without_discount_price):
-    """Test retriving correct id string."""
+    """Test retriving NA if correct discount price doesnt exists."""
     discount_prices = GetItemDiscountPrice(article_without_discount_price).get_data()
     assert discount_prices == "NA"
 
