@@ -8,31 +8,31 @@ from pepper_app.get_info import GetItemPercentageDiscount
 @pytest.fixture
 def article():
     """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/GetItemPercentageDiscount/saved_tag_article_with_percentage_discount.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
-        article_string = file.read()
-    article = BeautifulSoup(article_string, "html5lib")
+        soup = file.read()
+    soup = BeautifulSoup(soup, "html5lib")
+    articles = soup.find_all('article')
+    article = articles[0] #Example article with regular price
     return article
 
 @pytest.fixture
 def article_without_percentage_discount():
     """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/GetItemPercentageDiscount/saved_tag_article_without_percentage_discount.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
-        article_string = file.read()
-    article_without_percentage_discount = BeautifulSoup(article_string, "html5lib")
+        soup = file.read()
+    soup = BeautifulSoup(soup, "html5lib")
+    articles = soup.find_all('article')
+    article_without_percentage_discount = articles[8] #Example article without percentage discount
     return article_without_percentage_discount
 
-
-def test_article_type(article):
-    """Test correct data type of the article."""
-    assert isinstance(article, Tag)
 
 
 def test_get_data_returns_correct_percentage_discount_if_exists(article):
     """Test retriving correct percentage discount."""
     percentage_discount = GetItemPercentageDiscount(article).get_data()
-    assert percentage_discount == -15.0
+    assert percentage_discount == -50.0
     assert isinstance(percentage_discount, float)
 
 

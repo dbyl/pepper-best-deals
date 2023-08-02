@@ -66,7 +66,7 @@ class GetItemId:
 
     def get_data(self) -> int:
         try:
-            item_id = self.article.find_all(attrs={'class': "thread cept-thread-item thread--type-list imgFrame-container--scale thread--deal"})[0]['id']
+            item_id = self.article.get("id")
             item_id = item_id.strip('thread_')
             item_id = int(item_id)
             return item_id
@@ -164,7 +164,9 @@ class GetItemAddedDate:
             filtered_list = self.check_missing_date()
             date_string_likely = filtered_list[0]
             if date_string_likely == "NA":
-                prepared_data = self.fill_missing_date()
+                url_with_item = GetItemUrl.get_data(self)
+                soup = self.scrap_page(url_with_item)
+                prepared_data = self.fill_missing_date(soup)
                 return prepared_data
             else:
                 prepared_data = self.data_format_conversion(date_string_likely)
@@ -257,23 +259,7 @@ class GetItemAddedDate:
             raise TypeError(f"Input data must be a list: {e}")
 
 
-    def fill_missing_date(self) -> str:
-
-        try:
-            url_with_item = GetItemUrl.get_data(self)
-            driver = webdriver.Chrome()
-            driver.get(url_with_item)
-            time.sleep(0.7)
-            page_with_item = driver.page_source
-            soup = BeautifulSoup(page_with_item, 'html5lib')
-        except ConnectionError as e:
-            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
-        except MissingSchema as e:
-            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
-        except HTTPError as e:
-            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
-        except ReadTimeout as e:
-            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")
+    def fill_missing_date(self, soup) -> str:
 
         try:
             date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
@@ -294,4 +280,20 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
+    def scrap_page(self, url_with_item):
 
+        try:
+            driver = webdriver.Chrome()
+            driver.get(url_with_item)
+            time.sleep(0.7)
+            page_with_item = driver.page_source
+            soup = BeautifulSoup(page_with_item, 'html5lib')
+            return soup
+        except ConnectionError as e:
+            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
+        except MissingSchema as e:
+            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+        except HTTPError as e:
+            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+        except ReadTimeout as e:
+            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")

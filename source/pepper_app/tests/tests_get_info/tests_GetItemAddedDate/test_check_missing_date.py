@@ -12,12 +12,14 @@ def article():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    article = articles[1] #Example article
+    article = articles[0] #Example article
     return article
 
 
-def test_get_raw_non_list_with_data(article):
-    """Test if non empty list is returned"""
-    raw_string_list = GetItemAddedDate(article).clean_list()
-    assert isinstance(raw_string_list, list)
-    assert len(raw_string_list) > 0
+
+def test_check_missing_date(article):
+    """Test if function returns list with only 1 item "NA" """
+    filtered_list = GetItemAddedDate(article).check_missing_date()
+
+    assert len(filtered_list) == 1
+    assert filtered_list[0] == "NA"
