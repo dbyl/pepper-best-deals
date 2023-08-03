@@ -3,6 +3,8 @@ import re
 from bs4 import BeautifulSoup, Tag
 import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
+from selenium.webdriver.chrome.webdriver import WebDriver
+from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
 from enum import Enum, IntEnum
 from collections import Counter
 from selenium import webdriver
@@ -169,49 +171,58 @@ class GetItemAddedDate:
                 prepared_data = self.fill_missing_date(soup)
                 return prepared_data
             else:
-                prepared_data = self.data_format_conversion(date_string_likely)
+                stripped_date_string_likely = self.strip_date_string(date_string_likely)
+                prepared_data = self.date_format_conversion(stripped_date_string_likely)
             return prepared_data
 
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
-
-    def data_format_conversion(self, date_string_likely: str) -> str:
-
-        old_dates_data_pattern = r"[A-Za-z]+\s\d\d\.\s[0-9]+"
+    def strip_date_string(self, date_string_likely: str) -> str:
 
         try:
             if date_string_likely.startswith("Zaktualizowano ") and date_string_likely.endswith(" temu"):
-                date_string_likely = date_string_likely.lstrip("Zaktualizowano ")
-                date_string_likely = date_string_likely.rstrip(" temu")
+                stripped_date_string_likely = date_string_likely.lstrip("Zaktualizowano ")
+                stripped_date_string_likely = stripped_date_string_likely.rstrip(" temu")
+                return stripped_date_string_likely
             elif date_string_likely.endswith("Lokalnie"):
-                date_string_likely = date_string_likely.rstrip("Lokalnie")
-        except Exception:
-            return date_string_likely
+                stripped_date_string_likely = date_string_likely.rstrip("Lokalnie")
+                return stripped_date_string_likely
+            else:
+                stripped_date_string_likely = date_string_likely
+                return stripped_date_string_likely
+        except Exception as e:
+            logging.error(f"Stripping date string failed: {e}\n Tracking: {traceback.format_exc()}")
+
+    def date_format_conversion(self, stripped_date_string_likely: str) -> str:
 
         try:
-            if date_string_likely.endswith(('min', 'g', 's')):
+            if stripped_date_string_likely.endswith(('min', 'g', 's')):
                 prepared_data = date.today().strftime("%Y-%m-%d")
                 return prepared_data
-            elif date_string_likely.startswith(tuple(Months.keys())) and len(date_string_likely) < 8:
-                if len(date_string_likely[4:]) == 3:
-                    day = date_string_likely[4:6]
+            elif stripped_date_string_likely.startswith(tuple(Months.keys())) and len(stripped_date_string_likely) < 8:
+                if len(stripped_date_string_likely[4:]) == 3:
+                    day = stripped_date_string_likely[4:6]
                 else:
-                    day = date_string_likely[4:5].zfill(2)
-                month = Months.__members__[date_string_likely[0:3]].value
+                    day = stripped_date_string_likely[4:5].zfill(2)
+                month = Months.__members__[stripped_date_string_likely[0:3]].value
                 year = str(date.today().year)
                 prepared_data = '-'.join([year, month, day])
                 return prepared_data
-            elif bool(re.search(old_dates_data_pattern, date_string_likely)):
-                day = date_string_likely[4:6]
-                month = Months.__members__[date_string_likely[0:3]].value
-                year = date_string_likely[8:13]
+            elif bool(re.search(OLD_DATES_DATA_PATTERN_1, stripped_date_string_likely)):
+                day = stripped_date_string_likely[4:6]
+                month = Months.__members__[stripped_date_string_likely[0:3]].value
+                year = stripped_date_string_likely[8:13]
                 prepared_data = '-'.join([year, month, day])
                 return prepared_data
-
-
-        except KeyError as e:
-            raise KeyError(f"Invalid name of the month {e}")
+            elif bool(re.search(OLD_DATES_DATA_PATTERN_2, stripped_date_string_likely)):
+                day = stripped_date_string_likely[4:5].zfill(2)
+                month = Months.__members__[stripped_date_string_likely[0:3]].value
+                year = stripped_date_string_likely[7:12]
+                prepared_data = '-'.join([year, month, day])
+                return prepared_data
+        except Exception as e:
+            logging.error(f"Data format conversion tailed: {e}\n Tracking: {traceback.format_exc()}")
 
 
     def clean_list(self) -> List[str]:
@@ -280,20 +291,22 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-    def scrap_page(self, url_with_item):
+
+    def scrap_page(self, url_with_item: str, driver: WebDriver=None) -> BeautifulSoup:
 
         try:
-            driver = webdriver.Chrome()
+            if driver is None:
+                driver = webdriver.Chrome()
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source
             soup = BeautifulSoup(page_with_item, 'html5lib')
             return soup
         except ConnectionError as e:
-            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
+            raise ConnectionError(f"ConnectionError occured: {e}. \nTry again later")
         except MissingSchema as e:
-            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+            raise MissingSchema(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
         except HTTPError as e:
-            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+            raise HTTPError(f"HTTPError occured: {e}. \nMake sure that website url is valid")
         except ReadTimeout as e:
-            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")
+            raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")

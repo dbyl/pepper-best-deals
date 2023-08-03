@@ -14,6 +14,7 @@ from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from django.utils.timezone import utc
 from selenium import webdriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
@@ -48,24 +49,24 @@ class ScrapPage:
         self.scrap_continuously = scrap_continuously
         self.scrap_choosen_data = scrap_choosen_data
 
-    def scrap_data(self) -> str:
+    def scrap_page(self, url_to_scrap: str, driver: WebDriver=None) -> BeautifulSoup:
         try:
-            driver = webdriver.Chrome()
+            if driver is None:
+                driver = webdriver.Chrome()
             driver.set_window_size(1400,1000)
-            url_to_scrap = self.select_url()
             driver.get(url_to_scrap)
             time.sleep(0.7)
             page = driver.page_source
             soup = BeautifulSoup(page, "html5lib")
             return soup
         except ConnectionError as e:
-            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
+            raise ConnectionError(f"ConnectionError occured: {e}. \nTry again later")
         except MissingSchema as e:
-            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+            raise MissingSchema(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
         except HTTPError as e:
-            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+            raise HTTPError(f"HTTPError occured: {e}. \nMake sure that website url is valid")
         except ReadTimeout as e:
-            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")
+            raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")
 
     def select_url(self) -> str:
         try:
@@ -89,7 +90,8 @@ class ScrapPage:
             flag = True
             retrived_articles = list()
             while flag:
-                soup = self.scrap_data()
+                url_to_scrap = self.select_url()
+                soup = self.scrap_page(url_to_scrap)
                 flag = CheckConditions(soup).check_if_last_page()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
@@ -204,7 +206,7 @@ class ScrapPage:
 
         retrived_articles = list()
 
-        soup = self.scrap_data()
+        soup = self.scrap_page()
         time.sleep(20)
         articles = soup.find_all('article')
         retrived_articles += articles
