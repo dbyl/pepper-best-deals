@@ -6,13 +6,13 @@ import logging
 import html5lib
 import pandas as pd
 import traceback
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from typing import List, Union
 from bs4 import BeautifulSoup
 from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from django.utils.timezone import utc
+#from django.utils.timezone import utc
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
@@ -92,7 +92,8 @@ class ScrapPage:
             while flag:
                 url_to_scrap = self.select_url()
                 soup = self.scrap_page(url_to_scrap)
-                flag = CheckConditions(soup).check_if_last_page()
+                flag = CheckConditions(soup).check_if_last_page_nowe()
+                flag = CheckConditions(soup).check_if_last_page_search()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
 
@@ -221,16 +222,17 @@ class CheckConditions:
         self.soup = soup
 
 
-    def check_if_last_page(self) -> bool:
+    def check_if_last_page_nowe(self) -> bool:
         """Checking 'nowe' category to verify if the scraped page is the last one."""
         try:
-            searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
+            searched_ending_string = self.soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
             if searched_ending_string.startswith("Ups"):
                 logging.warning("No more pages to scrap.")
                 return False
         except:
             return True
 
+    def check_if_last_page_search(self) -> bool:
         """Checking 'search' category to verify if the scraped page is the last one."""
         try:
             searched_ending_string = self.soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
@@ -255,7 +257,7 @@ class CheckConditions:
             return True
 
 
-
+"""
 category_type = "nowe"
 start_page = 2
 searched_article = "fsdfsdfsdf"
@@ -270,3 +272,4 @@ output = ScrapPage(category_type, articles_to_retrieve, to_csv,
 
 output.select_url()
 output.get_items_details_depending_on_the_function()
+"""

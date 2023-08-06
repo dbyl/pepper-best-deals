@@ -28,3 +28,4 @@ exec(open("source/pepper_app/scrap.py").read())
 
 
 git commit -m "Implementing tests for get_info -> GetItemId, GetItemName, GetItemDiscountPrices"
+ pytest --ds=configuration.settings
