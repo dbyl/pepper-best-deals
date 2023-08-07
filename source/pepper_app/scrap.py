@@ -72,11 +72,13 @@ class ScrapPage:
         try:
             if self.scrap_continuously == True:
                 url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
+                print('d')
                 return url_to_scrap
-            elif self.category_type == "nowe":
+            elif self.category_type == "nowe" and self.scrap_continuously == False:
+                print('dd')
                 url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?page=", str(self.start_page)])
                 return url_to_scrap
-            elif self.category_type == "search":
+            elif self.category_type == "search" and self.scrap_continuously == False:
                 searched_article = str(self.searched_article.replace(" ","%20"))
                 url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?q=",
                                         searched_article, "&page=", str(self.start_page)])

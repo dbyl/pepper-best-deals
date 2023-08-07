@@ -13,6 +13,7 @@ def soup_searched_item_not_found():
     soup_searched_item_not_found = BeautifulSoup(soup, "html5lib")
     return soup_searched_item_not_found
 
+
 @pytest.fixture
 def soup_searched_item_found():
     """Preparing article for tests."""
@@ -27,6 +28,7 @@ def test_check_if_no_items_found(soup_searched_item_not_found):
     """Test if False is received when searched item is not found."""
     result = CheckConditions(soup_searched_item_not_found).check_if_no_items_found()
     assert result == False
+
 
 def test_check_if_item_is_found(soup_searched_item_found):
     """Test if False is received when searched item is found."""
