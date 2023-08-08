@@ -69,23 +69,21 @@ class ScrapPage:
             raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")
 
     def select_url(self) -> str:
-        try:
-            if self.scrap_continuously == True:
-                url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
-                print('d')
-                return url_to_scrap
-            elif self.category_type == "nowe" and self.scrap_continuously == False:
-                print('dd')
-                url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?page=", str(self.start_page)])
-                return url_to_scrap
-            elif self.category_type == "search" and self.scrap_continuously == False:
-                searched_article = str(self.searched_article.replace(" ","%20"))
-                url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?q=",
-                                        searched_article, "&page=", str(self.start_page)])
-                return url_to_scrap
-        except Exception as e:
-            logging.warning(f"Invalid category type name, category must be 'nowe' or 'search':\
-                            {e}\n Tracking: {traceback.format_exc()}")
+
+        if self.scrap_continuously == True:
+            url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
+            return url_to_scrap
+        elif self.category_type == "nowe" and self.scrap_continuously == False:
+            url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?page=", str(self.start_page)])
+            return url_to_scrap
+        elif self.category_type == "search" and self.scrap_continuously == False:
+            searched_article = str(self.searched_article.replace(" ","%20"))
+            url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?q=",
+                                    searched_article, "&page=", str(self.start_page)])
+            return url_to_scrap
+        else:
+            raise Exception(f"The variables were defined incorrectly.")
+
 
     def infinite_scroll_handling(self) -> List[str]:
         try:
