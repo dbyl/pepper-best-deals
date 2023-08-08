@@ -24,13 +24,13 @@ def soup_searched_item_found():
     return soup_searched_item_found
 
 
-def test_check_if_no_items_found(soup_searched_item_not_found):
+def test_check_if_no_items_found_1(soup_searched_item_not_found):
     """Test if False is received when searched item is not found."""
     result = CheckConditions(soup_searched_item_not_found).check_if_no_items_found()
     assert result == False
 
 
-def test_check_if_item_is_found(soup_searched_item_found):
+def test_check_if_no_items_found_2(soup_searched_item_found):
     """Test if False is received when searched item is found."""
     result = CheckConditions(soup_searched_item_found).check_if_no_items_found()
     assert result == True

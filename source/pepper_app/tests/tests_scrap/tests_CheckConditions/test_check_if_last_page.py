@@ -32,13 +32,13 @@ def soup_searched_item_last_page():
     return soup_searched_item_last_page
 
 
-def test_check_if_last_page_nowe_last_page(soup_nowe_last_page):
+def test_check_if_last_page_1(soup_nowe_last_page):
     """Test if False is received when last page in 'nowe' occured."""
     result = CheckConditions(soup_nowe_last_page).check_if_last_page_nowe()
     assert result == False
 
 
-def test_check_if_last_page_searched_item_last_page(soup_searched_item_last_page):
+def test_check_if_last_page_2(soup_searched_item_last_page):
     """Test if False is received when last page in 'search' occured."""
     result = CheckConditions(soup_searched_item_last_page).check_if_last_page_search()
     assert result == False

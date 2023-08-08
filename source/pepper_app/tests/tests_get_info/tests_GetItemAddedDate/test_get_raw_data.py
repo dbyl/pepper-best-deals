@@ -16,7 +16,7 @@ def article():
     return article
 
 
-def test_get_raw_non_list_with_data(article):
+def test_get_raw_data(article):
     """Test if non empty list is returned"""
     raw_string_list = GetItemAddedDate(article).clean_list()
     assert isinstance(raw_string_list, list)

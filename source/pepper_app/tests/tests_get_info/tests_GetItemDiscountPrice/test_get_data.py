@@ -28,14 +28,14 @@ def article_without_discount_price():
     return article
 
 
-def test_get_data_returns_correct_discount_price_if_exists(article):
+def test_get_data_1(article):
     """Test retriving correct discount price."""
     discount_price = GetItemDiscountPrice(article).get_data()
     assert discount_price == 4.99
     assert isinstance(discount_price, float)
 
 
-def test_get_data_returns_correct_discount_price_if_not_exists(article_without_discount_price):
+def test_get_data_2(article_without_discount_price):
     """Test retriving NA if correct discount price doesnt exists."""
     discount_prices = GetItemDiscountPrice(article_without_discount_price).get_data()
     assert discount_prices == "NA"
