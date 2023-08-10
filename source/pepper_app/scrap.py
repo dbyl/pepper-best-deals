@@ -96,7 +96,6 @@ class ScrapPage:
                 flag = CheckConditions(soup).check_if_last_page_search()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
-
                 flag = CheckConditions(soup).check_if_no_items_found()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
@@ -105,13 +104,12 @@ class ScrapPage:
                     retrived_articles += articles
                 else:
                     return retrived_articles[:self.articles_to_retrieve]
-
                 if len(retrived_articles) >= self.articles_to_retrieve:
                     flag = False
                     return retrived_articles[:self.articles_to_retrieve]
                 self.start_page += 1
         except Exception as e:
-            logging.warning(f"Infinite scroll failed:\
+            raise Exception(f"Infinite scroll failed:\
                             {e}\n Tracking: {traceback.format_exc()}")
 
     def get_items_details_depending_on_the_function(self) -> None:
