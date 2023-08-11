@@ -96,20 +96,16 @@ class ScrapPage:
                 flag_search = CheckConditions(soup).check_if_last_page_search()
                 if flag_nowe == False or flag_search == False:
                     flag = False
-                    to_test_data_flow = "A"
                     return retrived_articles[:self.articles_to_retrieve]
                 flag = CheckConditions(soup).check_if_no_items_found()
                 if flag == False:
-                    to_test_data_flow = "B"
                     return retrived_articles[:self.articles_to_retrieve]
                 if flag == True:
-                    to_test_data_flow = "C"
                     articles = soup.find_all('article')
                     retrived_articles += articles
                 else:
                     return retrived_articles[:self.articles_to_retrieve]
                 if len(retrived_articles) >= self.articles_to_retrieve:
-                    to_test_data_flow = "D"
                     flag = False
                     return retrived_articles[:self.articles_to_retrieve]
                 self.start_page += 1

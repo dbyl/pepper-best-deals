@@ -1,16 +1,10 @@
 from pathlib import Path
 import html5lib
 from pytest_mock import mocker
-
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import ScrapPage
+from pepper_app.scrap import ScrapPage, CheckConditions
 
-"""@pytest.fixture
-def mock_select_url(mocker):
-    mock = mocker.MagicMock()
-    mock.return_value = "https://www.pepper.pl/nowe?page=1"
-    return mock"""
 
 @pytest.fixture
 def soup():
@@ -21,57 +15,98 @@ def soup():
     soup = BeautifulSoup(soup, "html5lib")
     return soup
 
-
-
 def test_infinite_scroll_handling_1(mocker, soup):
-    """ Comm """
+    """Test infinite scroll handling if the page in 'nowe' is not last."""
     scrap_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
 
-    select_url_mocked_value = "https://www.pepper.pl/nowe?page=1"
-    scrap_page_mocked_value = soup
-
     select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
-    select_url_mock.return_value = select_url_mocked_value
-
     scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
-    scrap_page_mock.return_value = scrap_page_mocked_value
+    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    check_if_no_items_found_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_no_items_found")
+
+    select_url_mock.return_value = "https://www.pepper.pl/nowe?page=1"
+    scrap_page_mock.return_value = soup
+    check_if_last_page_nowe_mock.return_value = True
+    check_if_last_page_search_mock.return_value = True
+    check_if_no_items_found_mock.return_value = True
 
     retrived_articles = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve).infinite_scroll_handling()
 
     assert isinstance(retrived_articles, list)
-    assert ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve).select_url() == "dd"
+    assert len(retrived_articles) > 0
+
+
+    
+def test_infinite_scroll_handling_2(mocker, soup):
+    """Test infinite scroll handling if the page in 'nowe' is not last with only one article to retrieve."""
+    scrap_continuously = False
+    category_type = "nowe"
+    articles_to_retrieve = 1
+
+    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    check_if_no_items_found_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_no_items_found")
+
+    select_url_mock.return_value = "https://www.pepper.pl/nowe?page=1"
+    scrap_page_mock.return_value = soup
+    check_if_last_page_nowe_mock.return_value = True
+    check_if_last_page_search_mock.return_value = True
+    check_if_no_items_found_mock.return_value = True
+
+    retrived_articles = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve).infinite_scroll_handling()
+
+    assert isinstance(retrived_articles, list)
+    assert len(retrived_articles) > 0  
+
+
+def test_infinite_scroll_handling_3(mocker, soup):
+    """Test infinite scroll handling if the page in 'search' is last."""
+    scrap_continuously = False
+    category_type = "search"
+    articles_to_retrieve = 50
+
+    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
+
+    select_url_mock.return_value = "https://www.pepper.pl/search?q=s21&page=1"
+    scrap_page_mock.return_value = soup
+    check_if_last_page_nowe_mock.return_value = True
+    check_if_last_page_search_mock.return_value = False
+
+    retrived_articles = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve).infinite_scroll_handling()
+
+    assert isinstance(retrived_articles, list)
+    assert len(retrived_articles) == 0
 
 
 
+def test_infinite_scroll_handling_4(mocker, soup):
+    """Test infinite scroll handling if the searched item is not found."""
+    scrap_continuously = False
+    category_type = "search"
+    articles_to_retrieve = 50
 
+    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    check_if_no_items_found_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_no_items_found")
 
-"""
-   def infinite_scroll_handling(self) -> List[str]:
-        try:
-            flag = True
-            retrived_articles = list()
-            while flag:
-                url_to_scrap = self.select_url()
-                soup = self.scrap_page(url_to_scrap)
-                flag = CheckConditions(soup).check_if_last_page_nowe()
-                flag = CheckConditions(soup).check_if_last_page_search()
-                if flag == False:
-                    return retrived_articles[:self.articles_to_retrieve]
-                flag = CheckConditions(soup).check_if_no_items_found()
-                if flag == False:
-                    return retrived_articles[:self.articles_to_retrieve]
-                if flag == True:
-                    articles = soup.find_all('article')
-                    retrived_articles += articles
-                else:
-                    return retrived_articles[:self.articles_to_retrieve]
-                if len(retrived_articles) >= self.articles_to_retrieve:
-                    flag = False
-                    return retrived_articles[:self.articles_to_retrieve]
-                self.start_page += 1
-        except Exception as e:
-            raise Exception(f"Infinite scroll failed:\
-                            {e}\n Tracking: {traceback.format_exc()}")
-"""
+    select_url_mock.return_value = "https://www.pepper.pl/search?q=asdasdasd&page=1"
+    scrap_page_mock.return_value = soup
+    check_if_last_page_nowe_mock.return_value = True
+    check_if_last_page_search_mock.return_value = True
+    check_if_no_items_found_mock.return_value = False
+
+    retrived_articles = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve).infinite_scroll_handling()
+
+    assert isinstance(retrived_articles, list)
+    assert len(retrived_articles) == 0
+
