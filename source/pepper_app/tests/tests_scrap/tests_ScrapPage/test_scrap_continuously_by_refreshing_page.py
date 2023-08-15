@@ -3,6 +3,8 @@ import html5lib
 from pytest_mock import mocker
 import pytest
 from bs4 import BeautifulSoup, Tag
+import time
+import pepper_app.scrap
 from pepper_app.scrap import ScrapPage, CheckConditions
 
 
@@ -15,8 +17,14 @@ def soup():
     soup = BeautifulSoup(soup, "html5lib")
     return soup
 
-def test_scrap_continuously_by_refreshing_page_1(mocker, soup):
+def test_scrap_continuously_by_refreshing_page_1(monkeypatch, mocker, soup):
     """Test scrap continuously by refreshing page if correct list filled with articles is returned."""
+
+    def mock_sleep(seconds):
+        pass
+
+    monkeypatch.setattr(time, "sleep", mock_sleep)
+
     category_type = "nowe"
     articles_to_retrieve = 50
 
@@ -29,3 +37,16 @@ def test_scrap_continuously_by_refreshing_page_1(mocker, soup):
     assert isinstance(retrived_articles, list)
     assert len(retrived_articles) > 0
 
+
+"""
+    def scrap_continuously_by_refreshing_page(self) -> List[str]:
+
+        retrived_articles = list()
+
+        soup = self.scrap_page()
+        time.sleep(20)
+        articles = soup.find_all('article')
+        retrived_articles += articles
+
+        return retrived_articles
+"""
