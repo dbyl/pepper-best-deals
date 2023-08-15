@@ -123,8 +123,8 @@ class ScrapPage:
             retrived_articles = self.infinite_scroll_handling()
             self.get_items_details(retrived_articles)
         else:
-            logging.warning(f"Matching get_items_details depending on the selected \
-                            functionality failed: {e}\n Tracking: {traceback.format_exc()}")
+            raise Exception(f"Matching get_items_details depending on the selected \
+                            functionality failed. \n Tracking: {traceback.format_exc()}")
 
     def get_items_details(self, retrived_articles) -> None:
         start_time = datetime.utcnow().replace(tzinfo=utc)
