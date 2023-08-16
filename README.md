@@ -29,3 +29,7 @@ exec(open("source/pepper_app/scrap.py").read())
 
 git commit -m "Implementing tests for get_info -> GetItemId, GetItemName, GetItemDiscountPrices"
 pytest --ds=configuration.settings
+
+
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_scrap_continuously_by_refreshing_page.py --ds=configuration.settings
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_items_details_depending_on_the_function.py --ds=configuration.settings

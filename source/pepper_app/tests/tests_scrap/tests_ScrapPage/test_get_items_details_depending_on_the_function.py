@@ -28,22 +28,37 @@ def test_get_items_details_depending_on_the_function_1(monkeypatch, mocker):
 
     monkeypatch.setattr(time, "sleep", mock_sleep)
 
-    scrap_continuously_by_refreshing_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_continuously_by_refreshing_page")
     infinite_scroll_handling_mock = mocker.patch("pepper_app.scrap.ScrapPage.infinite_scroll_handling")
     get_items_details_mock = mocker.patch("pepper_app.scrap.ScrapPage.get_items_details")
 
-
-
-    scrap_continuously_by_refreshing_page_mock.return_value = "the function scrap_continuously_by_refreshing_page has been called"
-    infinite_scroll_handling_mock.return_value = "the function infinite_scroll_handling has been called"
-    get_items_details_mock.return_value = "the function get_items_details has been called"
-
-    retrived_articles = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, \
+    ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, \
         scrap_continuously=scrap_continuously, scrap_choosen_data=scrap_choosen_data).get_items_details_depending_on_the_function()
 
+    get_items_details_mock.assert_called_once()
+    infinite_scroll_handling_mock.assert_called_once()
 
-    assert retrived_articles == "the function infinite_scroll_handling has been called"
-    #assert get_items_details_mock.assert_called_once_with(retrived_articles)
+
+
+def test_get_items_details_depending_on_the_function_2(monkeypatch, mocker):
+    """Test get items details depending on the function whether the correct function has been started."""
+    category_type = "nowe"
+    articles_to_retrieve = 50
+    scrap_continuously = True
+    scrap_choosen_data = False
+
+    def mock_sleep(seconds):
+        pass
+
+    monkeypatch.setattr(time, "sleep", mock_sleep)
+
+    scrap_continuously_by_refreshing_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_continuously_by_refreshing_page")
+    get_items_details_mock = mocker.patch("pepper_app.scrap.ScrapPage.get_items_details")
+
+    ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, \
+        scrap_continuously=scrap_continuously, scrap_choosen_data=scrap_choosen_data).get_items_details_depending_on_the_function()
+    
+    scrap_continuously_by_refreshing_page_mock.assert_called_once()
+    get_items_details_mock.assert_called_once()
 
 """
     def get_items_details_depending_on_the_function(self) -> None:
