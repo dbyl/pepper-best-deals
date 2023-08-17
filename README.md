@@ -33,3 +33,5 @@ pytest --ds=configuration.settings
 
 pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_scrap_continuously_by_refreshing_page.py --ds=configuration.settings
 pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_items_details_depending_on_the_function.py --ds=configuration.settings
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_signal_handler_for_continuously_scrapping.py --ds=configuration.settings
+

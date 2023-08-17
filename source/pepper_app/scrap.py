@@ -5,6 +5,7 @@ import time
 import logging
 import html5lib
 import pandas as pd
+import signal
 import traceback
 from datetime import datetime, timedelta, date, timezone
 from typing import List, Union
@@ -113,12 +114,22 @@ class ScrapPage:
             raise Exception(f"Infinite scroll failed:\
                             {e}\n Tracking: {traceback.format_exc()}")
 
+    def signal_handler_for_continuously_scrapping(signal):
+        global interrupted
+        interrupted = True
+
+
     def get_items_details_depending_on_the_function(self) -> None:
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
-            flag = True
-            while flag == True:
+            global interrupted
+            interrupted = False
+            signal.signal(signal.SIGINT, self.signal_handler_for_continuously_scrapping)
+            while True:
                 retrived_articles = self.scrap_continuously_by_refreshing_page()
                 self.get_items_details(retrived_articles)
+                if interrupted:
+                    logging.info("Continuously scrapping stopped.")
+                    break
         elif self.scrap_continuously == False and self.scrap_choosen_data == True:
             retrived_articles = self.infinite_scroll_handling()
             self.get_items_details(retrived_articles)
