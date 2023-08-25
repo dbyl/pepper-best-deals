@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup
 from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-#from django.utils.timezone import utc
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
@@ -28,8 +27,8 @@ from pepper_app.populate_database import (LoadItemDetailsToDatabase,
                                         LoadDataFromCsv,
                                         LoadScrapingStatisticsToDatabase)
 from pepper_app.environment_config import CustomEnvironment
-from pepper_app.constans import CSV_COLUMNS, STATS_HEADER
-
+from pepper_app.constans import (CSV_COLUMNS,
+                                STATS_HEADER)
 
 
 
@@ -129,8 +128,8 @@ class ScrapPage:
                             functionality failed. \n Tracking: {traceback.format_exc()}")
 
 
-    def get_items_details(self, retrived_articles) -> None:
-        start_time = datetime.utcnow().replace(tzinfo=utc)
+    def get_items_details(self, retrived_articles) -> list():
+        start_time = datetime.utcnow().replace(tzinfo=timezone.utc)
         all_items = list()
         try:
             for article in retrived_articles:
@@ -147,18 +146,19 @@ class ScrapPage:
                 if '' in item:
                     logging.warning("Data retrieving failed. None values detected")
                     break
-                if to_csv == True:
+                if self.to_csv:
                     self.save_data_to_csv(item)
-                if to_database == True:
+                if self.to_database:
                     LoadItemDetailsToDatabase(item).load_to_db()
+            return all_items
         except Exception as e:
             logging.warning(f"Getting item details failed :\
                         {e}\n Tracking: {traceback.format_exc()}")
 
-        end_time = datetime.utcnow().replace(tzinfo=utc)
+        end_time = datetime.utcnow().replace(tzinfo=timezone.utc)
         action_execution_datetime = end_time - start_time
 
-        if to_statistics == True:
+        if self.to_statistics:
             try:
                 stats_info = self.get_scraping_stats_info(action_execution_datetime)
                 LoadScrapingStatisticsToDatabase(stats_info).load_to_db()
@@ -189,9 +189,9 @@ class ScrapPage:
         stats_info = list()
 
         category_type = self.category_type
-        start_page = str(self.start_page)
-        retrived_articles_quantity = str(self.articles_to_retrieve)
-        time_of_the_action = datetime.utcnow().replace(tzinfo=utc)
+        start_page = self.start_page
+        retrieved_articles_quantity = self.articles_to_retrieve
+        time_of_the_action = datetime.utcnow().replace(tzinfo=timezone.utc)
         action_execution_datetime = action_execution_datetime
         searched_article = self.searched_article
         to_csv = self.to_csv
@@ -199,7 +199,11 @@ class ScrapPage:
         scrap_continuously = self.scrap_continuously
         scrap_choosen_data = self.scrap_choosen_data
 
-        for field in STATS_HEADER:
+        stats=[category_type, start_page, retrieved_articles_quantity,
+            time_of_the_action, action_execution_datetime, searched_article,
+            to_csv, to_database, scrap_continuously, scrap_choosen_data]
+
+        for field in stats:
             stats_info.append(field)
 
         return stats_info

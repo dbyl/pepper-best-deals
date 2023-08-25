@@ -17,7 +17,6 @@ def soup():
     return soup
 
 
-
 def test_get_items_details_depending_on_the_function_1(monkeypatch, mocker):
     """Test get items details depending on the function whether the correct function has been started."""
     category_type = "nowe"
@@ -26,6 +25,7 @@ def test_get_items_details_depending_on_the_function_1(monkeypatch, mocker):
     scrap_choosen_data = True
 
     def mock_sleep(seconds):
+        """Mocking time sleep."""
         pass
 
     monkeypatch.setattr(time, "sleep", mock_sleep)

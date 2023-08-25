@@ -2,6 +2,7 @@ from pathlib import Path
 import html5lib
 from pytest_mock import mocker
 import pytest
+from unittest.mock import patch
 from bs4 import BeautifulSoup, Tag
 from pepper_app.scrap import ScrapPage, CheckConditions
 
@@ -39,7 +40,7 @@ def test_infinite_scroll_handling_1(mocker, soup):
     assert len(retrived_articles) > 0
 
 
-    
+
 def test_infinite_scroll_handling_2(mocker, soup):
     """Test infinite scroll handling if the page in 'nowe' is not last with only one article to retrieve."""
     scrap_continuously = False
@@ -61,7 +62,7 @@ def test_infinite_scroll_handling_2(mocker, soup):
     retrived_articles = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve).infinite_scroll_handling()
 
     assert isinstance(retrived_articles, list)
-    assert len(retrived_articles) > 0  
+    assert len(retrived_articles) > 0
 
 
 def test_infinite_scroll_handling_3(mocker, soup):

@@ -17,6 +17,7 @@ def test_select_url_1():
 
     assert url_to_scrap == "https://www.pepper.pl/nowe"
 
+
 def test_select_url_2():
     """Test if function returns correct url if category_type is nowe."""
     scrap_continuously = False
@@ -26,6 +27,7 @@ def test_select_url_2():
                             scrap_continuously=scrap_continuously).select_url()
 
     assert url_to_scrap == "https://www.pepper.pl/nowe?page=1"
+
 
 def test_select_url_3():
     """Test if function returns correct url if category_type is search."""
@@ -38,6 +40,7 @@ def test_select_url_3():
 
     assert url_to_scrap == "https://www.pepper.pl/search?q=s21&page=1"
 
+
 def test_select_url_4():
     """Test if function returns Exception if category_type is invalid."""
     scrap_continuously = False
@@ -49,6 +52,7 @@ def test_select_url_4():
         url_to_scrap = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve,
                             searched_article=searched_article, scrap_continuously=scrap_continuously).select_url()
     assert "The variables were defined incorrectly." in str(exc_info)
+
 
 def test_select_url_5():
     """Test if function returns Exception if scrap_continuously is invalid."""

@@ -37,16 +37,3 @@ def test_scrap_continuously_by_refreshing_page_1(monkeypatch, mocker, soup):
     assert isinstance(retrived_articles, list)
     assert len(retrived_articles) > 0
 
-
-"""
-    def scrap_continuously_by_refreshing_page(self) -> List[str]:
-
-        retrived_articles = list()
-
-        soup = self.scrap_page()
-        time.sleep(20)
-        articles = soup.find_all('article')
-        retrived_articles += articles
-
-        return retrived_articles
-"""
