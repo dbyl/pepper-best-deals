@@ -50,6 +50,7 @@ class ScrapPage:
         self.scrap_choosen_data = scrap_choosen_data
 
     def scrap_page(self, url_to_scrap: str, driver: WebDriver=None) -> BeautifulSoup:
+        """Setting up selenium webdriver, scraping page with bs4."""
         try:
             if driver is None:
                 driver = webdriver.Chrome()
@@ -69,7 +70,7 @@ class ScrapPage:
             raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")
 
     def select_url(self) -> str:
-
+        """Selection of the website address depending on the type of scrapping."""
         if self.scrap_continuously == True:
             url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
             return url_to_scrap
@@ -86,6 +87,7 @@ class ScrapPage:
 
 
     def infinite_scroll_handling(self) -> List[str]:
+        """Handling scraping through subsequent pages."""
         try:
             flag = True
             retrived_articles = list()
@@ -116,6 +118,7 @@ class ScrapPage:
 
 
     def get_items_details_depending_on_the_function(self) -> None:
+        """Completing the list of articles and extracting data details depending on the type of scrapping."""
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
             while True:
                 retrived_articles = self.scrap_continuously_by_refreshing_page()
@@ -129,6 +132,7 @@ class ScrapPage:
 
 
     def get_items_details(self, retrived_articles) -> list():
+        """Getting item detailes."""
         start_time = datetime.utcnow().replace(tzinfo=timezone.utc)
         all_items = list()
         try:
@@ -167,7 +171,7 @@ class ScrapPage:
 
 
     def save_data_to_csv(self, item) -> None:
-
+        """Saving data to csv file."""
         try:
             header = False
             if not os.path.exists('scraped.csv'):
@@ -185,7 +189,7 @@ class ScrapPage:
 
 
     def get_scraping_stats_info(self, action_execution_datetime: datetime) -> List[Union[str, int, bool, float]]:
-
+        """Getting scraping stats info."""
         stats_info = list()
 
         category_type = self.category_type
@@ -210,7 +214,7 @@ class ScrapPage:
 
 
     def scrap_continuously_by_refreshing_page(self) -> List[str]:
-
+        """Scraping data function for continuously scraping feature."""
         retrived_articles = list()
 
         soup = self.scrap_page()

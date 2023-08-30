@@ -35,3 +35,5 @@ pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_scrap_continuously_by_r
 pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_items_details_depending_on_the_function.py --ds=configuration.settings
 pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_signal_handler_for_continuously_scrapping.py --ds=configuration.settings
 
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_save_data_to_csv.py --ds=configuration.settings
+pytest pepper_app/tests/tests_populate_database/tests_LoadDataFromCsv/test_load_to_db.py --ds=configuration.settings

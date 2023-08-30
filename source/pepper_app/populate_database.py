@@ -86,10 +86,12 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
 
 class LoadDataFromCsv(BaseCommand):
 
+    """
     def __init__(self, parser: str) -> None:
         self.parser = parser
+    """
 
-    def add_arguments(self) -> None:
+    def add_arguments(self, parser: str) -> None:
         self.parser.add_argument(
             "input", type=str, help="Choose directory path with input csv files"
         )
