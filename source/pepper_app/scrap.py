@@ -154,7 +154,6 @@ class ScrapPage:
                     self.save_data_to_csv(item)
                 if self.to_database:
                     LoadItemDetailsToDatabase(item).load_to_db()
-            return all_items
         except Exception as e:
             logging.warning(f"Getting item details failed :\
                         {e}\n Tracking: {traceback.format_exc()}")
@@ -169,6 +168,7 @@ class ScrapPage:
             except Exception as e:
                 logging.warning(f"Populating ScrapingStatistics table failed: {e}\n Tracking: {traceback.format_exc()}")
 
+        return all_items
 
     def save_data_to_csv(self, item) -> None:
         """Saving data to csv file."""

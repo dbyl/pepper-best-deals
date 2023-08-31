@@ -1,7 +1,7 @@
 from pathlib import Path
 import html5lib
 import pytest
-from datetime import datetime
+import datetime
 from pepper_app.models import PepperArticle
 from pepper_app.populate_database import LoadDataFromCsv
 
@@ -12,8 +12,8 @@ def loaddatafromcsv():
 
 @pytest.mark.django_db
 def test_load_to_db_1(loaddatafromcsv):
-
-    input = Path("pepper_app/tests/fixtures/to_test_populate_database/scraped.csv")
+    """Test loading csv file to database."""
+    input = Path("pepper_app/tests/fixtures/to_test_populate_database/scraped_test.csv")
     df = loaddatafromcsv.read_csv(input)
     loaddatafromcsv.load_to_db(df)
 

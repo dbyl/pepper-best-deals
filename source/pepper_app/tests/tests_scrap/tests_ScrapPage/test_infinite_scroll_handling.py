@@ -16,6 +16,7 @@ def soup():
     soup = BeautifulSoup(soup, "html5lib")
     return soup
 
+
 def test_infinite_scroll_handling_1(mocker, soup):
     """Test infinite scroll handling if the page in 'nowe' is not last."""
     scrap_continuously = False
@@ -38,7 +39,6 @@ def test_infinite_scroll_handling_1(mocker, soup):
 
     assert isinstance(retrived_articles, list)
     assert len(retrived_articles) > 0
-
 
 
 def test_infinite_scroll_handling_2(mocker, soup):
@@ -85,7 +85,6 @@ def test_infinite_scroll_handling_3(mocker, soup):
 
     assert isinstance(retrived_articles, list)
     assert len(retrived_articles) == 0
-
 
 
 def test_infinite_scroll_handling_4(mocker, soup):

@@ -32,8 +32,14 @@ pytest --ds=configuration.settings
 
 
 pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_scrap_continuously_by_refreshing_page.py --ds=configuration.settings
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_items_details_depending_on_the_function.py --ds=configuration.settings
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_items_details.py --ds=configuration.settings
 pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_signal_handler_for_continuously_scrapping.py --ds=configuration.settings
 
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_save_data_to_csv.py --ds=configuration.settings
-pytest pepper_app/tests/tests_populate_database/tests_LoadDataFromCsv/test_load_to_db.py --ds=configuration.settings
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_signal_handler_for_continuously_scrapping.py --ds=configuration.settings
+
+pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_scraping_stats_info.py --ds=configuration.settings
+
+
+pytest pepper_app/tests/tests_populate_database/tests_LoadDataFromCsv/test_handle.py --ds=configuration.settings
+pytest pepper_app/tests/tests_populate_database/tests_LoadItemDetailsToDatabase/test_load_to_db_lidtd.py --ds=configuration.settings
+

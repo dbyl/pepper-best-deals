@@ -43,4 +43,3 @@ def test_get_items_details_depending_on_the_function_1(monkeypatch, mocker):
 # write more tests here!
 
 
-1,"Name",100.0,-15.0,
