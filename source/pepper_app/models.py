@@ -20,6 +20,7 @@ class PepperArticle(models.Model):
 
 class ScrapingStatistic(models.Model):
 
+    stats_id = models.AutoField(primary_key=True)
     category_type = models.CharField(max_length=500)
     start_page = models.PositiveIntegerField()
     retrieved_articles_quantity = models.PositiveIntegerField()
@@ -33,7 +34,7 @@ class ScrapingStatistic(models.Model):
 
 
     def __str__(self):
-        fields = [str(self.category_type), str(self.start_page), str(self.retrieved_articles_quantity),
+        fields = [str(self.stats_id), str(self.category_type), str(self.start_page), str(self.retrieved_articles_quantity),
                 str(self.time_of_the_action), str(self.action_execution_datetime), str(self.searched_article),
                 str(self.to_csv), str(self.to_database), str(self.scrap_continuously), str(self.scrap_choosen_data)]
 
