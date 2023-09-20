@@ -3,7 +3,7 @@ import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
 
-from pepper_app.get_info import GetItemRegularPrice
+from source.pepper_app.get_info import GetItemRegularPrice
 
 @pytest.fixture
 def article():

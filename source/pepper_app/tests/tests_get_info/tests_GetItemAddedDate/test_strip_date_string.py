@@ -2,8 +2,8 @@ from pathlib import Path
 import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.get_info import GetItemAddedDate
-from pepper_app.tests.constans_for_tests import STRIPPED_DATE_STRINGS_TO_TEST_1, DESIRED_DATE_STRINGS_1
+from source.pepper_app.get_info import GetItemAddedDate
+from source.pepper_app.tests.constans_for_tests import STRIPPED_DATE_STRINGS_TO_TEST_1, DESIRED_DATE_STRINGS_1
 
 
 @pytest.fixture

@@ -4,7 +4,7 @@ from pytest_mock import mocker
 import pytest
 from datetime import datetime, timedelta, date, timezone
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import ScrapPage, CheckConditions
+from source.pepper_app.scrap import ScrapPage, CheckConditions
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def soup():
 @pytest.fixture
 def mock_utcnow(mocker):
     """Mocking datetime.utcnow()"""
-    mock_datetime = mocker.patch("pepper_app.scrap.datetime")
+    mock_datetime = mocker.patch("source.pepper_app.scrap.datetime")
     mock_datetime.utcnow.return_value.replace.return_value = datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc)
     return mock_datetime
 

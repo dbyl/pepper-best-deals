@@ -6,9 +6,9 @@ from bs4 import BeautifulSoup, Tag
 import pandas as pd
 import os
 import time
-import pepper_app.scrap
+import source.pepper_app.scrap
 import csv
-from pepper_app.scrap import ScrapPage, CheckConditions
+from source.pepper_app.scrap import ScrapPage, CheckConditions
 
 
 

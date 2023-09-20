@@ -4,8 +4,8 @@ from pytest_mock import mocker
 import pytest
 from bs4 import BeautifulSoup, Tag
 import time
-import pepper_app.scrap
-from pepper_app.scrap import ScrapPage, CheckConditions
+import source.pepper_app.scrap
+from source.pepper_app.scrap import ScrapPage, CheckConditions
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def test_scrap_continuously_by_refreshing_page_1(monkeypatch, mocker, soup):
     category_type = "nowe"
     articles_to_retrieve = 50
 
-    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
+    scrap_page_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.scrap_page")
 
     scrap_page_mock.return_value = soup
 

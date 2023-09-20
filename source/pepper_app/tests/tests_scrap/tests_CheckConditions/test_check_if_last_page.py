@@ -2,7 +2,7 @@ from pathlib import Path
 import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import CheckConditions
+from source.pepper_app.scrap import CheckConditions
 
 @pytest.fixture
 def soup():

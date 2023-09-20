@@ -7,14 +7,7 @@ from datetime import datetime, timedelta, date, timezone
 from pepper_app.models import ScrapingStatistic
 from pepper_app.populate_database import LoadScrapingStatisticsToDatabase
 
-"""
-@pytest.fixture
-def mock_utcnow(mocker):
 
-    mock_datetime = mocker.patch("pepper_app.scrap.datetime")
-    mock_datetime.utcnow.return_value.replace.return_value = datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc)
-    return mock_datetime
-"""
 @pytest.fixture
 def loadscrapingstatisticstodatabase():
     stats_info = ["nowe", 1, 50, datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc),

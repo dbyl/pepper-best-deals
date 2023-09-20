@@ -2,7 +2,7 @@ from pathlib import Path
 import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import ScrapPage
+from source.pepper_app.scrap import ScrapPage
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from requests.exceptions import ConnectionError, MissingSchema, HTTPError, ReadTimeout

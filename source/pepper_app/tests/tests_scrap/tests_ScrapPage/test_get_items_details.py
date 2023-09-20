@@ -164,16 +164,4 @@ def test_get_items_details_6(mocker, retrived_articles):
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     load_statistics_to_db_mock.assert_called_once()
-    #get_scraping_stats_info_mock.assert_called_once()
 
-
-
-"""
- if self.to_statistics:
-            try:
-                stats_info = self.get_scraping_stats_info(action_execution_datetime)
-                LoadScrapingStatisticsToDatabase(stats_info).load_to_db()
-            except Exception as e:
-                logging.warning(f"Populating ScrapingStatistics table failed: {e}\n Tracking: {traceback.format_exc()}")
-
-"""

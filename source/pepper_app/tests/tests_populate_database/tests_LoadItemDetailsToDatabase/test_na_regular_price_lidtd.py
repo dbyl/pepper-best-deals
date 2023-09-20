@@ -32,20 +32,3 @@ def test_na_regular_price_2(loaditemdetailstodatabase):
 
 
 
-
-
-
-"""
-    def na_percentage_discount(self, row):
-        if row["percentage_discount"] == 'NA':
-            return None
-        else:
-            return float(row["percentage_discount"])
-
-    def na_regular_price(self, row):
-        if row["regular_price"] == 'NA':
-            return None
-        else:
-            return float(row["regular_price"])
-
-"""

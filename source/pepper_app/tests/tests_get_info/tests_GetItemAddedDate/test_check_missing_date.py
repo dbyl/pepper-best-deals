@@ -2,7 +2,7 @@ from pathlib import Path
 import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.get_info import GetItemAddedDate
+from source.pepper_app.get_info import GetItemAddedDate
 
 @pytest.fixture
 def article():

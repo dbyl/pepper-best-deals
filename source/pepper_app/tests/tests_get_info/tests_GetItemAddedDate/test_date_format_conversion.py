@@ -3,8 +3,8 @@ import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
 from datetime import datetime, timedelta, date
-from pepper_app.get_info import GetItemAddedDate
-from pepper_app.tests.constans_for_tests import STRIPPED_DATE_STRINGS_TO_TEST_2, DESIRED_DATE_STRINGS_2
+from source.pepper_app.get_info import GetItemAddedDate
+from source.pepper_app.tests.constans_for_tests import STRIPPED_DATE_STRINGS_TO_TEST_2, DESIRED_DATE_STRINGS_2
 
 
 @pytest.fixture

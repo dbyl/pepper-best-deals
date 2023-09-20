@@ -43,3 +43,4 @@ pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_scraping_stats_info
 pytest pepper_app/tests/tests_populate_database/tests_LoadDataFromCsv/test_handle.py --ds=configuration.settings
 pytest pepper_app/tests/tests_populate_database/tests_LoadItemDetailsToDatabase/test_load_to_db_lidtd.py --ds=configuration.settings
 
+pytest pepper_app/tests/tests_article_and_soup/test_soup.py --ds=configuration.settings

@@ -3,7 +3,7 @@ import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
 
-from pepper_app.get_info import GetItemPercentageDiscount
+from source.pepper_app.get_info import GetItemPercentageDiscount
 
 @pytest.fixture
 def article():

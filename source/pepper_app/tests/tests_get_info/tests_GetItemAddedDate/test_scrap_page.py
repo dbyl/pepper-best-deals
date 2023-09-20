@@ -2,7 +2,7 @@ from pathlib import Path
 import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.get_info import GetItemAddedDate
+from source.pepper_app.get_info import GetItemAddedDate
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from requests.exceptions import ConnectionError, MissingSchema, HTTPError, ReadTimeout

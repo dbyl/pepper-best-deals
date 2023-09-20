@@ -3,7 +3,8 @@ import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
 from datetime import datetime, timedelta, date
-from pepper_app.get_info import GetItemAddedDate
+from source.pepper_app.get_info import GetItemAddedDate
+
 
 
 @pytest.fixture

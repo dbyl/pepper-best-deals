@@ -4,7 +4,7 @@ from pytest_mock import mocker
 import pytest
 from unittest.mock import patch
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import ScrapPage, CheckConditions
+from source.pepper_app.scrap import ScrapPage, CheckConditions
 
 
 @pytest.fixture
@@ -23,11 +23,11 @@ def test_infinite_scroll_handling_1(mocker, soup):
     category_type = "nowe"
     articles_to_retrieve = 50
 
-    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
-    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
-    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
-    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
-    check_if_no_items_found_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_no_items_found")
+    select_url_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    check_if_no_items_found_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_no_items_found")
 
     select_url_mock.return_value = "https://www.pepper.pl/nowe?page=1"
     scrap_page_mock.return_value = soup
@@ -47,11 +47,11 @@ def test_infinite_scroll_handling_2(mocker, soup):
     category_type = "nowe"
     articles_to_retrieve = 1
 
-    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
-    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
-    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
-    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
-    check_if_no_items_found_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_no_items_found")
+    select_url_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    check_if_no_items_found_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_no_items_found")
 
     select_url_mock.return_value = "https://www.pepper.pl/nowe?page=1"
     scrap_page_mock.return_value = soup
@@ -71,10 +71,10 @@ def test_infinite_scroll_handling_3(mocker, soup):
     category_type = "search"
     articles_to_retrieve = 50
 
-    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
-    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
-    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
-    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    select_url_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_search")
 
     select_url_mock.return_value = "https://www.pepper.pl/search?q=s21&page=1"
     scrap_page_mock.return_value = soup
@@ -93,11 +93,11 @@ def test_infinite_scroll_handling_4(mocker, soup):
     category_type = "search"
     articles_to_retrieve = 50
 
-    select_url_mock = mocker.patch("pepper_app.scrap.ScrapPage.select_url")
-    scrap_page_mock = mocker.patch("pepper_app.scrap.ScrapPage.scrap_page")
-    check_if_last_page_nowe_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
-    check_if_last_page_search_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_last_page_search")
-    check_if_no_items_found_mock = mocker.patch("pepper_app.scrap.CheckConditions.check_if_no_items_found")
+    select_url_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.select_url")
+    scrap_page_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.scrap_page")
+    check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_nowe")
+    check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_last_page_search")
+    check_if_no_items_found_mock = mocker.patch("source.pepper_app.scrap.CheckConditions.check_if_no_items_found")
 
     select_url_mock.return_value = "https://www.pepper.pl/search?q=asdasdasd&page=1"
     scrap_page_mock.return_value = soup

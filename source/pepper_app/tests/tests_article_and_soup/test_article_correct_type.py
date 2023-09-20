@@ -15,7 +15,6 @@ def article():
     return article
 
 
-
 def test_article_type(article):
     """Test correct data type of the article."""
     assert isinstance(article, Tag)
