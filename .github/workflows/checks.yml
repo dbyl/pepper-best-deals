@@ -7,9 +7,6 @@
     test-lint:
       name: Test and Lint
       runs-on: ubuntu-20.04
-      defaults:
-        run:
-          working-directory: source/
       steps:
         - name: Configure Env
           run: |
