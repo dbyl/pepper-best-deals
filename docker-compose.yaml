@@ -33,7 +33,7 @@ services:
     ports:
       - "8000:8000"
     restart: on-failure
-    env_file: source/.env
+    env_file: .env
 
 volumes:
   db-data:
