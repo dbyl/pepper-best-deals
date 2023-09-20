@@ -1,9 +1,12 @@
-name: Run Pytest
+name: Run pytest unit tests
 
-on: [push]
+on:
+  push:
+    branches:
+      - main  # Replace with your main branch name
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,13 +16,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: 3.8  # Replace with your desired Python version
 
     - name: Install dependencies
-      run: pip install -r requirements.txt
-
-    - name: Run Pytest
       run: |
-        python source/manage.py migrate
+        pip install -r requirements.txt
+
+    - name: Run pytest
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      run: |
         cd source
         pytest
