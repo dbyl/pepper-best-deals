@@ -24,6 +24,5 @@
           env:
             ENV_FILE: .env
           run: |
-            echo .env
             docker-compose run --rm app sh -c "pytest"
 
