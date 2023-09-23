@@ -29,6 +29,7 @@
             ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           run: |
             pip install -r requirements.txt
+            sudo service postgresql start
             cd source
             pytest
 
