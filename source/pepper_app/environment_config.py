@@ -16,8 +16,6 @@ class CustomEnvironment:
     _url = env.str("URL")
     _database_url = env.db("DATABASE_URL")
     _allowed_hosts = env.list("ALLOWED_HOSTS")
-    _email = env.str("EMAIL")
-    _email_password = env.str("EMAIL_PASSWORD")
 
     @classmethod
     def get_debug(cls) -> bool:
@@ -48,15 +46,3 @@ class CustomEnvironment:
         if cls._allowed_hosts is None:
             raise ValueError("Allowed hosts are not provided.")
         return cls._allowed_hosts
-
-    @classmethod
-    def get_email(cls) -> str:
-        if cls._email is None:
-            raise ValueError("Email is not provided.")
-        return cls._email
-
-    @classmethod
-    def get_email_password(cls) -> str:
-        if cls._email_password is None:
-            raise ValueError("Email password is not provided.")
-        return cls._email_password
