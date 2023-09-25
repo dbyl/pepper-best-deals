@@ -11,6 +11,7 @@ django-environ
 html5lib
 psycopg2-binary
 pytest
+pytest-mock
 pytest-django
 docker
 celery

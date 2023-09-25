@@ -1,9 +1,14 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 
+
 def get_current_article():
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(options=options)
     driver.set_window_size(1400,1000)
     driver.get("https://www.pepper.pl/nowe")
     time.sleep(0.7)

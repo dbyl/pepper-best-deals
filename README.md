@@ -44,3 +44,11 @@ pytest pepper_app/tests/tests_populate_database/tests_LoadDataFromCsv/test_handl
 pytest pepper_app/tests/tests_populate_database/tests_LoadItemDetailsToDatabase/test_load_to_db_lidtd.py --ds=configuration.settings
 
 pytest pepper_app/tests/tests_article_and_soup/test_soup.py --ds=configuration.settings
+
+
+
+docker exec -it pepper-best-deals-web-1 sh -c "pytest"
+
+docker exec -t -i pepper-best-deals-web-1 sh /bin/bash
+docker exec -it pepper-best-deals-web-1 sh -c "python3 -m pytest source"
+docker exec -it pepper-best-deals-web-1 sh -c "python3 -m pytest source"

@@ -15,6 +15,7 @@ from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
@@ -52,8 +53,11 @@ class ScrapPage:
     def scrap_page(self, url_to_scrap: str, driver: WebDriver=None) -> BeautifulSoup:
         """Setting up selenium webdriver, scraping page with bs4."""
         try:
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome()
+                driver = webdriver.Chrome(options=options)
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)

@@ -26,14 +26,18 @@ services:
         - DEV=true
     command: >
       sh -c "python source/manage.py runserver 0.0.0.0:8000"
+
     volumes:
       - .:/app
     depends_on:
       - database
     ports:
       - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: on-failure
-    env_file: .env
+    env_file: source/.env
+
 
 volumes:
   db-data:

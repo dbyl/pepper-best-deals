@@ -169,3 +169,4 @@ populating_scrapstats_failed.txt
 populating_pepart_failed.txt
 populating_pepart_from_csv_failed.txt
 scraped.csv
+checks.yml
