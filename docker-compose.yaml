@@ -38,6 +38,10 @@ services:
     restart: on-failure
     env_file: source/.env
 
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
 
 volumes:
   db-data:
