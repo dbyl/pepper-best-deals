@@ -19,6 +19,15 @@ services:
     volumes:
      - pgadmin-data:/var/lib/pgadmin
 
+  selenium:
+    image: "selenium/standalone-chrome:latest"
+    container_name: "selenium"
+    hostname: selenium
+    shm_size: '2gb'
+    restart: always
+    ports:
+      - "4444:4444"
+
   web:
     build:
       context: .
@@ -26,17 +35,19 @@ services:
         - DEV=true
     command: >
       sh -c "python source/manage.py runserver 0.0.0.0:8000"
-
     volumes:
       - .:/app
     depends_on:
+      - selenium
       - database
     ports:
       - "8000:8000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    shm_size: "2gb"
     restart: on-failure
     env_file: source/.env
+
 
 
 volumes:
