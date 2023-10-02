@@ -7,7 +7,7 @@ from source.pepper_app.scrap import CheckConditions
 @pytest.fixture
 def soup_searched_item_not_found():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_scrap/soup_searched_item_not_found.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrap/soup_searched_item_not_found.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup_searched_item_not_found = BeautifulSoup(soup, "html5lib")
@@ -17,7 +17,7 @@ def soup_searched_item_not_found():
 @pytest.fixture
 def soup_searched_item_found():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_scrap/soup_searched_item_found.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrap/soup_searched_item_found.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup_searched_item_found = BeautifulSoup(soup, "html5lib")

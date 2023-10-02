@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup, Tag
 @pytest.fixture
 def article():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_article_and_soup/soup.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_article_and_soup/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")

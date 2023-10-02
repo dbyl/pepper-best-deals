@@ -52,3 +52,4 @@ docker exec -it pepper-best-deals-web-1 sh -c "pytest"
 docker exec -t -i pepper-best-deals-web-1 sh /bin/bash
 docker exec -it pepper-best-deals-web-1 sh -c "python3 -m pytest source"
 docker exec -it pepper-best-deals-web-1 sh -c "python3 -m pytest source"
+docker exec -it pepper-best-deals-web-1 sh -c "python3 source/manage.py createsuperuser"

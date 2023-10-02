@@ -11,7 +11,7 @@ get_article.get_current_article() #Collecting current soup.
 def current_article_soup():
     """Setting environment up."""
     time.sleep(0.7)
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_article_and_soup/article_to_check.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_article_and_soup/article_to_check.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         current_article_soup = file.read()
     current_article_soup = BeautifulSoup(current_article_soup, "html5lib")

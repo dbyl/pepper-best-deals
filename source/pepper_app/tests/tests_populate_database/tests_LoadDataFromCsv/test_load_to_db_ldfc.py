@@ -13,7 +13,7 @@ def loaddatafromcsv():
 @pytest.mark.django_db
 def test_load_to_db_1(loaddatafromcsv):
     """Test loading csv file to database."""
-    input = Path("pepper_app/tests/fixtures/to_test_populate_database/scraped_test.csv")
+    input = Path("source/pepper_app/tests/fixtures/to_test_populate_database/scraped_test.csv")
     df = loaddatafromcsv.read_csv(input)
     loaddatafromcsv.load_to_db(df)
 

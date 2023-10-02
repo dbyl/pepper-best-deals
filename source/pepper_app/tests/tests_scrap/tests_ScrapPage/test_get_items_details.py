@@ -22,7 +22,7 @@ from pepper_app.get_info import (GetItemAddedDate,
 @pytest.fixture
 def retrived_articles():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_get_info/soup.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
@@ -34,7 +34,7 @@ def retrived_articles():
 @pytest.fixture
 def retrived_articles_with_duplicates():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_get_info/soup_with_duplicates.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup_with_duplicates.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
@@ -46,7 +46,7 @@ def retrived_articles_with_duplicates():
 @pytest.fixture
 def retrived_articles_with_none_values():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_get_info/soup_with_none.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup_with_none.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")

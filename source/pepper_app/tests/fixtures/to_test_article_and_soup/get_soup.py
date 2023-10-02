@@ -18,7 +18,7 @@ def get_current_soup():
     page = driver.page_source
     soup = BeautifulSoup(page, "html5lib")
 
-    with open("pepper_app/tests/fixtures/to_test_article_and_soup/soup_to_check.html", 'w', encoding='utf-8') as file:
+    with open("source/pepper_app/tests/fixtures/to_test_article_and_soup/soup_to_check.html", 'w', encoding='utf-8') as file:
         file.write(str(soup))
 
     driver.quit()

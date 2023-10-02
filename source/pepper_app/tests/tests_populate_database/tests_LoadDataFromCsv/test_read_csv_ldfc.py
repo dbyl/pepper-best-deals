@@ -14,7 +14,7 @@ def loaddatafromcsv():
 @pytest.mark.django_db
 def test_read_csv_1(loaddatafromcsv):
     """Test reading csv file from given path."""
-    path = Path("pepper_app/tests/fixtures/to_test_populate_database/scraped_test.csv")
+    path = Path("source/pepper_app/tests/fixtures/to_test_populate_database/scraped_test.csv")
 
     df = loaddatafromcsv.read_csv(path=path)
 

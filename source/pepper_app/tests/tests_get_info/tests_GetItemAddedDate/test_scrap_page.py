@@ -13,7 +13,7 @@ from requests.exceptions import ConnectionError, MissingSchema, HTTPError, ReadT
 @pytest.fixture
 def article():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_get_info/soup.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")

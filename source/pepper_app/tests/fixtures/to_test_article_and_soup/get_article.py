@@ -25,7 +25,7 @@ def get_current_article():
     page_with_article = driver.page_source
     soup_with_article = BeautifulSoup(page_with_article, "html5lib")
 
-    with open("pepper_app/tests/fixtures/to_test_article_and_soup/article_to_check.html", 'w', encoding='utf-8') as file:
+    with open("source/pepper_app/tests/fixtures/to_test_article_and_soup/article_to_check.html", 'w', encoding='utf-8') as file:
         file.write(str(soup_with_article))
 
     driver.quit()
