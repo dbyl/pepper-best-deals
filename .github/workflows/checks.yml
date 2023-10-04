@@ -4,8 +4,8 @@
   on: [push]
 
   jobs:
-    test-lint:
-      name: Test and Lint
+    test-docker:
+      name: Building Docker Container and Tests
       runs-on: ubuntu-20.04
 
       steps:
@@ -22,9 +22,9 @@
           uses: actions/checkout@v2
         - name: Build Docker Container
           run: |
-            docker build -t pepper_app .
+            docker-compose -f docker-compose.yaml up --build
         - name: Run Tests
           run: |
-            docker exec -it  $(docker ps --latest --quiet) "python3 -m pytest source"
+            docker exec -it pepper_app "python3 -m pytest source"
 
 

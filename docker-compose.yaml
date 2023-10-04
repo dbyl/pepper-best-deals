@@ -20,6 +20,7 @@ services:
      - pgadmin-data:/var/lib/pgadmin
 
   web:
+    image: pepper_app
     build:
       context: .
       args:
