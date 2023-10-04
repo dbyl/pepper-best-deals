@@ -25,6 +25,6 @@
             docker build -t pepper_app .
         - name: Run Tests
           run: |
-            docker exec -it pepper_app sh -c "python3 -m pytest source"
+            docker exec -it  $(docker ps --latest --quiet) "python3 -m pytest source"
 
 
