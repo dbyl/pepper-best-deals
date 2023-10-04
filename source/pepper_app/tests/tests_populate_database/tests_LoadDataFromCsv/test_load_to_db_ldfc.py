@@ -19,7 +19,7 @@ def test_load_to_db_1(loaddatafromcsv):
 
     object_1 = PepperArticle.objects.get(item_id=1000000)
 
-    assert object_1.name == "Samsung S21"
+    assert object_1.article_name == "Samsung S21"
     assert object_1.discount_price == 2000.0
     assert object_1.percentage_discount == -10.0
     assert object_1.regular_price == 2200.0

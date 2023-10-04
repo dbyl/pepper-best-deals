@@ -20,16 +20,12 @@ services:
      - pgadmin-data:/var/lib/pgadmin
 
   web:
-    image: pepper_app
     build:
       context: .
       args:
         - DEV=true
-    command: >
-      sh -c "python source/manage.py runserver 0.0.0.0:8000 &&
-             python3 source/manage.py migrate &&
-             python3 source/manage.py makemigrations &&
-             python3 source/manage.py sqlmigrate pepper_app 0001"
+    command: python3 source/manage.py runserver 0.0.0.0:8000
+
     volumes:
       - .:/app
     depends_on:

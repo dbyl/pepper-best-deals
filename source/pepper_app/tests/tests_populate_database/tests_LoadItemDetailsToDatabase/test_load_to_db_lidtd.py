@@ -18,7 +18,7 @@ def test_load_to_db_1(loaditemdetailstodatabase):
 
     object_1 = PepperArticle.objects.get(item_id=99999)
 
-    assert object_1.name == "LG A1 55 cali"
+    assert object_1.article_name == "LG A1 55 cali"
     assert object_1.discount_price == 3000.0
     assert object_1.percentage_discount == -10.0
     assert object_1.regular_price == 3300.0
