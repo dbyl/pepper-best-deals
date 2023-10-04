@@ -22,7 +22,7 @@
           uses: actions/checkout@v2
         - name: Build Docker Container
           run: |
-            docker build -t pepper_app
+            docker build -t pepper_app .
         - name: Run Tests
           run: |
             docker exec -it pepper_app sh -c "python3 -m pytest source"
