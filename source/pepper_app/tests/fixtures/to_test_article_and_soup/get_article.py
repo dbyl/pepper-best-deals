@@ -3,14 +3,11 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 
-#selenium_url = "http://172.21.0.2:4444"
-
 
 def get_current_article():
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
-    #driver = webdriver.Remote(command_executor=selenium_url, options=options)
     driver = webdriver.Chrome(options=options)
     driver.set_window_size(1400,1000)
     driver.get("https://www.pepper.pl/nowe")

@@ -25,10 +25,10 @@ services:
       args:
         - DEV=true
     command: >
-      sh -c "python source/manage.py runserver 0.0.0.0:8000"
-      sh -c "python3 source/manage.py migrate"
-      sh -c "python3 source/manage.py makemigrations"
-      sh -c "python3 source/manage.py sqlmigrate pepper_app 0001"
+      sh -c "python source/manage.py runserver 0.0.0.0:8000 &&
+             python3 source/manage.py migrate &&
+             python3 source/manage.py makemigrations &&
+             python3 source/manage.py sqlmigrate pepper_app 0001"
     volumes:
       - .:/app
     depends_on:

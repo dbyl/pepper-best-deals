@@ -23,7 +23,7 @@ class LoadItemDetailsToDatabase(BaseCommand):
             try:
                 pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
                     item_id = row["item_id"],
-                    name = row["name"],
+                    article_name = row["name"],
                     discount_price = self.na_discount_price(row),
                     percentage_discount = self.na_percentage_discount(row),
                     regular_price = self.na_regular_price(row),
@@ -112,7 +112,7 @@ class LoadDataFromCsv(BaseCommand):
             try:
                 pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
                     item_id = row["item_id"],
-                    name = row["name"],
+                    article_name = row["name"],
                     discount_price = row["discount_price"],
                     percentage_discount = row["percentage_discount"],
                     regular_price = row["regular_price"],

@@ -20,16 +20,11 @@
             password: ${{ secrets.DOCKERHUB_TOKEN }}
         - name: Checkout
           uses: actions/checkout@v2
-        - name: Test
-          env:
-            DEBUG: ${{ secrets.DEBUG }}
-            SECRET_KEY: ${{ secrets.SECRET_KEY }}
-            URL: ${{ secrets.URL }}
-            DATABASE_URL: ${{ secrets.DATABASE_URL }}
-            ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+        - name: Build Docker Container
           run: |
-            pip install -r requirements.txt
-            sudo service postgresql start
-            cd source
-            pytest
+            docker build -t pepper_app
+        - name: Run Tests
+          run: |
+            docker exec -it pepper_app sh -c "python3 -m pytest source"
+
 
