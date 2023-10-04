@@ -24,6 +24,12 @@
           run: |
             docker build -t pepper_app .
         - name: Run Tests
+          env:
+            DEBUG: ${{ secrets.DEBUG }}
+            SECRET_KEY: ${{ secrets.SECRET_KEY }}
+            URL: ${{ secrets.URL }}
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
+            ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           run: |
             docker run --rm pepper_app pytest source
 
