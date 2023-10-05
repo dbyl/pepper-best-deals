@@ -169,5 +169,6 @@ populating_scrapstats_failed.txt
 populating_pepart_failed.txt
 populating_pepart_from_csv_failed.txt
 scraped.csv
-checks.yml
-.github/
+.github/workflows/checks.yml
+.github
+jupyter_to_test.ipynb
