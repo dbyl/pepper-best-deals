@@ -1,55 +1,77 @@
 # pepper-best-deals
 
-clean cache, migrations
 
-sudo -u postgres psql
-\dt
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
+# Pepper Best Deals
 
-sudo service postgresql start
+## Introduction
 
-python source/manage.py flush
-python source/manage.py makemigrations pepper_app
-python source/manage.py migrate
-python source/manage.py sqlmigrate pepper_app 0001
-python source/manage.py createsuperuser
+This django web application scrapes information from www.pepper.pl. Said site is a database of bargains, discounts of all kinds of products where individual bargains are created and rated by Users.
+The purpose of the application is to collect informations about all deals, appearing on the site and to search historical data. Based on the scraped data, it will be possible to create a data warehouse. 
+Selected functions of the application that will be implemented:
+1) Analysis of data for items, bargains selected by the user. For example, it will be possible to track the price of an item of interest. 
+2) The user will be able to define the item that interests him and set parameters such as price, name, discount. If the parameters are met, then he will receive an email/sms notification.
+3) Constant scraping (deals hunting)
 
-python source/manage.py migrate pepper_app
+## Current stage of work
 
-python source/manage.py runserver
-
-new_terminal
-python source/manage.py shell
-
-exec(open("source/pepper_app/scrap.py").read())
+1) creating scraping functions based on Selenium and Beautifulsoup4 
+2) creating a django model (PepperArticle, ScrapingStatistic, UserRequest, SuccessfulResponse tables)
+3) creating functions that populate the database (PepperArticle, ScrapingStatistic tables) 
+4) creating functions that save the scraped information to a csv file
+5) creating more than 80 unit tests that test functions and validate the correctness of scraped data
+6) implementation of a docker, creation of a PostgreSQL database, pgadmin4 panel
+7) ...in progress...
 
 
 
+## App Setup
 
-git commit -m "Implementing tests for get_info -> GetItemId, GetItemName, GetItemDiscountPrices"
-pytest --ds=configuration.settings
+The first thing to do is to clone the repository:
 
+```sh
+$ git clone https://github.com/dbyl/pepper-best-deals
+$ cd pepper-best-deals
+```
 
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_scrap_continuously_by_refreshing_page.py --ds=configuration.settings
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_items_details.py --ds=configuration.settings
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_signal_handler_for_continuously_scrapping.py --ds=configuration.settings
+This project requires Python 3.9 or later.
 
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_signal_handler_for_continuously_scrapping.py --ds=configuration.settings
+Create a virtual environment to install dependencies in and activate it:
 
-pytest pepper_app/tests/tests_scrap/tests_ScrapPage/test_get_scraping_stats_info.py --ds=configuration.settings
+Linux:
+```sh
+$ python3 -m venv env
+$ source env/bin/activate
+```
 
+Create a .env file in project root directory (source). The file format can be understood from the example below:
+```sh
+DEBUG=True
+SECRET_KEY=your-secret-key #generate your own secret key
+URL=https://www.pepper.pl/
+DATABASE_URL=postgres://postgres:postgres@host.docker.internal/postgres
+ALLOWED_HOSTS=0.0.0.0,localhost
+```
 
-pytest pepper_app/tests/tests_populate_database/tests_LoadDataFromCsv/test_handle.py --ds=configuration.settings
-pytest pepper_app/tests/tests_populate_database/tests_LoadItemDetailsToDatabase/test_load_to_db_lidtd.py --ds=configuration.settings
+Application runs on docker so docker must be configured *(sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin)* and Docker Desktop must be installed.
+Please open Docker Desktop and run docker-compose to install dependiences and run application:
+```sh
+(env)$ docker-compose -f docker-compose.yaml up --build
+```
 
-pytest pepper_app/tests/tests_article_and_soup/test_soup.py --ds=configuration.settings
+Docker-server should be started.
 
+If project is setting up for the first time make sure that in source/pepper_app/migrations exists only one file - __init__.py. 
+To make migrations and create superuser open new terminal window and run:
+```sh
+(env)$ docker exec -it pepper-best-deals-web-1 /bin/bash
+(env)$ python3 source/manage.py migrate
+(env)$ python3 source/manage.py makemigrations
+(env)$ python3 source/manage.py sqlmigrate pepper_app 0001
+(env)$ python3 source/manage.py createsuperuser
+(env)$ python3 source/manage.py migrate
+```
 
-
-docker exec -it pepper-best-deals-web-1 sh -c "pytest"
-
-docker exec -t -i pepper-best-deals-web-1 sh /bin/bash
-docker exec -it pepper-best-deals-web-1 sh -c "python3 -m pytest source"
-docker exec -it pepper-best-deals-web-1 sh -c "python3 -m pytest source"
-docker exec -it pepper-best-deals-web-1 sh -c "python3 source/manage.py createsuperuser"
+To run tests run:
+```sh
+(env)$ python3 -m pytest source
+```
