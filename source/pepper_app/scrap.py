@@ -5,15 +5,17 @@ import time
 import logging
 import html5lib
 import pandas as pd
+import signal
 import traceback
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from typing import List, Union
 from bs4 import BeautifulSoup
 from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from django.utils.timezone import utc
 from selenium import webdriver
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
@@ -26,8 +28,8 @@ from pepper_app.populate_database import (LoadItemDetailsToDatabase,
                                         LoadDataFromCsv,
                                         LoadScrapingStatisticsToDatabase)
 from pepper_app.environment_config import CustomEnvironment
-from pepper_app.constans import CSV_COLUMNS, STATS_HEADER
-
+from pepper_app.constans import (CSV_COLUMNS,
+                                STATS_HEADER)
 
 
 
@@ -48,52 +50,59 @@ class ScrapPage:
         self.scrap_continuously = scrap_continuously
         self.scrap_choosen_data = scrap_choosen_data
 
-    def scrap_data(self) -> str:
+    def scrap_page(self, url_to_scrap: str, driver: WebDriver=None) -> BeautifulSoup:
+        """Setting up selenium webdriver, scraping page with bs4."""
         try:
-            driver = webdriver.Chrome()
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
+            if driver is None:
+                driver = webdriver.Chrome(options=options)
             driver.set_window_size(1400,1000)
-            url_to_scrap = self.select_url()
             driver.get(url_to_scrap)
             time.sleep(0.7)
             page = driver.page_source
             soup = BeautifulSoup(page, "html5lib")
             return soup
         except ConnectionError as e:
-            logging.warning(f"ConnectionError occured: {e}. \nTry again later")
+            raise ConnectionError(f"ConnectionError occured: {e}. \nTry again later")
         except MissingSchema as e:
-            logging.warning(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+            raise MissingSchema(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
         except HTTPError as e:
-            logging.warning(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+            raise HTTPError(f"HTTPError occured: {e}. \nMake sure that website url is valid")
         except ReadTimeout as e:
-            logging.warning(f"ReadTimeout occured: {e}. \nTry again later")
+            raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")
 
     def select_url(self) -> str:
-        try:
-            if self.scrap_continuously == True:
-                url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
-                return url_to_scrap
-            elif self.category_type == "nowe":
-                url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?page=", str(self.start_page)])
-                return url_to_scrap
-            elif self.category_type == "search":
-                searched_article = str(self.searched_article.replace(" ","%20"))
-                url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?q=",
-                                        searched_article, "&page=", str(self.start_page)])
-                return url_to_scrap
-        except Exception as e:
-            logging.warning(f"Invalid category type name, category must be 'nowe' or 'search':\
-                            {e}\n Tracking: {traceback.format_exc()}")
+        """Selection of the website address depending on the type of scrapping."""
+        if self.scrap_continuously == True:
+            url_to_scrap = "".join([CustomEnvironment.get_url(), "nowe"])
+            return url_to_scrap
+        elif self.category_type == "nowe" and self.scrap_continuously == False:
+            url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?page=", str(self.start_page)])
+            return url_to_scrap
+        elif self.category_type == "search" and self.scrap_continuously == False:
+            searched_article = str(self.searched_article.replace(" ","%20"))
+            url_to_scrap = "".join([CustomEnvironment.get_url(), self.category_type, "?q=",
+                                    searched_article, "&page=", str(self.start_page)])
+            return url_to_scrap
+        else:
+            raise Exception(f"The variables were defined incorrectly.")
+
 
     def infinite_scroll_handling(self) -> List[str]:
+        """Handling scraping through subsequent pages."""
         try:
             flag = True
             retrived_articles = list()
             while flag:
-                soup = self.scrap_data()
-                flag = CheckConditions(soup).check_if_last_page()
-                if flag == False:
+                url_to_scrap = self.select_url()
+                soup = self.scrap_page(url_to_scrap)
+                flag_nowe = CheckConditions(soup).check_if_last_page_nowe()
+                flag_search = CheckConditions(soup).check_if_last_page_search()
+                if flag_nowe == False or flag_search == False:
+                    flag = False
                     return retrived_articles[:self.articles_to_retrieve]
-
                 flag = CheckConditions(soup).check_if_no_items_found()
                 if flag == False:
                     return retrived_articles[:self.articles_to_retrieve]
@@ -102,30 +111,33 @@ class ScrapPage:
                     retrived_articles += articles
                 else:
                     return retrived_articles[:self.articles_to_retrieve]
-
                 if len(retrived_articles) >= self.articles_to_retrieve:
                     flag = False
                     return retrived_articles[:self.articles_to_retrieve]
                 self.start_page += 1
         except Exception as e:
-            logging.warning(f"Infinite scroll failed:\
+            raise Exception(f"Infinite scroll failed:\
                             {e}\n Tracking: {traceback.format_exc()}")
 
+
+
     def get_items_details_depending_on_the_function(self) -> None:
+        """Completing the list of articles and extracting data details depending on the type of scrapping."""
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
-            flag = True
-            while flag == True:
+            while True:
                 retrived_articles = self.scrap_continuously_by_refreshing_page()
                 self.get_items_details(retrived_articles)
         elif self.scrap_continuously == False and self.scrap_choosen_data == True:
             retrived_articles = self.infinite_scroll_handling()
             self.get_items_details(retrived_articles)
         else:
-            logging.warning(f"Matching get_items_details depending on the selected \
-                            functionality failed: {e}\n Tracking: {traceback.format_exc()}")
+            raise Exception(f"Matching get_items_details depending on the selected \
+                            functionality failed. \n Tracking: {traceback.format_exc()}")
 
-    def get_items_details(self, retrived_articles) -> None:
-        start_time = datetime.utcnow().replace(tzinfo=utc)
+
+    def get_items_details(self, retrived_articles) -> list():
+        """Getting item detailes."""
+        start_time = datetime.utcnow().replace(tzinfo=timezone.utc)
         all_items = list()
         try:
             for article in retrived_articles:
@@ -142,27 +154,28 @@ class ScrapPage:
                 if '' in item:
                     logging.warning("Data retrieving failed. None values detected")
                     break
-                if to_csv == True:
+                if self.to_csv:
                     self.save_data_to_csv(item)
-                if to_database == True:
+                if self.to_database:
                     LoadItemDetailsToDatabase(item).load_to_db()
         except Exception as e:
             logging.warning(f"Getting item details failed :\
                         {e}\n Tracking: {traceback.format_exc()}")
 
-        end_time = datetime.utcnow().replace(tzinfo=utc)
+        end_time = datetime.utcnow().replace(tzinfo=timezone.utc)
         action_execution_datetime = end_time - start_time
 
-        if to_statistics == True:
+        if self.to_statistics:
             try:
                 stats_info = self.get_scraping_stats_info(action_execution_datetime)
                 LoadScrapingStatisticsToDatabase(stats_info).load_to_db()
             except Exception as e:
                 logging.warning(f"Populating ScrapingStatistics table failed: {e}\n Tracking: {traceback.format_exc()}")
 
+        return all_items
 
     def save_data_to_csv(self, item) -> None:
-
+        """Saving data to csv file."""
         try:
             header = False
             if not os.path.exists('scraped.csv'):
@@ -180,13 +193,13 @@ class ScrapPage:
 
 
     def get_scraping_stats_info(self, action_execution_datetime: datetime) -> List[Union[str, int, bool, float]]:
-
+        """Getting scraping stats info."""
         stats_info = list()
 
         category_type = self.category_type
-        start_page = str(self.start_page)
-        retrived_articles_quantity = str(self.articles_to_retrieve)
-        time_of_the_action = datetime.utcnow().replace(tzinfo=utc)
+        start_page = self.start_page
+        retrieved_articles_quantity = self.articles_to_retrieve
+        time_of_the_action = datetime.utcnow().replace(tzinfo=timezone.utc)
         action_execution_datetime = action_execution_datetime
         searched_article = self.searched_article
         to_csv = self.to_csv
@@ -194,17 +207,21 @@ class ScrapPage:
         scrap_continuously = self.scrap_continuously
         scrap_choosen_data = self.scrap_choosen_data
 
-        for field in STATS_HEADER:
+        stats=[category_type, start_page, retrieved_articles_quantity,
+            time_of_the_action, action_execution_datetime, searched_article,
+            to_csv, to_database, scrap_continuously, scrap_choosen_data]
+
+        for field in stats:
             stats_info.append(field)
 
         return stats_info
 
 
     def scrap_continuously_by_refreshing_page(self) -> List[str]:
-
+        """Scraping data function for continuously scraping feature."""
         retrived_articles = list()
 
-        soup = self.scrap_data()
+        soup = self.scrap_page()
         time.sleep(20)
         articles = soup.find_all('article')
         retrived_articles += articles
@@ -219,16 +236,17 @@ class CheckConditions:
         self.soup = soup
 
 
-    def check_if_last_page(self) -> bool:
+    def check_if_last_page_nowe(self) -> bool:
         """Checking 'nowe' category to verify if the scraped page is the last one."""
         try:
-            searched_ending_string = soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
+            searched_ending_string = self.soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
             if searched_ending_string.startswith("Ups"):
                 logging.warning("No more pages to scrap.")
                 return False
         except:
             return True
 
+    def check_if_last_page_search(self) -> bool:
         """Checking 'search' category to verify if the scraped page is the last one."""
         try:
             searched_ending_string = self.soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
@@ -253,7 +271,7 @@ class CheckConditions:
             return True
 
 
-
+"""
 category_type = "nowe"
 start_page = 2
 searched_article = "fsdfsdfsdf"
@@ -268,3 +286,4 @@ output = ScrapPage(category_type, articles_to_retrieve, to_csv,
 
 output.select_url()
 output.get_items_details_depending_on_the_function()
+"""
