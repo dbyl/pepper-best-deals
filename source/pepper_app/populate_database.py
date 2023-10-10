@@ -1,15 +1,52 @@
 import datetime
 import logging
 import logging.config
-from pepper_app.constans import DATA_HEADER, STATS_HEADER
+from pepper_app.constans import DATA_HEADER, STATS_HEADER, REQUEST_HEADER, RESPONSE_HEADER
 from datetime import timezone
 import os
 import traceback
 import sys
 import pandas as pd
 from django.core.management import BaseCommand
-from pepper_app.models import PepperArticle, ScrapingStatistic
+from django.contrib.auth import get_user
+from pepper_app.models import PepperArticle, ScrapingStatistic, UserRequest, SuccessfulResponse
 
+
+class LoadUserRequestToDatabase(BaseCommand):
+    def __init__(self, item) -> None:
+        self.request = request
+
+    def load_to_db(self) -> None:
+        data = self.request
+        request_df = pd.DataFrame([data], columns=REQUEST_HEADER)
+        for _, row in item_df.iterrows():
+            try:
+                userrequest_obj, _ = UserRequest.objects.get_or_create(
+                    user_id = request.user.id,
+                    request_time = row["request_time"],
+                    desired_article = row["desired_article"],
+                    desired_price = row["desired_price"],
+                )
+            except Exception as e:
+                with open("populating_requests_failed.txt", "w") as bad_row:
+                    bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
+
+
+class LoadSuccessfulResponse(BaseCommand):
+    def __init__(self, item) -> None:
+        self.response = response
+
+    def load_to_db(self) -> None:
+        data = self.response
+        response_df = pd.DataFrame([data], columns=RESPONSE_HEADER)
+        for _, row in item_df.iterrows():
+            try:
+                successfulresponse_obj, _ = SuccessfulResponse.objects.get_or_create(
+                    response_time = row["response_time"],
+                )
+            except Exception as e:
+                with open("populating_responses_failed.txt", "w") as bad_row:
+                    bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
 
 class LoadItemDetailsToDatabase(BaseCommand):
 
@@ -31,7 +68,7 @@ class LoadItemDetailsToDatabase(BaseCommand):
                     url = row["url"],
                 )
             except Exception as e:
-                with open("populating_pepart_failed.txt", "w") as bad_row:
+                with open("populating_detailstodb_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
 
     def na_discount_price(self, row):
@@ -87,10 +124,6 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
 
 class LoadDataFromCsv(BaseCommand):
 
-    """
-    def __init__(self, parser: str) -> None:
-        self.parser = parser
-    """
 
     def add_arguments(self, parser: str) -> None:
         self.parser.add_argument(
