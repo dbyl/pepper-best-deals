@@ -19,17 +19,32 @@ services:
     volumes:
      - pgadmin-data:/var/lib/pgadmin
 
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - database
+    command: celery -A source.pepper_app.celery worker --loglevel=info
+
   web:
     build:
       context: .
       args:
         - DEV=true
     command: python3 source/manage.py runserver 0.0.0.0:8000
-
     volumes:
       - .:/app
     depends_on:
       - database
+      - redis
     ports:
       - "8000:8000"
     extra_hosts:

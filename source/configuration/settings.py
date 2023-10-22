@@ -6,6 +6,7 @@ from pepper_app.environment_config import CustomEnvironment
 
 
 
+
 SECRET_KEY = CustomEnvironment.get_secret_key()
 
 DEBUG = CustomEnvironment.get_debug()
@@ -71,6 +72,20 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+#FOR LOCAL
+"""
+DATABASES = {
+'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'postgres',
+    'USER': 'postgres',
+    'PASSWORD': 'postgres',
+    'HOST': 'localhost',
+    'PORT': 5432,
+} }
+"""
+#FOR DOCKER
+
 DATABASES = {
     "default": CustomEnvironment.get_database_url()
 }
@@ -119,6 +134,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
 # SMTP Configuration
 

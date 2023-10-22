@@ -30,9 +30,15 @@ from pepper_app.populate_database import (LoadItemDetailsToDatabase,
 from pepper_app.environment_config import CustomEnvironment
 from pepper_app.constans import (CSV_COLUMNS,
                                 STATS_HEADER)
+from celery import shared_task
 
 
 
+@shared_task(bind=True)
+def test_func(self):
+    for i in range(10):
+        print(i)
+    return "Done"
 
 class ScrapPage:
 

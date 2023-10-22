@@ -16,3 +16,5 @@ pytest-django
 docker
 celery
 django-configurations
+redis
+redis-server
