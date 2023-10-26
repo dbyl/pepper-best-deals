@@ -5,8 +5,6 @@ import environ
 from pepper_app.environment_config import CustomEnvironment
 
 
-
-
 SECRET_KEY = CustomEnvironment.get_secret_key()
 
 DEBUG = CustomEnvironment.get_debug()
@@ -22,11 +20,9 @@ LOGGING = {
             "level": "WARNING",
         }}
 }
-
+6
 LOGIN_URL = "login"
 
-
-# Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -37,6 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "pepper_app",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -69,33 +66,22 @@ TEMPLATES = [
 WSGI_APPLICATION = "configuration.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-#FOR LOCAL
-"""
 DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'postgres',
-    'USER': 'postgres',
-    'PASSWORD': 'postgres',
-    'HOST': 'localhost',
-    'PORT': 5432,
-} }
-"""
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',
+        }
+    }
+
 #FOR DOCKER
-
-DATABASES = {
+"""DATABASES = {
     "default": CustomEnvironment.get_database_url()
-}
+}"""
 
 
-#database for docker, localhost for local
-""
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -113,8 +99,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
 
@@ -125,24 +109,15 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CELERY_BROKER_URL = "redis://redis:6379/0"
-CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+CELERY_BROKER_URL = CustomEnvironment.get_celery_broker_url()
+CELERY_RESULT_BACKEND = CustomEnvironment.get_celery_result_backend()
+CELERY_ACCEPT_CONTENT = CustomEnvironment.get_celery_accept_content()
+CELERY_TASK_SERIALIZER = CustomEnvironment.get_celery_task_serializer()
+CELERY_RESULT_SERIALIZER = CustomEnvironment.get_celery_result_serializer()
 
-# SMTP Configuration
-
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-#EMAIL_HOST = "smtp.gmail.com"
-#EMAIL_PORT = 587
-#EMAIL_USE_TLS = True
-#EMAIL_HOST_USER = os.environ.get("EMAIL")
-#EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")

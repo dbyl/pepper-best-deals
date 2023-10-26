@@ -16,6 +16,12 @@ class CustomEnvironment:
     _url = env.str("URL")
     _database_url = env.db("DATABASE_URL")
     _allowed_hosts = env.list("ALLOWED_HOSTS")
+    _celery_broker_url = env.str("CELERY_BROKER_URL")
+    _celery_result_backend = env.str("CELERY_RESULT_BACKEND")
+    _celery_accept_content = env.list("CELERY_ACCEPT_CONTENT")
+    _celery_task_serializer = env.str("CELERY_TASK_SERIALIZER")
+    _celery_result_serializer = env.str("CELERY_RESULT_SERIALIZER")
+
 
     @classmethod
     def get_debug(cls) -> bool:
@@ -46,3 +52,33 @@ class CustomEnvironment:
         if cls._allowed_hosts is None:
             raise ValueError("Allowed hosts are not provided.")
         return cls._allowed_hosts
+
+    @classmethod
+    def get_celery_broker_url(cls) -> str:
+        if cls._celery_broker_url is None:
+            raise ValueError("Celery broker url is not provided.")
+        return cls._celery_broker_url
+
+    @classmethod
+    def get_celery_result_backend(cls) -> str:
+        if cls._celery_result_backend is None:
+            raise ValueError("Celery result backend is not provided.")
+        return cls._celery_result_backend
+
+    @classmethod
+    def get_celery_accept_content(cls) -> list:
+        if cls._celery_accept_content is None:
+            raise ValueError("Celery accept content is not provided.")
+        return cls._celery_accept_content
+
+    @classmethod
+    def get_celery_task_serializer(cls) -> str:
+        if cls._celery_task_serializer is None:
+            raise ValueError("Celery task serializer is not provided.")
+        return cls._celery_task_serializer
+
+    @classmethod
+    def get_celery_result_serializer(cls) -> str:
+        if cls._celery_result_serializer is None:
+            raise ValueError("Celery result serializer is not provided.")
+        return cls._celery_result_serializer

@@ -1,13 +1,4 @@
-<html>
-<body>
-    <p>Hi there!</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Run Script</button>
-    </form>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Stop Script</button>
-    </form>
-</body>
-</html>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="run_script">Run script</button>
+</form>

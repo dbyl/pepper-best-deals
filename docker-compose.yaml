@@ -1,12 +1,16 @@
 version: "3.9"
 services:
+
   database:
+    restart: always
+    container_name: postgres_database
     image: postgres:14.2-alpine
     env_file: .env-db
     ports:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
@@ -20,26 +24,19 @@ services:
      - pgadmin-data:/var/lib/pgadmin
 
   redis:
+    restart: always
+    container_name: redis
     image: redis:latest
     ports:
       - 6379:6379
-  celery-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-      - database
-    command: celery -A source.pepper_app.celery worker --loglevel=info
 
-  web:
+  app:
+    restart: always
+    container_name: pepper_app
     build:
       context: .
       args:
         - DEV=true
-    command: python3 source/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     depends_on:
@@ -49,9 +46,25 @@ services:
       - "8000:8000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    restart: on-failure
     env_file: source/.env
     shm_size: 2gb
+    working_dir: /source
+    #command: uvicorn configuration.asgi:application --host 0.0.0.0  --reload
+    #command: gunicorn --reload --bind 0.0.0.0:8000 configuration.wsgi #python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+
+
+  celery-worker:
+    restart: always
+    container_name: celery-worker
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - database
+    working_dir: /source
+    command: bash -c "celery -A configuration.celery worker -l info"
 
 
 volumes:

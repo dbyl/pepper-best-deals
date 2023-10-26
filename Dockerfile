@@ -1,6 +1,8 @@
 FROM python:3.9
 LABEL maintainer="dbyl.developer"
 
+
+RUN mkdir /app
 ENV PYTHONUNBUFFERED 1 \
     APP_DIR=/app
 
@@ -51,5 +53,10 @@ RUN python -m venv /py && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi
+COPY . /app/
+
+#COPY entrypoint.sh .
+#RUN ["chmod", "+x", "/entrypoint.sh"]
 
 ENV PATH="/py/bin:$PATH"
+

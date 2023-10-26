@@ -3,11 +3,13 @@ import re
 from bs4 import BeautifulSoup, Tag
 import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
+from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
 from enum import Enum, IntEnum
 from collections import Counter
-from selenium import webdriver
 import time
 from typing import List, Union
 import html5lib
@@ -85,7 +87,11 @@ class GetItemDiscountPrice:
         try:
             discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
             if len(discount_price) > 0:
-                discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+                discount_price = discount_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ','')
+                if discount_price == "ZADARMO":
+                    discount_price = float(0)
+                else:
+                    discount_price = float(discount_price)
             else:
                 """The attribute does not exist or the class name is invalid."""
                 discount_price = "NA"
@@ -104,7 +110,7 @@ class GetItemRegularPrice:
         try:
             regular_price = self.article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"})
             if len(regular_price) > 0:
-                regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+                regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ',''))
             else:
                 """The attribute does not exist or the class name is invalid."""
                 regular_price = "NA"
@@ -295,8 +301,11 @@ class GetItemAddedDate:
     def scrap_page(self, url_with_item: str, driver: WebDriver=None) -> BeautifulSoup:
 
         try:
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome()
+                driver = webdriver.Chrome(options=options)
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source

@@ -15,7 +15,7 @@ class PepperArticle(models.Model):
 
     def __str__(self):
 
-        fields = [str(self.item_id), str(self.name), str(self.discount_price), str(self.percentage_discount),
+        fields = [str(self.item_id), str(self.article_name), str(self.discount_price), str(self.percentage_discount),
                 str(self.regular_price), str(self.date_added), str(self.url)]
 
         return ', '.join(fields)
