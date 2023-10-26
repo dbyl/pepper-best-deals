@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Article name</th>
+            <th>Discount price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.item_id }}</td>
+                <td>{{ item.article_name }}</td>
+                <td>{{ item.discount_price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+

@@ -3,13 +3,12 @@ import re
 from bs4 import BeautifulSoup, Tag
 import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
 from enum import Enum, IntEnum
 from collections import Counter
+from selenium import webdriver
 import time
 from typing import List, Union
 import html5lib

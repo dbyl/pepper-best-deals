@@ -38,8 +38,8 @@ class ScrapPage:
 
 
     def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool=False,
-                to_database: bool=False, to_statistics: bool=True, start_page: int=1,
-                searched_article: str='NA', scrap_continuously: bool=False, scrap_choosen_data: bool=False) -> None:
+                to_database: bool=True, to_statistics: bool=True, start_page: int=1,
+                searched_article: str='NA', scrap_continuously: bool=False, scrap_choosen_data: bool=True) -> None:
         self.category_type = category_type
         self.articles_to_retrieve = articles_to_retrieve
         self.to_database = to_database
