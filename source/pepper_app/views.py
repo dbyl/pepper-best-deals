@@ -10,6 +10,7 @@ from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from .scrap import ScrapPage
+from .tasks import scrap_new_articles
 from pepper_app.models import (PepperArticle,
                                 ScrapingStatistic,
                                 UserRequest,
@@ -37,3 +38,21 @@ def post_action(request):
     items = PepperArticle.objects.all()
 
     return render(request, 'post_action.html', {'items': items})
+
+def celery_scrapping(request):
+    if request.method == 'POST':
+
+        result = scrap_new_articles.delay()  # Trigger the Celery task
+
+        return render(request, 'post_celery.html', {'task_id': result.task_id})
+    return render(request, 'pre_celery.html')
+
+def post_celery(request, task_id):
+    result = AsyncResult(task_id)
+
+    if result.ready():
+        return JsonResponse({'status': 'SUCCESS', 'result': result.result})
+    elif result.failed():
+        return JsonResponse({'status': 'FAILURE', 'message': 'Task failed'})
+    else:
+        return JsonResponse({'status': 'PENDING'})

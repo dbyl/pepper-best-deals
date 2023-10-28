@@ -60,7 +60,7 @@ class LoadItemDetailsToDatabase(BaseCommand):
             try:
                 pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
                     item_id = row["item_id"],
-                    article_name = row["name"],
+                    article_name = row["article_name"],
                     discount_price = self.na_discount_price(row),
                     percentage_discount = self.na_percentage_discount(row),
                     regular_price = self.na_regular_price(row),

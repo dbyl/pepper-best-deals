@@ -77,7 +77,7 @@ To run tests run:
 ```
 
 
-celery -A configuration.celery worker -l info
+celery -A configuration.celery worker --loglevel=INFO
 redis-server
 sudo service postgresql start
 sudo -u postgres psql

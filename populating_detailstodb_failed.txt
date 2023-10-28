@@ -1,0 +1,47 @@
+Error message: Traceback (most recent call last):
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.UndefinedColumn: column pepper_app_pepperarticle.article_name does not exist
+LINE 1: SELECT "pepper_app_pepperarticle"."item_id", "pepper_app_pep...
+                                                     ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/damian/pepper-best-deals/source/pepper_app/populate_database.py", line 61, in load_to_db
+    pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/query.py", line 633, in get
+    num = len(clone)
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/models/sql/compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/damian/pepper-best-deals/env/lib/python3.9/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.ProgrammingError: column pepper_app_pepperarticle.article_name does not exist
+LINE 1: SELECT "pepper_app_pepperarticle"."item_id", "pepper_app_pep...
+                                                     ^
+
+, column pepper_app_pepperarticle.article_name does not exist
+LINE 1: SELECT "pepper_app_pepperarticle"."item_id", "pepper_app_pep...
+                                                     ^
+ 
