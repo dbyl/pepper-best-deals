@@ -65,9 +65,18 @@ def celery_scrapping(request):
 def post_celery(request, task_id):
     result = AsyncResult(task_id)
 
+    return JsonResponse({'status': 'SUCCESS', 'result': result.result})
+
     if result.ready():
         return JsonResponse({'status': 'SUCCESS', 'result': result.result})
     elif result.failed():
         return JsonResponse({'status': 'FAILURE', 'message': 'Task failed'})
     else:
         return JsonResponse({'status': 'PENDING'})
+
+
+def post_celery2(request, task_id):
+
+    result = PepperArticle.objects.all()
+
+    return render(request, 'post_celery.html', {'result': result})

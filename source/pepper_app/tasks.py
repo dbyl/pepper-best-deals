@@ -12,7 +12,10 @@ def scrap_new_articles():
 
     output = ScrapPage(category_type, articles_to_retrieve)
     output.get_items_details_depending_on_the_function()
-    result = PepperArticle.objects.all()
+   # articles = PepperArticle.objects.all()
 
-    return result
+   # result = [{'title': article.title, 'content': article.content, 'date': article.date} for article in articles]
+
+   # return result
+
 
