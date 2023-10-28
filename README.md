@@ -85,3 +85,5 @@ sudo kill -9 10534
 sudo -u postgres  psql second
 ps -ef | grep postgres
 python3 source/manage.py runserver 0.0.0.0:8000
+pip install eventlet
+celery -A configuration.celery worker --loglevel=info -P eventlet

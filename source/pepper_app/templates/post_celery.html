@@ -5,9 +5,8 @@
 <body>
     <h1>Task ID: {{ task_id }}</h1>
         <p>Calculating...</p>
-</body>
-</html>
-
+        
+        <p>{{ result }}</p>
 <table>
     <thead>
         <tr>
@@ -16,6 +15,21 @@
             <th>Discount price</th>
         </tr>
     </thead>
-<p>{{ result }}</p>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.item_id }}</td>
+                <td>{{ item.article_name }}</td>
+                <td>{{ item.discount_price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
+</body>
+</html>
+
+
+
+
+
 

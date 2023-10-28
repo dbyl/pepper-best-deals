@@ -39,13 +39,28 @@ def post_action(request):
 
     return render(request, 'post_action.html', {'items': items})
 
-def celery_scrapping(request):
+"""def celery_scrapping(request):
     if request.method == 'POST':
 
         result = scrap_new_articles.delay()  # Trigger the Celery task
 
-        return render(request, 'post_celery.html', {'task_id': result.task_id})
+        return render(request, 'post_celery.html', {'task_id': result.task_id, 'result':result.result})
+    return render(request, 'pre_celery.html')"""
+
+def pre_celery(request):
     return render(request, 'pre_celery.html')
+
+
+def celery_scrapping(request):
+    #if request.method == 'POST':
+    result = scrap_new_articles.delay()  # Trigger the Celery task
+    context = {'task_id': result.id}
+
+    return redirect("post_celery", context)
+    #return HttpResponseRedirect(reverse("post_celery", context))
+
+    #return render(request, 'post_celery.html', {'task_id': result.result})
+    #return render(request, 'pre_celery.html')
 
 def post_celery(request, task_id):
     result = AsyncResult(task_id)
