@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Celery Task Example</title>
+</head>
+<body>
+    <button id="run-task">Run Celery Task</button>
+    <div id="result"></div>
+</body>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#run-task").click(function () {
+            $.ajax({
+                url: "/trigger_task/",
+                method: "POST",
+                success: function (data) {
+                    $("#result").text("Task ID: " + data.task_id);
+                }
+            });
+        });
+    });
+</script>

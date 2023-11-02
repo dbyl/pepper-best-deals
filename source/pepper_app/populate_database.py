@@ -9,6 +9,7 @@ import sys
 import pandas as pd
 from django.core.management import BaseCommand
 from django.contrib.auth import get_user
+from django.db import IntegrityError
 from pepper_app.models import PepperArticle, ScrapingStatistic, UserRequest, SuccessfulResponse
 
 
@@ -67,6 +68,8 @@ class LoadItemDetailsToDatabase(BaseCommand):
                     date_added = row["date_added"],
                     url = row["url"],
                 )
+            except IntegrityError:
+                pass
             except Exception as e:
                 with open("populating_detailstodb_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")

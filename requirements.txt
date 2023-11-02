@@ -1,9 +1,5 @@
 Django
 pandas
-numpy
-plotly
-matplotlib
-matplotlib-inline
 beautifulsoup4
 selenium
 environ

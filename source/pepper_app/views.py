@@ -26,9 +26,9 @@ def action(request):
 
     category_type = "nowe"
     articles_to_retrieve = 120
-
-    output = ScrapPage(category_type, articles_to_retrieve)
-    output.get_items_details_depending_on_the_function()
+    task = scrap_new_articles.apply_async()
+    #output = ScrapPage(category_type, articles_to_retrieve)
+    #output.get_items_details_depending_on_the_function()
 
     return HttpResponseRedirect(reverse("post_action"))
 
@@ -39,44 +39,16 @@ def post_action(request):
 
     return render(request, 'post_action.html', {'items': items})
 
-"""def celery_scrapping(request):
+def run_task(request):
     if request.method == 'POST':
+        task = scrap_new_articles.apply_async()
+        return redirect('task_result', task_id=task.id)
+    return render(request, 'task_form.html')
 
-        result = scrap_new_articles.delay()  # Trigger the Celery task
-
-        return render(request, 'post_celery.html', {'task_id': result.task_id, 'result':result.result})
-    return render(request, 'pre_celery.html')"""
-
-def pre_celery(request):
-    return render(request, 'pre_celery.html')
-
-
-def celery_scrapping(request):
-    #if request.method == 'POST':
-    result = scrap_new_articles.delay()  # Trigger the Celery task
-    context = {'task_id': result.id}
-
-    return redirect("post_celery", context)
-    #return HttpResponseRedirect(reverse("post_celery", context))
-
-    #return render(request, 'post_celery.html', {'task_id': result.result})
-    #return render(request, 'pre_celery.html')
-
-def post_celery(request, task_id):
-    result = AsyncResult(task_id)
-
-    return JsonResponse({'status': 'SUCCESS', 'result': result.result})
-
-    if result.ready():
-        return JsonResponse({'status': 'SUCCESS', 'result': result.result})
-    elif result.failed():
-        return JsonResponse({'status': 'FAILURE', 'message': 'Task failed'})
+def task_result(request, task_id):
+    task = AsyncResult(task_id)
+    if task.ready():
+        result = task.result
     else:
-        return JsonResponse({'status': 'PENDING'})
-
-
-def post_celery2(request, task_id):
-
-    result = PepperArticle.objects.all()
-
-    return render(request, 'post_celery.html', {'result': result})
+        result = "Task is still running..."
+    return render(request, 'task_result.html', {'result': result})

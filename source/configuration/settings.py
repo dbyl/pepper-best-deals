@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pepper_app",
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 
@@ -68,18 +70,13 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 
 DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
-            'HOST': 'localhost',
+            'ENGINE': CustomEnvironment.get_postgres_db_engine(),
+            'NAME': CustomEnvironment.get_postgres_db_name(),
+            'USER': CustomEnvironment.get_postgres_user(),
+            'PASSWORD': CustomEnvironment.get_postgres_password(),
+            'HOST': CustomEnvironment.get_postgres_host(),
         }
     }
-
-#FOR DOCKER
-"""DATABASES = {
-    "default": CustomEnvironment.get_database_url()
-}"""
 
 
 
@@ -120,4 +117,6 @@ CELERY_RESULT_BACKEND = CustomEnvironment.get_celery_result_backend()
 CELERY_ACCEPT_CONTENT = CustomEnvironment.get_celery_accept_content()
 CELERY_TASK_SERIALIZER = CustomEnvironment.get_celery_task_serializer()
 CELERY_RESULT_SERIALIZER = CustomEnvironment.get_celery_result_serializer()
+CELERY_IGNORE_RESULT = CustomEnvironment.get_celery_ignore_result()
+CELERY_TRACK_STARTED = CustomEnvironment.get_celery_track_started()
 
