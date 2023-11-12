@@ -121,7 +121,7 @@ class ScrapPage:
 
 
 
-    def get_items_details_depending_on_the_function(self) -> None:
+    def get_items_details_depending_on_the_function(self):
         """Completing the list of articles and extracting data details depending on the type of scrapping."""
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
             while True:
