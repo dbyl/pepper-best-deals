@@ -20,8 +20,12 @@
 </div>
 {% if scrapping_in_progress %}
 <div>
-    {{ result }}
+    Scrapping in progress...
+    {{task_id}}
 </div>
+{% endif %}
+{% if scrapping_finished %}
+<div>{{result}}</div>
 {% endif %}
 {% endblock content %}
 
