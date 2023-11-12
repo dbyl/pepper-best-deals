@@ -57,7 +57,7 @@ def scrap_view(request):
             request.session["scrapping_in_progress"] = True
 
             context = {"scraping_request_form": ScrapingRequest(),
-                       "task_id": task.id,
+                       "task_id": request.session.get("task_id", False),
                        "result": request.session.get("result", False),
                        "scrapping_in_progress": request.session.get("scrapping_in_progress", False), }
 
@@ -65,7 +65,7 @@ def scrap_view(request):
 
 
 def scrap_status(request, task_id):
-    request.session["scraping_ready"] = False
+    # request.session["scraping_ready"] = False
     if request.method == 'GET':
         task = AsyncResult(task_id)
         if task.ready():
@@ -79,11 +79,9 @@ def scrap_status(request, task_id):
 
 def scrap_result(request, task_id):
     task = AsyncResult(task_id)
+    request.session["result"] = task.get()
 
-    context = {"scraping_request_form": ScrapingRequest(),
-               "result": task.get()}
-
-    return render(request, "scrap.html", context)
+    return redirect("scrap.html")
 
 
 """def scrap_view(request):

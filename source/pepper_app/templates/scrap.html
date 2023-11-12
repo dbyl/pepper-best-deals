@@ -18,9 +18,11 @@
         </div>
     </form>
 </div>
+{% if scrapping_in_progress %}
 <div>
     {{ result }}
 </div>
+{% endif %}
 {% endblock content %}
 
 {% block javascript %}
@@ -30,17 +32,37 @@
     }
 </script>
 <script type="text/javascript">
-            setInterval(function () {
-            $.ajax({
-                url: 'scrap/',
-                type: 'GET',
-                success: function (response) {
-                    if (response.scrapping_in_progress) {
-                        window.location.href = "/scrap_result/{{task_id}}";
-                    }
-                }
-            });
-        }, 500);
+    function redirectToScrapStatusPage() {
+        window.location.href = "/scrap_status/{{task_id}}";
+    }
+
+
+setInterval(function () {
+var url;
+if ("{{task_id}}") {
+    url = "/scrap_status/{{task_id}}";
+} else {
+    url = "/scrap";
+}
+
+$.ajax({
+    url: url,
+    type: 'GET',
+    success: function (response) {
+        if (response.scrapping_in_progress) {
+            redirectToScrapStatusPage();
+        }
+    }
+});
+}, 5000);
+
+
+    {% if scrapping_in_progress %}
+    setTimeout(function () {
+        redirectToScrapStatusPage();
+    }, 100000);
+    {% endif %}
+
 </script>
 {% endblock javascript %}
 </body>

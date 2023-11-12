@@ -8,5 +8,5 @@ urlpatterns = [
     path('action/', views.action, name="action"),
     path('post_action/', views.post_action, name="post_action"),
     path('scrap/', views.scrap_view, name="scrap"),
-    # path('scrap_status/<task_id>/', views.scrap_status, name="scrap_status"),
+    path('scrap_status/<task_id>/', views.scrap_status, name="scrap_status"),
     path('scrap_result/<task_id>/', views.scrap_result, name="scrap_result"), ]
