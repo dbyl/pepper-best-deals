@@ -3,11 +3,16 @@ pandas
 beautifulsoup4
 selenium
 environ
+django-environ
 html5lib
 psycopg2-binary
 pytest
 pytest-mock
+chromedriver
 pytest-django
 docker
 celery
 redis
+eventlet
+chromedriver-binary
+django-bootstrap-v5

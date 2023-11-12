@@ -129,7 +129,8 @@ class ScrapPage:
                 self.get_items_details(retrived_articles)
         elif self.scrap_continuously == False and self.scrap_choosen_data == True:
             retrived_articles = self.infinite_scroll_handling()
-            self.get_items_details(retrived_articles)
+            all_items = self.get_items_details(retrived_articles)
+            return all_items
         else:
             raise Exception(f"Matching get_items_details depending on the selected \
                             functionality failed. \n Tracking: {traceback.format_exc()}")

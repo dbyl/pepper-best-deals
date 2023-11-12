@@ -13,22 +13,14 @@ app = Celery("configuration", include=['pepper_app.tasks'])
 
 
 @app.task()
-def scrap_new_articles():
+def scrap_new_articles(category_type, articles_to_retrieve, start_page):
 
-    try:
-        category_type = "nowe"
-        articles_to_retrieve = 50
+    
+    output = ScrapPage(category_type, articles_to_retrieve, start_page)
+    all_items = output.get_items_details_depending_on_the_function()
 
-        output = ScrapPage(category_type, articles_to_retrieve)
-        output.get_items_details_depending_on_the_function()
-        articles = PepperArticle.objects.all()
+    return all_items
 
-        result = "done"
-
-        return result
-    except Exception as ex:
-        update_state(state=states.FAILURE, meta={'custom': '...'})
-        raise Ignore()
 
 
 @app.task()

@@ -1,0 +1,47 @@
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="desc_box">Select data to scrape.</div>
+        <div class="form_box">
+        <form method="POST" name="form" action="{% url 'scrap' %}" >
+            {% csrf_token %}
+            {{ scraping_request_form.as_p}}
+            <div class="button_box">
+                <button onclick="redirectToStatusPage()">Submit</button>
+            </div>
+        </form>
+        </div>
+        <div>
+        {{ result }}
+        </div>
+    {% endblock content %}
+
+    {% block javascript %}
+    <script type="text/javascript">
+        function redirectToStatusPage() {
+            window.location.href = "/scrap_status";
+        }
+    </script>
+    <script type="text/javascript">
+        setInterval(function () {
+            $.ajax({
+                url: '/scrap_status',
+                type: 'GET',
+                success: function (response) {
+                    if (response.scraping_ready) {
+                        window.location.href = "/scrap_result";
+                    }
+                }
+            });
+        }, 100);
+    </script>
+    {% endblock javascript %}
+</body>
+

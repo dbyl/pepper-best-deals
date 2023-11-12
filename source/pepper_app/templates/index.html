@@ -1,26 +1,59 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Celery Task Example</title>
+    <meta charset="UTF-8">
+    <title>Your Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-    <button id="run-task">Run Celery Task</button>
-    <div id="result"></div>
+    <form id="taskForm">
+        {% csrf_token %}
+        <input type="submit" value="Run Task">
+    </form>
+
+    <div id="status"></div>
+
+    <script>
+        $(document).ready(function() {
+            $("#taskForm").submit(function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'run_task' %}",
+                    dataType: "json",
+                    success: function(response) {
+                        checkTaskStatus(response.task_id);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            function checkTaskStatus(taskId) {
+                var intervalId = setInterval(function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/get_task_status/" + taskId + "/",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.status === "SUCCESS") {
+                                clearInterval(intervalId);
+                                $("#status").html("Task completed. Result: " + response.result);
+                                // Redirect or perform any other action on task completion
+                            } else {
+                                $("#status").html("Task status: " + response.status);
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                }, 1000); // Check status every 1 second
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#run-task").click(function () {
-            $.ajax({
-                url: "/trigger_task/",
-                method: "POST",
-                success: function (data) {
-                    $("#result").text("Task ID: " + data.task_id);
-                }
-            });
-        });
-    });
-</script>

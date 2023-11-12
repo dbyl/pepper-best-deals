@@ -2,6 +2,8 @@ from typing import Any, Dict
 import time
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from celery.result import AsyncResult
+from celery import Celery
+
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -15,6 +17,7 @@ from pepper_app.models import (PepperArticle,
                                 ScrapingStatistic,
                                 UserRequest,
                                 SuccessfulResponse)
+from pepper_app.forms import ScrapingRequest
 
 
 
@@ -39,16 +42,94 @@ def post_action(request):
 
     return render(request, 'post_action.html', {'items': items})
 
-def run_task(request):
-    if request.method == 'POST':
-        task = scrap_new_articles.apply_async()
-        return redirect('task_result', task_id=task.id)
-    return render(request, 'task_form.html')
 
-def task_result(request, task_id):
+def scrap_view(request):
+
+    scraping_request_form = ScrapingRequest()
+
+    context = {"scraping_request_form": ScrapingRequest()}
+
+    if request.method == 'POST':
+        scraping_request_form = ScrapingRequest(request.POST)
+        if scraping_request_form.is_valid():
+            category_type = scraping_request_form.cleaned_data["category_type"]
+            articles_to_retrieve = scraping_request_form.cleaned_data["articles_to_retrieve"]
+            start_page = scraping_request_form.cleaned_data["start_page"]
+
+            task = scrap_new_articles.delay(category_type, articles_to_retrieve, start_page)
+            request.session["task_id"] = task.id
+
+            context = {"scraping_request_form": ScrapingRequest(),
+                       "task_id": task.id,}
+
+    return render(request, "scrap.html", context)
+
+def scrap_status(request, task_id):
+
+    request.session["scraping_ready"] = False
+    if request.method == 'GET':
+        task = AsyncResult(task_id)
+        if task.ready():
+            request.session["scraping_ready"] = True
+            #scraping_ready = request.session.get("scraping_ready")
+            return redirect("scrap.html")
+        else:
+            #scraping_ready = request.session.get("scraping_ready")
+            return redirect("scrap.html")
+
+
+def scrap_result(request, task_id):
+        
     task = AsyncResult(task_id)
+
+    context = {"scraping_request_form": ScrapingRequest(),
+               "result": task.get()}
+    
+    return render(request, "scrap.html", context)
+
+
+
+"""def scrap_view(request):
+
+    context = {"scraping_request_form": ScrapingRequest()}
+    scraping_request_form = ScrapingRequest(request.POST)
+
+    if request.method == 'GET':
+        task_id = request.session.get("task_id")
+        request.session["scraping_in_progress"] = False
+
+        if task_id:
+            task = AsyncResult(task_id)
+            request.session["scraping_in_progress"] = not task.ready()
+        
+        return render(request, 
+                      "scrap.html", 
+                      context,
+                      request.session.get("scraping_in_progress", False))
+
+    if request.method == 'POST':
+        if scraping_request_form.is_valid():
+            category_type = scraping_request_form.cleaned_data["category_type"]
+            articles_to_retrieve = scraping_request_form.cleaned_data["articles_to_retrieve"]
+            start_page = scraping_request_form.cleaned_data["start_page"]
+
+            task = scrap_new_articles.delay(category_type, articles_to_retrieve, start_page)
+            request.session["scraping_in_progress"] = True
+            request.session["task_id"] = task.id
+
+
+        redirect("scrap_status", task_id=str(task_id))"""
+
+"""def scrap_status(request, task_id):
+
+    task = AsyncResult(task_id)
+
     if task.ready():
         result = task.result
-    else:
-        result = "Task is still running..."
-    return render(request, 'task_result.html', {'result': result})
+    
+        context = {"scraping_request_form": ScrapingRequest(),
+                    "result": result}
+
+        return render(request, "scrap.html", context)
+
+"""

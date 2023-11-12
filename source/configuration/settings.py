@@ -1,7 +1,6 @@
 import os
 import sys
 from pathlib import Path
-import environ
 from pepper_app.environment_config import CustomEnvironment
 
 
@@ -32,8 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pepper_app",
-    'django_celery_beat',
-    'django_celery_results',
+    "bootstrap5",
 ]
 
 
