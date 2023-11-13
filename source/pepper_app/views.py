@@ -68,15 +68,46 @@ def scrap_view(request):
 
 def scrap_status(request, task_id):
     # request.session["scraping_ready"] = False
+
+
+    if request.method == 'GET':
+        task = AsyncResult(task_id)
+        context = {"task_id": request.session.get("task_id", False),
+                       "result": task.get(),
+                       "scrapping_in_progress": request.session.get("scrapping_in_progress", False),
+                       "scraping_finished": request.session.get("scraping_finished", False),
+                       }
+        if task.ready():
+            request.session["scrapping_in_progress"] = False
+            request.session["scraping_finished"] = True
+            request.session["result"] = task.get()
+
+            
+            return JsonResponse(context)
+
+        else:
+            return JsonResponse(context)
+
+        
+"""def scrap_status(request, task_id):
+    # request.session["scraping_ready"] = False
     if request.method == 'GET':
         task = AsyncResult(task_id)
         if task.ready():
             request.session["scrapping_in_progress"] = False
             request.session["scraping_finished"] = True
             request.session["result"] = task.get()
-            return redirect("scrap.html")
+            #return redirect("scrap.html")
+        
+            context = {"scraping_request_form": ScrapingRequest(),
+                       "result": request.session.get("result", False),
+                       "scrapping_in_progress": request.session.get("scrapping_in_progress", False),
+                       "scraping_finished": request.session.get("scraping_finished", False)
+                       }
+            return render(request, "scrap.html", context)
+        
         else:
-            return redirect("scrap.html")
+            return render(request, "scrap.html")"""
 
 
 def scrap_result(request, task_id):

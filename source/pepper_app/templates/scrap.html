@@ -37,7 +37,7 @@
 </script>
 <script type="text/javascript">
     function redirectToScrapStatusPage() {
-        window.location.href = "/scrap_status/{{task_id}}";
+        window.location.href = "/scrap";
     }
 
 
@@ -45,27 +45,17 @@ setInterval(function () {
 var url;
 if ("{{task_id}}") {
     url = "/scrap_status/{{task_id}}";
-} else {
-    url = "/scrap";
-}
-
+} 
 $.ajax({
     url: url,
     type: 'GET',
     success: function (response) {
-        if (response.scrapping_in_progress) {
+        if (response.scraping_finished) {
             redirectToScrapStatusPage();
         }
     }
 });
-}, 5000);
-
-
-    {% if scrapping_in_progress %}
-    setTimeout(function () {
-        redirectToScrapStatusPage();
-    }, 100000);
-    {% endif %}
+}, 1000);
 
 </script>
 {% endblock javascript %}
