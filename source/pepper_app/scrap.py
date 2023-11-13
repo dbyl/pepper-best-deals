@@ -13,11 +13,9 @@ from bs4 import BeautifulSoup
 from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-import selenium
-from selenium import webdriver
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
                                 GetItemId,
@@ -51,7 +49,7 @@ class ScrapPage:
         self.scrap_continuously = scrap_continuously
         self.scrap_choosen_data = scrap_choosen_data
 
-    def scrap_page(self, url_to_scrap: str, driver: WebDriver=None) -> BeautifulSoup:
+    def scrap_page(self, url_to_scrap: str, driver: webdriver=None) -> BeautifulSoup:
         """Setting up selenium webdriver, scraping page with bs4."""
         try:
             options = Options()

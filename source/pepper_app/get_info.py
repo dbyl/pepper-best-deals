@@ -2,11 +2,10 @@ from datetime import datetime, timedelta, date
 import re
 from bs4 import BeautifulSoup, Tag
 import logging
-import selenium
-from selenium import webdriver
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+
 from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
 from enum import Enum, IntEnum
 from collections import Counter
@@ -299,7 +298,7 @@ class GetItemAddedDate:
             raise TypeError(f"Input data must be a list: {e}")
 
 
-    def scrap_page(self, url_with_item: str, driver: WebDriver=None) -> BeautifulSoup:
+    def scrap_page(self, url_with_item: str, driver: webdriver=None) -> BeautifulSoup:
 
         try:
             options = Options()
