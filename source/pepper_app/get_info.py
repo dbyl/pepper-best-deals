@@ -2,6 +2,8 @@ from datetime import datetime, timedelta, date
 import re
 from bs4 import BeautifulSoup, Tag
 import logging
+import selenium
+from selenium import webdriver
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options

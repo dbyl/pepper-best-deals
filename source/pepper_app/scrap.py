@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from enum import Enum, IntEnum
 from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
+import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options

@@ -16,3 +16,5 @@ redis
 eventlet
 chromedriver-binary
 django-bootstrap-v5
+webdriver_manager
+
