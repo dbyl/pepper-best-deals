@@ -105,7 +105,7 @@ def scrap_status(request, task_id):
             return redirect("scrap")
 
 
-"""def scrap_result(request, task_id):
+def scrap_result(request, task_id):
     task = AsyncResult(task_id)
     request.session["result"] = task.get()
 
@@ -118,7 +118,7 @@ def check_task_status(task_id):
     if result.ready():
         return JsonResponse({'status': 'success', 'result': result.result})
     else:
-        return JsonResponse({'status': 'pending'})"""
+        return JsonResponse({'status': 'pending'})
 
 
 """def scrap_view(request):

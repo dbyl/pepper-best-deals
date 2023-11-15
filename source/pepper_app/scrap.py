@@ -55,8 +55,8 @@ class ScrapPage:
             options = Options()
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
-            if driver is None:
-                driver = webdriver.Chrome(options=options)
+            #if driver is None:
+            driver = webdriver.Chrome(options=options)
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)

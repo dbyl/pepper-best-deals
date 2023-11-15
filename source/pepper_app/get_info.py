@@ -304,8 +304,8 @@ class GetItemAddedDate:
             options = Options()
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
-            if driver is None:
-                driver = webdriver.Chrome(options=options)
+            #if driver is None:
+            driver = webdriver.Chrome(options=options)
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source
