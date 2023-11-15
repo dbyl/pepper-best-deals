@@ -19,44 +19,41 @@
     </form>
 </div>
 {% if scrapping_in_progress %}
-<div>
+<div id="refresh">
     Scrapping in progress...
     {{task_id}}
 </div>
 {% endif %}
 {% if scrapping_finished %}
-<div>{{result}}</div>
+<div>{{ result }}</div>
 {% endif %}
 {% endblock content %}
 
 {% block javascript %}
 <script type="text/javascript">
+    var task_id = "{{ task_id }}";
     function redirectToStatusPage() {
-        window.location.href = "/scrap_status";
-    }
-</script>
-<script type="text/javascript">
-    function redirectToScrapStatusPage() {
-        window.location.href = "/scrap";
+        window.location.href = '/scrap_status/' + task_id + '/';
     }
 
+    setInterval(function () {
+    var task_id = "{{ task_id }}";
+    var result = "{{ result }}";
 
-setInterval(function () {
-var url;
-if ("{{task_id}}") {
-    url = "/scrap_status/{{task_id}}";
-} 
-$.ajax({
-    url: url,
-    type: 'GET',
-    success: function (response) {
-        if (response.scraping_finished) {
-            redirectToScrapStatusPage();
-        }
-    }
-});
-}, 1000);
-
+    $.ajax({
+        url: '/scrap_status/' + task_id + '/',
+        type: 'GET',
+        data: result,
+        success: function(response) {
+             if (response.status === 'success') {
+                 window.location.href = '/';
+                } else {
+                setTimeout(redirectToStatusPage, 5000);
+                }
+                }
+            });
+        }, 1000
+    );
 </script>
 {% endblock javascript %}
 </body>
