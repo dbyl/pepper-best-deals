@@ -1,0 +1,72 @@
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        .frame {
+            border: 1px solid black;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .content {
+            border: 1p
+        }
+    </style>
+</head>
+
+<body>
+{% block content %}
+<div class="desc_box">Select data to scrape.</div>
+<div class="frame">
+    <form method="POST" name="form" action="{% url 'scrap' %}">
+        {% csrf_token %}
+        {{ scraping_request_form.as_p}}
+        <div class="button_box">
+            <button onclick="redirectToStatusPage()">Submit</button>
+        </div>
+    </form>
+</div>
+{% if scrapping_in_progress %}
+<div id="refresh">
+    Scrapping in progress...
+    {{task_id}}
+</div>
+{% endif %}
+{% if scraping_finished %}
+<div>{{ result }}</div>
+{% endif %}
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">
+    var task_id = "{{ task_id }}";
+    var result = "{{ result }}";
+    function redirectToStatusPage() {
+        window.location.href = '/scrap_status/' + task_id + '/';
+    }
+
+    setInterval(function () {
+    var task_id = "{{ task_id }}";
+    var result = "{{ result }}";
+
+    $.ajax({
+        url: '/scrap_status/' + task_id + '/',
+        type: 'GET',
+        success: function(response) {
+             if (response.status === 'success') {
+                 window.location.href = '/';
+                 result = 'None';
+                } else {
+                setTimeout(redirectToStatusPage, 1000);
+                }
+                }
+            });
+        }, 1000
+    );
+</script>
+{% endblock javascript %}
+</body>
+

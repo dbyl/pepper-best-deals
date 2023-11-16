@@ -4,57 +4,76 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    <style>
+        .frame {
+            border: 1px solid black;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .content {
+            border: 1p
+        }
+    </style>
 </head>
 
 <body>
 {% block content %}
 <div class="desc_box">Select data to scrape.</div>
-<div class="form_box">
+<div class="frame">
     <form method="POST" name="form" action="{% url 'scrap' %}">
         {% csrf_token %}
         {{ scraping_request_form.as_p}}
         <div class="button_box">
-            <button onclick="redirectToStatusPage()">Submit</button>
+            <button id="ajaxButton">Submit</button>
         </div>
     </form>
 </div>
 {% if scrapping_in_progress %}
-<div id="refresh">
+<div>
     Scrapping in progress...
     {{task_id}}
 </div>
 {% endif %}
-{% if scrapping_finished %}
+{% if scraping_finished %}
 <div>{{ result }}</div>
 {% endif %}
 {% endblock content %}
 
 {% block javascript %}
 <script type="text/javascript">
-    var task_id = "{{ task_id }}";
-    function redirectToStatusPage() {
-        window.location.href = '/scrap_status/' + task_id + '/';
-    }
+     // Function to check the session value and redirect if necessary
+     var task_id = "{{ task_id }}";
 
-    setInterval(function () {
-    var task_id = "{{ task_id }}";
-    var result = "{{ result }}";
+     setInterval(function checkSessionValue() {
+        $.ajax({
+            url: '/scrap_status/' + task_id + '/',  // Change this to the URL of your Django view
+            type: 'GET',
+            success: function (data) {
+                var sessionValue = data.result;
 
-    $.ajax({
-        url: '/scrap_status/' + task_id + '/',
-        type: 'GET',
-        data: result,
-        success: function(response) {
-             if (response.status === 'success') {
-                 window.location.href = '/';
-                } else {
-                setTimeout(redirectToStatusPage, 5000);
+                // Check if the session value is the one you're looking for
+                if (sessionValue !== false) {
+                    // Redirect the user to a new page
+                    window.location.href = '/scrap/';
+                    clearInterval();
                 }
-                }
-            });
-        }, 1000
-    );
+            },
+            error: function (error) {
+                console.error('Error checking session value:', error);
+            }
+        });
+        
+    }, 2000
+     );
+
+    // Periodically check the session value every 5 seconds (adjust as needed)
+
+     // Click event handler for the button
+  $('#ajaxButton').on('click', function() {
+    // Call the AJAX function
+    checkSessionValue();
+  });
 </script>
 {% endblock javascript %}
 </body>
-
