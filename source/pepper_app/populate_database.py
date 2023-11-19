@@ -105,7 +105,6 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
             try:
                 scrapingstatistic_obj, _ = ScrapingStatistic.objects.get_or_create(
                     category_type = row["category_type"],
-                    start_page = row["start_page"],
                     retrieved_articles_quantity = int(row["retrieved_articles_quantity"]),
                     time_of_the_action = row["time_of_the_action"],
                     action_execution_datetime = row["action_execution_datetime"],

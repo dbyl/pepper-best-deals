@@ -37,14 +37,14 @@ class ScrapPage:
 
 
     def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool=False,
-                to_database: bool=True, to_statistics: bool=True, start_page: int=1,
-                searched_article: str='NA', scrap_continuously: bool=False, scrap_choosen_data: bool=True) -> None:
+                to_database: bool=True, to_statistics: bool=True, searched_article: str='NA', 
+                scrap_continuously: bool=False, scrap_choosen_data: bool=True) -> None:
         self.category_type = category_type
         self.articles_to_retrieve = articles_to_retrieve
         self.to_database = to_database
         self.to_csv = to_csv
         self.to_statistics = to_statistics
-        self.start_page = start_page
+        self.start_page = 1
         self.searched_article = searched_article
         self.scrap_continuously = scrap_continuously
         self.scrap_choosen_data = scrap_choosen_data
@@ -55,8 +55,8 @@ class ScrapPage:
             options = Options()
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
-            #if driver is None:
-            driver = webdriver.Chrome(options=options)
+            if driver is None:
+                driver = webdriver.Chrome(options=options)
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)
@@ -197,7 +197,6 @@ class ScrapPage:
         stats_info = list()
 
         category_type = self.category_type
-        start_page = self.start_page
         retrieved_articles_quantity = self.articles_to_retrieve
         time_of_the_action = datetime.utcnow().replace(tzinfo=timezone.utc)
         action_execution_datetime = action_execution_datetime
@@ -207,7 +206,7 @@ class ScrapPage:
         scrap_continuously = self.scrap_continuously
         scrap_choosen_data = self.scrap_choosen_data
 
-        stats=[category_type, start_page, retrieved_articles_quantity,
+        stats=[category_type, retrieved_articles_quantity,
             time_of_the_action, action_execution_datetime, searched_article,
             to_csv, to_database, scrap_continuously, scrap_choosen_data]
 
@@ -271,19 +270,3 @@ class CheckConditions:
             return True
 
 
-"""
-category_type = "nowe"
-start_page = 2
-searched_article = "fsdfsdfsdf"
-articles_to_retrieve = 120
-to_csv = True
-to_database = True
-to_statistics = True
-scrap_continuously = False
-scrap_choosen_data = True
-output = ScrapPage(category_type, articles_to_retrieve, to_csv,
-                        to_database, to_statistics, start_page, searched_article, scrap_continuously, scrap_choosen_data)
-
-output.select_url()
-output.get_items_details_depending_on_the_function()
-"""

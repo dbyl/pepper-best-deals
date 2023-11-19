@@ -41,25 +41,12 @@
 {% endblock content %}
 
 {% block javascript %}
+<script type="text/javascript">
+     // Function to check the session value and redirect if necessary
+     var task_id = "{{ task_id }}";
 
-
-<script>
-    $(document).ready(function () {
-        var intervalId;
-
-        $('#ajaxButton').click(function () {
-            // Call the AJAX function on button click
-            ajaxFunction();
-
-            // Set an interval to execute the AJAX function every 5 seconds (adjust as needed)
-            intervalId = setInterval(ajaxFunction, 2000);
-        });
-
-
-        function ajaxFunction() {
-            var task_id = "{{ task_id }}";
-
-            $.ajax({
+     setInterval(function checkSessionValue() {
+        $.ajax({
             url: '/scrap_status/' + task_id + '/',  // Change this to the URL of your Django view
             type: 'GET',
             success: function (data) {
@@ -76,9 +63,19 @@
                 console.error('Error checking session value:', error);
             }
         });
-        }
-    });
-</script>
+        
+    }, 2000
+     );
 
+    // Periodically check the session value every 5 seconds (adjust as needed)
+</script>
+<script>
+
+     // Click event handler for the button
+  $('#ajaxButton').on('click', function() {
+    // Call the AJAX function
+    checkSessionValue();
+  });
+</script>
 {% endblock javascript %}
 </body>

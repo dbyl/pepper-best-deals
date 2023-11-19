@@ -172,3 +172,4 @@ scraped.csv
 .github/workflows/checks.yml
 .github
 jupyter_to_test.ipynb
+USEFUL_COMMANDS.md

@@ -75,16 +75,3 @@ To run tests run:
 ```sh
 (env)$ python3 -m pytest source
 ```
-
-source env/bin/activate
-celery -A configuration.celery worker --loglevel=INFO
-redis-server
-sudo service postgresql start
-sudo -u postgres psql
-sudo kill -9 10534
-sudo -u postgres  psql second
-ps -ef | grep postgres
-python3 source/manage.py runserver 0.0.0.0:8000
-pip install eventlet
-celery -A configuration.celery worker --loglevel=info -P eventlet --without-gossip
-print(result.backend.get(result.backend.get_key_for_task('f5a010f4-ae4c-4b39-9205-a24e45df48d1')))
