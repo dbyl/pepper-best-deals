@@ -31,6 +31,5 @@ class ScrapingRequest(forms.Form):
         required=True, choices=numbers_of_articles, coerce=int, initial=5
     )
 
-    start_page = forms.IntegerField(min_value=1, max_value=200, initial=1)
 
 
