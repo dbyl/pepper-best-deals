@@ -26,7 +26,7 @@
         <form method="POST" id="form_id" name="form" action="{% url 'task' %}">
             {% csrf_token %}
             {{ scraping_request_form.as_p}}
-        <button id="ajaxButton" onclick="checkSessionValue">Submit</button>
+        <button id="ajaxButton">Submit</button>
         </form>
     </div>
 
@@ -45,38 +45,33 @@
     {% endblock content %}
 
 
-
     {% block javascript %}
+    {% if request.method == 'POST' %}
     <script>
-         var task_id = "{{ task_id }}";
         
-        async function checkSessionValue() {
+        function checkSessionValue() {
+            var task_id = "{{ task_id }}";
             $.ajax({
                 url: '/task_check/' + task_id + '/', 
                 method: 'GET',
+                data: "{{ result }}",
                 success: function (data) {
-                    var sessionValue = "{{ result }}"; 
-    
-                    if ("{{ result }}" !== false) {
-                        alert("Good");
+                    if (data["result"] !== false) {
                         window.location.href = '/task_result/';
-                        
                     }
                     else {
-                        alert("Bad");
-                        setInterval(checkSessionValue, 3000);
+                        setTimeout(checkSessionValue, 1000);
                     }
                 },
                 error: function (xhr, status, error) {
                         console.error('AJAX request failed:', status, error);
                     }
             });
-            
         }
+        window.onload = checkSessionValue;
 
-    
-  
     </script>
+    {% endif %}
     {% endblock javascript %}
     </body>
     

@@ -4,6 +4,8 @@ from pathlib import Path
 from pepper_app.environment_config import CustomEnvironment
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 SECRET_KEY = CustomEnvironment.get_secret_key()
 
 DEBUG = CustomEnvironment.get_debug()
@@ -22,7 +24,6 @@ LOGGING = {
 6
 LOGIN_URL = "login"
 
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -33,7 +34,6 @@ INSTALLED_APPS = [
     "pepper_app",
     "bootstrap5",
 ]
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -65,7 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "configuration.wsgi.application"
 
-
 DATABASES = {
         'default': {
             'ENGINE': CustomEnvironment.get_postgres_db_engine(),
@@ -75,8 +74,6 @@ DATABASES = {
             'HOST': CustomEnvironment.get_postgres_host(),
         }
     }
-
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -93,8 +90,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Europe/Warsaw"
@@ -103,10 +98,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-
 STATIC_URL = "static/"
-
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -118,3 +110,5 @@ CELERY_RESULT_SERIALIZER = CustomEnvironment.get_celery_result_serializer()
 CELERY_IGNORE_RESULT = CustomEnvironment.get_celery_ignore_result()
 CELERY_TRACK_STARTED = CustomEnvironment.get_celery_track_started()
 
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
