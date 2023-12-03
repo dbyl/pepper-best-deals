@@ -8,7 +8,6 @@ html5lib
 psycopg2-binary
 pytest
 pytest-mock
-chromedriver
 pytest-django
 docker
 celery

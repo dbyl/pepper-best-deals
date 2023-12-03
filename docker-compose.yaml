@@ -1,6 +1,24 @@
 version: "3.9"
 services:
 
+  chrome:
+    image: selenium/node-chrome:4.0.0-rc-1-prerelease-20210823
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    ports:
+      - "6900:5900"
+
+  selenium-hub:
+    image: selenium/hub:4.0.0-rc-1-prerelease-20210823
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+
   database:
     restart: always
     container_name: postgres_database
@@ -42,6 +60,8 @@ services:
     depends_on:
       - database
       - redis
+      - selenium-hub
+      - chrome
     ports:
       - "8000:8000"
     extra_hosts:
@@ -52,6 +72,7 @@ services:
     #command: uvicorn configuration.asgi:application --host 0.0.0.0  --reload
     #command: gunicorn --reload --bind 0.0.0.0:8000 configuration.wsgi #python manage.py runserver 0.0.0.0:8000
     command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+
 
 
   celery-worker:

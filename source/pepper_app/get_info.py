@@ -243,7 +243,7 @@ class GetItemAddedDate:
                     items_to_remove.append(string)
                 if ":" in string:
                     items_to_remove.append(string)
-                if string in ["Jutro", "DZISIAJ", "Lokalnie"]:
+                if string in ["Jutro", "DZISIAJ", "Lokalnie", "Stacjonarnie"]:
                     items_to_remove.append(string)
                 if string.startswith("Wysyłka"):
                     items_to_remove.append(string)
@@ -305,10 +305,12 @@ class GetItemAddedDate:
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome(options=options)
+                #driver = webdriver.Chrome(options=options)
+                driver = webdriver.Remote(command_executor='http://selenium-hub:4444/wd/hub', options=options)
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source
+            driver.quit()
             soup = BeautifulSoup(page_with_item, 'html5lib')
             return soup
         except ConnectionError as e:

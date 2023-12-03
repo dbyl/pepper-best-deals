@@ -30,6 +30,8 @@ from pepper_app.environment_config import CustomEnvironment
 from pepper_app.constans import (CSV_COLUMNS,
                                 STATS_HEADER)
 from celery import shared_task
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 
 
 
@@ -56,11 +58,13 @@ class ScrapPage:
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome(options=options)
+                #driver = webdriver.Chrome(options=options)
+                driver = webdriver.Remote(command_executor='http://selenium-hub:4444/wd/hub', options=options)
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)
             page = driver.page_source
+            driver.quit()
             soup = BeautifulSoup(page, "html5lib")
             return soup
         except ConnectionError as e:
