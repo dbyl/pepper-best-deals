@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-
 class PepperArticle(models.Model):
 
     item_id = models.PositiveIntegerField(primary_key=True)
@@ -19,6 +18,7 @@ class PepperArticle(models.Model):
                 str(self.regular_price), str(self.date_added), str(self.url)]
 
         return ', '.join(fields)
+
 
 class ScrapingStatistic(models.Model):
 
@@ -41,6 +41,7 @@ class ScrapingStatistic(models.Model):
 
         return ', '.join(fields)
 
+
 class UserRequest(models.Model):
 
     request_id = models.AutoField(primary_key=True)
@@ -52,13 +53,13 @@ class UserRequest(models.Model):
     def __str__(self):
         fields = [str(self.request_id), str(self.user), str(self.request_time), str(self.desired_article), str(self.desired_price)]
 
+
 class SuccessfulResponse(models.Model):
 
     response_id = models.AutoField(primary_key=True)
     request_id = models.ForeignKey(UserRequest, on_delete=models.CASCADE)
     response_time = models.DateTimeField()
     item_id = models.ForeignKey(PepperArticle, on_delete=models.CASCADE)
-
 
     def __str__(self):
         fields = [str(self.response_id), str(self.request_id), str(self.response_time)]

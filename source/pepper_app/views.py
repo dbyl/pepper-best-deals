@@ -1,24 +1,9 @@
 from typing import Any, Dict
-import time
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from celery.result import AsyncResult
-from celery import Celery
-
-from django.contrib import messages
-from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
-from django.shortcuts import redirect, render
-from django.views.generic import TemplateView
-from .scrap import ScrapPage
+from django.shortcuts import render
 from .tasks import scrap_new_articles
-from pepper_app.models import (PepperArticle,
-                               ScrapingStatistic,
-                               UserRequest,
-                               SuccessfulResponse)
 from pepper_app.forms import ScrapingRequest
-
 
 
 def task(request):
@@ -61,7 +46,6 @@ def task(request):
 
         return render(request, "task.html", context)
     
-
 def task_check(request, task_id):
 
     if request.method == 'GET':
@@ -90,10 +74,8 @@ def task_check(request, task_id):
             request.session["data"]["result"] = request.session["result"]
 
             return JsonResponse(request.session["data"], safe=False)
-        
 
 def task_status(request):
-
 
     context = {"task_id": request.session.get("task_id"),
                 "result": request.session.get("result"),
@@ -102,7 +84,6 @@ def task_status(request):
                 }
     
     return JsonResponse(context)
-
 
 def task_result(request):
     

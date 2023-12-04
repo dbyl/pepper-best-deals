@@ -1,20 +1,13 @@
-import sys
-import csv
 import os
 import time
 import logging
-import html5lib
 import pandas as pd
-import signal
 import traceback
-from datetime import datetime, timedelta, date, timezone
+from datetime import datetime, timezone
 from typing import List, Union
 from bs4 import BeautifulSoup
-from enum import Enum, IntEnum
-from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
@@ -24,19 +17,12 @@ from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemRegularPrice,
                                 GetItemUrl)
 from pepper_app.populate_database import (LoadItemDetailsToDatabase,
-                                        LoadDataFromCsv,
                                         LoadScrapingStatisticsToDatabase)
 from pepper_app.environment_config import CustomEnvironment
-from pepper_app.constans import (CSV_COLUMNS,
-                                STATS_HEADER)
-from celery import shared_task
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-
+from pepper_app.constans import (CSV_COLUMNS)
 
 
 class ScrapPage:
-
 
     def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool=False,
                 to_database: bool=True, to_statistics: bool=True, searched_article: str='NA', 
@@ -58,8 +44,8 @@ class ScrapPage:
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             if driver is None:
-                #driver = webdriver.Chrome(options=options)
-                driver = webdriver.Remote(command_executor='http://selenium-hub:4444/wd/hub', options=options)
+                #driver = webdriver.Chrome(options=options) #for local  
+                driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)
@@ -92,7 +78,6 @@ class ScrapPage:
         else:
             raise Exception(f"The variables were defined incorrectly.")
 
-
     def infinite_scroll_handling(self) -> List[str]:
         """Handling scraping through subsequent pages."""
         try:
@@ -122,8 +107,6 @@ class ScrapPage:
             raise Exception(f"Infinite scroll failed:\
                             {e}\n Tracking: {traceback.format_exc()}")
 
-
-
     def get_items_details_depending_on_the_function(self):
         """Completing the list of articles and extracting data details depending on the type of scrapping."""
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
@@ -137,7 +120,6 @@ class ScrapPage:
         else:
             raise Exception(f"Matching get_items_details depending on the selected \
                             functionality failed. \n Tracking: {traceback.format_exc()}")
-
 
     def get_items_details(self, retrived_articles) -> list():
         """Getting item detailes."""
@@ -195,7 +177,6 @@ class ScrapPage:
         except Exception as e:
             logging.warning(f"Saving data to csv failed: {e}\n Tracking: {traceback.format_exc()}")
 
-
     def get_scraping_stats_info(self, action_execution_datetime: datetime) -> List[Union[str, int, bool, float]]:
         """Getting scraping stats info."""
         stats_info = list()
@@ -219,7 +200,6 @@ class ScrapPage:
 
         return stats_info
 
-
     def scrap_continuously_by_refreshing_page(self) -> List[str]:
         """Scraping data function for continuously scraping feature."""
         retrived_articles = list()
@@ -234,10 +214,8 @@ class ScrapPage:
 
 class CheckConditions:
 
-
     def __init__(self, soup: BeautifulSoup) -> None:
         self.soup = soup
-
 
     def check_if_last_page_nowe(self) -> bool:
         """Checking 'nowe' category to verify if the scraped page is the last one."""

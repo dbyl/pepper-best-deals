@@ -1,14 +1,9 @@
-import datetime
 import logging
 import logging.config
 from pepper_app.constans import DATA_HEADER, STATS_HEADER, REQUEST_HEADER, RESPONSE_HEADER
-from datetime import timezone
-import os
 import traceback
-import sys
 import pandas as pd
 from django.core.management import BaseCommand
-from django.contrib.auth import get_user
 from django.db import IntegrityError
 from pepper_app.models import PepperArticle, ScrapingStatistic, UserRequest, SuccessfulResponse
 
@@ -48,6 +43,7 @@ class LoadSuccessfulResponse(BaseCommand):
             except Exception as e:
                 with open("populating_responses_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
+
 
 class LoadItemDetailsToDatabase(BaseCommand):
 
@@ -93,6 +89,7 @@ class LoadItemDetailsToDatabase(BaseCommand):
         else:
             return float(row["regular_price"])
 
+
 class LoadScrapingStatisticsToDatabase(BaseCommand):
 
     def __init__(self, stats_info) -> None:
@@ -124,8 +121,8 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
         else:
             return row["searched_article"]
 
-class LoadDataFromCsv(BaseCommand):
 
+class LoadDataFromCsv(BaseCommand):
 
     def add_arguments(self, parser: str) -> None:
         self.parser.add_argument(

@@ -1,4 +1,3 @@
-from django.contrib.auth import views as auth_views
 from django.urls import path
 from pepper_app import views
 from pepper_app.views import (task, task_check, task_result)

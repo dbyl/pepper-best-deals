@@ -69,11 +69,7 @@ services:
     env_file: source/.env
     shm_size: 2gb
     working_dir: /source
-    #command: uvicorn configuration.asgi:application --host 0.0.0.0  --reload
-    #command: gunicorn --reload --bind 0.0.0.0:8000 configuration.wsgi #python manage.py runserver 0.0.0.0:8000
     command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
-
-
 
   celery-worker:
     restart: always
@@ -86,7 +82,6 @@ services:
       - database
     working_dir: /source
     command: bash -c "celery -A configuration.celery worker -l info"
-
 
 volumes:
   db-data:

@@ -1,6 +1,4 @@
-import os
 from pathlib import Path
-
 import environ
 
 
@@ -27,8 +25,9 @@ class CustomEnvironment:
     _celery_result_serializer = env.str("CELERY_RESULT_SERIALIZER")
     _celery_ignore_result = env.str("CELERY_IGNORE_RESULT")
     _celery_track_started = env.str("CELERY_TRACK_STARTED")
+    _selenium_container_name = env.str("SELENIUM_CONTAINTER_NAME")
 
-
+    
     @classmethod
     def get_debug(cls) -> bool:
         if cls._debug is None:
@@ -124,3 +123,9 @@ class CustomEnvironment:
         if cls._celery_track_started is None:
             raise ValueError("Celery track started is not provided.")
         return cls._celery_track_started
+    
+    @classmethod
+    def get_selenium_container_name(cls) -> str:
+        if cls._selenium_container_name is None:
+            raise ValueError("Selenium container name is not provided.")
+        return cls._selenium_container_name

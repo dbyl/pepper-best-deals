@@ -20,7 +20,9 @@ Selected functions of the application that will be implemented:
 4) creating functions that save the scraped information to a csv file
 5) creating more than 80 unit tests that test functions and validate the correctness of scraped data
 6) implementation of a docker, creation of a PostgreSQL database, pgadmin4 panel
-7) ...in progress...
+7) correct selenium setup inside a docker-container
+8) implementation of sample views along with celery task
+9) implementation of auto-refreshing task status with javascript and redirecting when ready
 
 
 
@@ -75,3 +77,4 @@ To run tests run:
 ```sh
 (env)$ python3 -m pytest source
 ```
+

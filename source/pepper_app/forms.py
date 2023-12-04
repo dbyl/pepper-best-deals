@@ -1,7 +1,4 @@
 from django import forms
-from pepper_app.models import PepperArticle
-
-
 
 
 class ScrapingRequest(forms.Form):
@@ -21,7 +18,6 @@ class ScrapingRequest(forms.Form):
         (50, 50),
         (100, 100),
     )
-
 
     category_type = forms.ChoiceField(
         required=True, choices=category_choices, initial="nowe"
