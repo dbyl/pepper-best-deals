@@ -1,10 +1,10 @@
 import os
 import sys
 from pathlib import Path
-import environ
 from pepper_app.environment_config import CustomEnvironment
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = CustomEnvironment.get_secret_key()
 
@@ -21,11 +21,8 @@ LOGGING = {
             "level": "WARNING",
         }}
 }
-
+6
 LOGIN_URL = "login"
-
-
-# Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -35,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pepper_app",
+    "bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -67,20 +65,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "configuration.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
-    "default": CustomEnvironment.get_database_url()
-}
-
-
-#database for docker, localhost for local
-""
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+        'default': {
+            'ENGINE': CustomEnvironment.get_postgres_db_engine(),
+            'NAME': CustomEnvironment.get_postgres_db_name(),
+            'USER': CustomEnvironment.get_postgres_user(),
+            'PASSWORD': CustomEnvironment.get_postgres_password(),
+            'HOST': CustomEnvironment.get_postgres_host(),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -97,10 +90,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Europe/Warsaw"
@@ -109,22 +98,17 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# SMTP Configuration
+CELERY_BROKER_URL = CustomEnvironment.get_celery_broker_url()
+CELERY_RESULT_BACKEND = CustomEnvironment.get_celery_result_backend()
+CELERY_ACCEPT_CONTENT = CustomEnvironment.get_celery_accept_content()
+CELERY_TASK_SERIALIZER = CustomEnvironment.get_celery_task_serializer()
+CELERY_RESULT_SERIALIZER = CustomEnvironment.get_celery_result_serializer()
+CELERY_IGNORE_RESULT = CustomEnvironment.get_celery_ignore_result()
+CELERY_TRACK_STARTED = CustomEnvironment.get_celery_track_started()
 
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-#EMAIL_HOST = "smtp.gmail.com"
-#EMAIL_PORT = 587
-#EMAIL_USE_TLS = True
-#EMAIL_HOST_USER = os.environ.get("EMAIL")
-#EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_ENGINE = "django.contrib.sessions.backends.db"

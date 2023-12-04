@@ -1,22 +1,14 @@
-import sys
-import csv
 import os
 import time
 import logging
-import html5lib
 import pandas as pd
-import signal
 import traceback
-from datetime import datetime, timedelta, date, timezone
+from datetime import datetime, timezone
 from typing import List, Union
 from bs4 import BeautifulSoup
-from enum import Enum, IntEnum
-from collections import Counter
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from selenium import webdriver
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
                                 GetItemId,
@@ -25,43 +17,40 @@ from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemRegularPrice,
                                 GetItemUrl)
 from pepper_app.populate_database import (LoadItemDetailsToDatabase,
-                                        LoadDataFromCsv,
                                         LoadScrapingStatisticsToDatabase)
 from pepper_app.environment_config import CustomEnvironment
-from pepper_app.constans import (CSV_COLUMNS,
-                                STATS_HEADER)
-
-
+from pepper_app.constans import (CSV_COLUMNS)
 
 
 class ScrapPage:
 
-
     def __init__(self, category_type: str, articles_to_retrieve: int, to_csv: bool=False,
-                to_database: bool=False, to_statistics: bool=True, start_page: int=1,
-                searched_article: str='NA', scrap_continuously: bool=False, scrap_choosen_data: bool=False) -> None:
+                to_database: bool=True, to_statistics: bool=True, searched_article: str='NA', 
+                scrap_continuously: bool=False, scrap_choosen_data: bool=True) -> None:
         self.category_type = category_type
         self.articles_to_retrieve = articles_to_retrieve
         self.to_database = to_database
         self.to_csv = to_csv
         self.to_statistics = to_statistics
-        self.start_page = start_page
+        self.start_page = 1
         self.searched_article = searched_article
         self.scrap_continuously = scrap_continuously
         self.scrap_choosen_data = scrap_choosen_data
 
-    def scrap_page(self, url_to_scrap: str, driver: WebDriver=None) -> BeautifulSoup:
+    def scrap_page(self, url_to_scrap: str, driver: webdriver=None) -> BeautifulSoup:
         """Setting up selenium webdriver, scraping page with bs4."""
         try:
             options = Options()
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome(options=options)
+                #driver = webdriver.Chrome(options=options) #for local  
+                driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrap)
             time.sleep(0.7)
             page = driver.page_source
+            driver.quit()
             soup = BeautifulSoup(page, "html5lib")
             return soup
         except ConnectionError as e:
@@ -88,7 +77,6 @@ class ScrapPage:
             return url_to_scrap
         else:
             raise Exception(f"The variables were defined incorrectly.")
-
 
     def infinite_scroll_handling(self) -> List[str]:
         """Handling scraping through subsequent pages."""
@@ -119,9 +107,7 @@ class ScrapPage:
             raise Exception(f"Infinite scroll failed:\
                             {e}\n Tracking: {traceback.format_exc()}")
 
-
-
-    def get_items_details_depending_on_the_function(self) -> None:
+    def get_items_details_depending_on_the_function(self):
         """Completing the list of articles and extracting data details depending on the type of scrapping."""
         if self.scrap_continuously == True and self.scrap_choosen_data == False:
             while True:
@@ -129,11 +115,11 @@ class ScrapPage:
                 self.get_items_details(retrived_articles)
         elif self.scrap_continuously == False and self.scrap_choosen_data == True:
             retrived_articles = self.infinite_scroll_handling()
-            self.get_items_details(retrived_articles)
+            all_items = self.get_items_details(retrived_articles)
+            return all_items
         else:
             raise Exception(f"Matching get_items_details depending on the selected \
                             functionality failed. \n Tracking: {traceback.format_exc()}")
-
 
     def get_items_details(self, retrived_articles) -> list():
         """Getting item detailes."""
@@ -191,13 +177,11 @@ class ScrapPage:
         except Exception as e:
             logging.warning(f"Saving data to csv failed: {e}\n Tracking: {traceback.format_exc()}")
 
-
     def get_scraping_stats_info(self, action_execution_datetime: datetime) -> List[Union[str, int, bool, float]]:
         """Getting scraping stats info."""
         stats_info = list()
 
         category_type = self.category_type
-        start_page = self.start_page
         retrieved_articles_quantity = self.articles_to_retrieve
         time_of_the_action = datetime.utcnow().replace(tzinfo=timezone.utc)
         action_execution_datetime = action_execution_datetime
@@ -207,7 +191,7 @@ class ScrapPage:
         scrap_continuously = self.scrap_continuously
         scrap_choosen_data = self.scrap_choosen_data
 
-        stats=[category_type, start_page, retrieved_articles_quantity,
+        stats=[category_type, retrieved_articles_quantity,
             time_of_the_action, action_execution_datetime, searched_article,
             to_csv, to_database, scrap_continuously, scrap_choosen_data]
 
@@ -215,7 +199,6 @@ class ScrapPage:
             stats_info.append(field)
 
         return stats_info
-
 
     def scrap_continuously_by_refreshing_page(self) -> List[str]:
         """Scraping data function for continuously scraping feature."""
@@ -231,10 +214,8 @@ class ScrapPage:
 
 class CheckConditions:
 
-
     def __init__(self, soup: BeautifulSoup) -> None:
         self.soup = soup
-
 
     def check_if_last_page_nowe(self) -> bool:
         """Checking 'nowe' category to verify if the scraped page is the last one."""
@@ -271,19 +252,3 @@ class CheckConditions:
             return True
 
 
-"""
-category_type = "nowe"
-start_page = 2
-searched_article = "fsdfsdfsdf"
-articles_to_retrieve = 120
-to_csv = True
-to_database = True
-to_statistics = True
-scrap_continuously = False
-scrap_choosen_data = True
-output = ScrapPage(category_type, articles_to_retrieve, to_csv,
-                        to_database, to_statistics, start_page, searched_article, scrap_continuously, scrap_choosen_data)
-
-output.select_url()
-output.get_items_details_depending_on_the_function()
-"""

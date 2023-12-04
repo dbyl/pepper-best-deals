@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <link rel="shortcut icon" href="#" />
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        .frame {
+            border: 1px solid black;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .content {
+            border: 1p
+        }
+    </style>
+</head>
+
+<body>
+    {% block content %}
+    <div class="frame">
+        <form method="POST" id="form_id" name="form" action="{% url 'task' %}">
+            {% csrf_token %}
+            {{ scraping_request_form.as_p}}
+        <button id="ajaxButton">Submit</button>
+        </form>
+    </div>
+
+    <div>
+        Task id: {{ task_id }}
+    </div>
+    <div>
+        Result: {{ result }}
+    </div>
+    <div>
+        Scraping finished: {{ scraping_finished }}
+    </div>
+    <div>
+        Scraping in progress: {{ scraping_in_progress }}
+    </div>
+    {% endblock content %}
+
+
+    {% block javascript %}
+    {% if request.method == 'POST' %}
+    <script>
+        
+        function checkSessionValue() {
+            var task_id = "{{ task_id }}";
+            $.ajax({
+                url: '/task_check/' + task_id + '/', 
+                method: 'GET',
+                data: "{{ result }}",
+                success: function (data) {
+                    if (data["result"] !== false) {
+                        window.location.href = '/task_result/';
+                    }
+                    else {
+                        setTimeout(checkSessionValue, 1000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                        console.error('AJAX request failed:', status, error);
+                    }
+            });
+        }
+        window.onload = checkSessionValue;
+
+    </script>
+    {% endif %}
+    {% endblock javascript %}
+    </body>
+    
+    

@@ -1,19 +1,18 @@
-from datetime import datetime, timedelta, date
+from datetime import date
 import re
 from bs4 import BeautifulSoup, Tag
 import logging
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from selenium.webdriver.chrome.webdriver import WebDriver
-from source.pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
-from enum import Enum, IntEnum
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from pepper_app.environment_config import CustomEnvironment
+from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
+from enum import Enum
 from collections import Counter
 from selenium import webdriver
 import time
 from typing import List, Union
-import html5lib
 import traceback
-
-
 
 
 class Months(Enum):
@@ -85,14 +84,17 @@ class GetItemDiscountPrice:
         try:
             discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
             if len(discount_price) > 0:
-                discount_price = float(discount_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+                discount_price = discount_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ','')
+                if discount_price == "ZADARMO":
+                    discount_price = float(0)
+                else:
+                    discount_price = float(discount_price)
             else:
                 """The attribute does not exist or the class name is invalid."""
                 discount_price = "NA"
             return discount_price
         except Exception as e:
             logging.warning(f"Getting item discount price failed: {e}\n Tracking: {traceback.format_exc()}")
-
 
 
 class GetItemRegularPrice:
@@ -104,14 +106,13 @@ class GetItemRegularPrice:
         try:
             regular_price = self.article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"})
             if len(regular_price) > 0:
-                regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.'))
+                regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ',''))
             else:
                 """The attribute does not exist or the class name is invalid."""
                 regular_price = "NA"
             return regular_price
         except Exception as e:
             logging.warning(f"Getting item regular price failed: {e}\n Tracking: {traceback.format_exc()}")
-
 
 
 class GetItemPercentageDiscount:
@@ -151,7 +152,6 @@ class GetItemAddedDate:
         self.article = article
 
     def get_raw_data(self) -> List[str]:
-
         try:
             date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
             raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
@@ -160,7 +160,6 @@ class GetItemAddedDate:
             logging.warning(f"Getting item added date failed: {e}\n Tracking: {traceback.format_exc()}")
 
     def get_data(self) -> str:
-
         try:
             filtered_list = self.clean_list()
             filtered_list = self.check_missing_date()
@@ -174,12 +173,10 @@ class GetItemAddedDate:
                 stripped_date_string_likely = self.strip_date_string(date_string_likely)
                 prepared_data = self.date_format_conversion(stripped_date_string_likely)
             return prepared_data
-
         except TypeError as e:
             raise TypeError(f"Invalid html class name: {e}")
 
     def strip_date_string(self, date_string_likely: str) -> str:
-
         try:
             if date_string_likely.startswith("Zaktualizowano ") and date_string_likely.endswith(" temu"):
                 stripped_date_string_likely = date_string_likely.lstrip("Zaktualizowano ")
@@ -195,7 +192,6 @@ class GetItemAddedDate:
             logging.error(f"Stripping date string failed: {e}\n Tracking: {traceback.format_exc()}")
 
     def date_format_conversion(self, stripped_date_string_likely: str) -> str:
-
         try:
             if stripped_date_string_likely.endswith(('min', 'g', 's')):
                 prepared_data = date.today().strftime("%Y-%m-%d")
@@ -224,42 +220,32 @@ class GetItemAddedDate:
         except Exception as e:
             logging.error(f"Data format conversion tailed: {e}\n Tracking: {traceback.format_exc()}")
 
-
     def clean_list(self) -> List[str]:
-
         raw_string_list = self.get_raw_data()
         items_to_remove = list()
         filtered_list = list()
-
         try:
             for string in raw_string_list:
                 if "/" in string:
                     items_to_remove.append(string)
                 if ":" in string:
                     items_to_remove.append(string)
-                if string in ["Jutro", "DZISIAJ", "Lokalnie"]:
+                if string in ["Jutro", "DZISIAJ", "Lokalnie", "Stacjonarnie"]:
                     items_to_remove.append(string)
                 if string.startswith("Wysyłka"):
                     items_to_remove.append(string)
-
             counts = Counter(items_to_remove)
-
             for string in raw_string_list:
                 if counts[string]:
                     counts[string] -= 1
                 else:
                     filtered_list.append(string)
-
             return filtered_list
-
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-
     def check_missing_date(self) -> List[str]:
-
         filtered_list = self.clean_list()
-
         try:
             if len(filtered_list) == 0:
                 filtered_list.append("NA")
@@ -269,21 +255,17 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-
     def fill_missing_date(self, soup) -> str:
-
         try:
             date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
             filtered_list = date_string.split()
             day_string = filtered_list[0]
             month_string = filtered_list[1]
             year_string = filtered_list[2].strip(',')
-
             if len(day_string[0]) == 2:
                 day = day_string
             else:
                 day = day_string.zfill(2)
-
             month = Months.__members__[month_string].value
             year = year_string
             prepared_data = '-'.join([year, month, day])
@@ -291,15 +273,18 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-
-    def scrap_page(self, url_with_item: str, driver: WebDriver=None) -> BeautifulSoup:
-
+    def scrap_page(self, url_with_item: str, driver: webdriver=None) -> BeautifulSoup:
         try:
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome()
+                #driver = webdriver.Chrome(options=options) #for local  
+                driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source
+            driver.quit()
             soup = BeautifulSoup(page_with_item, 'html5lib')
             return soup
         except ConnectionError as e:

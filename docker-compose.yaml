@@ -1,12 +1,34 @@
 version: "3.9"
 services:
+
+  chrome:
+    image: selenium/node-chrome:4.0.0-rc-1-prerelease-20210823
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    ports:
+      - "6900:5900"
+
+  selenium-hub:
+    image: selenium/hub:4.0.0-rc-1-prerelease-20210823
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+
   database:
+    restart: always
+    container_name: postgres_database
     image: postgres:14.2-alpine
     env_file: .env-db
     ports:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
@@ -19,25 +41,47 @@ services:
     volumes:
      - pgadmin-data:/var/lib/pgadmin
 
-  web:
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+  app:
+    restart: always
+    container_name: pepper_app
     build:
       context: .
       args:
         - DEV=true
-    command: python3 source/manage.py runserver 0.0.0.0:8000
-
     volumes:
       - .:/app
     depends_on:
       - database
+      - redis
+      - selenium-hub
+      - chrome
     ports:
       - "8000:8000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    restart: on-failure
     env_file: source/.env
     shm_size: 2gb
+    working_dir: /source
+    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
 
+  celery-worker:
+    restart: always
+    container_name: celery-worker
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - database
+    working_dir: /source
+    command: bash -c "celery -A configuration.celery worker -l info"
 
 volumes:
   db-data:

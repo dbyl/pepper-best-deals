@@ -10,7 +10,7 @@ from pepper_app.populate_database import LoadScrapingStatisticsToDatabase
 
 @pytest.fixture
 def loadscrapingstatisticstodatabase():
-    stats_info = ["nowe", 1, 50, datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc),
+    stats_info = ["nowe", 50, datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc),
                 timedelta(days =-1, seconds = 1), "NA", False, False, False, False]
     return LoadScrapingStatisticsToDatabase(stats_info)
 
@@ -23,7 +23,6 @@ def test_load_to_db_1(loadscrapingstatisticstodatabase):
 
 
     assert object_1.category_type == "nowe"
-    assert object_1.start_page == 1
     assert object_1.retrieved_articles_quantity == 50
     assert object_1.time_of_the_action == datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc)
     assert object_1.action_execution_datetime == timedelta(days =-1, seconds = 1)

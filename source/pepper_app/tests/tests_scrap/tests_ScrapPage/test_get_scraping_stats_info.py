@@ -27,17 +27,19 @@ def mock_utcnow(mocker):
 
 def test_get_scraping_stats_info(mocker, mock_utcnow):
     """Test if correct stats info is returned."""
-    scrap_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
-    to_database = False
+    scrap_continuously = False
+    to_database = False 
     to_csv = False
     to_statistics = False
+    scrap_continuously = False
+    scrap_choosen_data = True
     action_execution_datetime = 100
 
     stats_info = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_scraping_stats_info(action_execution_datetime)
-
-    assert stats_info == ["nowe", 1, 50, datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc),
-                            100, "NA", False, False, False, False]
+    
+    assert stats_info == ["nowe", 50, datetime(2023, 8, 25, 12, 0, tzinfo=timezone.utc),
+                            100, "NA", False, False, False, True]
 

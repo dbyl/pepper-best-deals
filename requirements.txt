@@ -1,9 +1,5 @@
 Django
 pandas
-numpy
-plotly
-matplotlib
-matplotlib-inline
 beautifulsoup4
 selenium
 environ
@@ -15,4 +11,7 @@ pytest-mock
 pytest-django
 docker
 celery
-django-configurations
+redis
+eventlet
+django-bootstrap-v5
+
