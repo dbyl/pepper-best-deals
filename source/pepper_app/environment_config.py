@@ -25,7 +25,7 @@ class CustomEnvironment:
     _celery_result_serializer = env.str("CELERY_RESULT_SERIALIZER")
     _celery_ignore_result = env.str("CELERY_IGNORE_RESULT")
     _celery_track_started = env.str("CELERY_TRACK_STARTED")
-    _selenium_container_name = env.str("SELENIUM_CONTAINTER_NAME")
+    #_selenium_container_name = env.str("SELENIUM_CONTAINTER_NAME")
 
     
     @classmethod
@@ -124,8 +124,8 @@ class CustomEnvironment:
             raise ValueError("Celery track started is not provided.")
         return cls._celery_track_started
     
-    @classmethod
+    '''@classmethod
     def get_selenium_container_name(cls) -> str:
         if cls._selenium_container_name is None:
             raise ValueError("Selenium container name is not provided.")
-        return cls._selenium_container_name
+        return cls._selenium_container_name'''

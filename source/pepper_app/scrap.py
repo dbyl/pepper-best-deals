@@ -128,13 +128,13 @@ class ScrapPage:
         try:
             for article in retrived_articles:
                 item = list()
-                item.append(GetItemId(article).get_data())
-                item.append(GetItemName(article).get_data())
-                item.append(GetItemDiscountPrice(article).get_data())
-                item.append(GetItemPercentageDiscount(article).get_data())
-                item.append(GetItemRegularPrice(article).get_data())
-                item.append(GetItemAddedDate(article).get_data())
-                item.append(GetItemUrl(article).get_data())
+                item.extend([GetItemId(article).get_data(), 
+                            GetItemName(article).get_data(),
+                            GetItemDiscountPrice(article).get_data(),
+                            GetItemPercentageDiscount(article).get_data(),
+                            GetItemRegularPrice(article).get_data(),
+                            GetItemAddedDate(article).get_data(),
+                            GetItemUrl(article).get_data()])
                 if item not in all_items:
                     all_items.append(item)
                 if '' in item:

@@ -11,7 +11,7 @@ from pepper_app.models import PepperArticle
 
 
 class HomeView(ListView):
-
+    """Creating home page"""
     model = PepperArticle
     context_object_name = "record"
 
@@ -27,12 +27,11 @@ class HomeView(ListView):
         return context
 
 class GetNewArticles(TemplateView):
-
+    """The class returns a view of the subpage and performs a celery task with the parameters set by the user."""
     def __init__(self, *args, **kwargs):
         self.template_name = "get_new_articles.html"
 
     def get(self, request):
-
         session_keys = ["get_new_articles_task_id",
                         "get_new_articles_result",
                         "get_new_articles_finished",
@@ -70,15 +69,12 @@ class GetNewArticles(TemplateView):
                         "get_new_articles_in_progress": request.session.get("get_new_articles_in_progress"),
                         "get_new_articles_finished": request.session.get("get_new_articles_finished"),
                         }
-            
-            
 
         return render(request, self.template_name, context)
 
 
 class CheckGetNewArticleTaskStatus(TemplateView):
-
-
+    """The class checks if the celery task is ready by returning the corresponding django session values.""" 
     def get(self, request, **kwargs):
         get_new_articles_task_id = self.kwargs['get_new_articles_task_id']
         request.session["get_new_articles_result"] = False
@@ -95,7 +91,6 @@ class CheckGetNewArticleTaskStatus(TemplateView):
             request.session["data"]["get_new_articles_result"] = request.session["get_new_articles_result"]
             
             return JsonResponse(request.session["data"], safe=False)
-        
         else:
             request.session["get_new_articles_in_progress"] = True
             request.session["get_new_articles_result"] = False
@@ -108,12 +103,16 @@ class CheckGetNewArticleTaskStatus(TemplateView):
             return JsonResponse(request.session["data"], safe=False)
 
 
-def get_new_articles_task_result(request):
+class CheckGetNewArticleTaskResult(TemplateView):
+    """The class returns results on a database query for new articles.""" 
+    def __init__(self, *args, **kwargs):
+        self.template_name = "get_new_articles_result.html"
 
-    results = PepperArticle.objects.order_by('-item_id')[:request.session.get("articles_to_retrieve")][::-1]
-    context = {"results": results}
-    
-    return render(request, "get_new_articles_result.html", context)
+    def get(self, request):
+        results = PepperArticle.objects.order_by('-item_id')[:request.session.get("articles_to_retrieve")][::-1]
+        context = {"results": results}
+
+        return render(request, self.template_name, context)
 
 
 def task_status(request):

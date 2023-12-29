@@ -28,4 +28,7 @@ class ScrapingRequest(forms.Form):
     )
 
 
+class ScrapingSearchedArticleRequest(forms.Form):
 
+    search_field = forms.CharField(required=True, coerce=str)
+    avoid_expressions = forms.CharField(required=False, coerce=str)

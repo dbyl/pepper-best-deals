@@ -9,3 +9,9 @@ def scrap_new_articles(category_type, articles_to_retrieve):
     output = ScrapPage(category_type, articles_to_retrieve)
     output.get_items_details_depending_on_the_function()
 
+@app.task()
+def scrap_searched_articles(searched_article, articles_to_retrieve):
+
+    output = ScrapPage(category_type, searched_article, articles_to_retrieve)
+    output.get_items_details_depending_on_the_function()
+ 
