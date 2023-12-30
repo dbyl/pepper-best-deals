@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+<body>
+    {% block content %}
+    <div class="frame">
+        <form method="POST" id="form_id" name="form" action="{% url 'get_searched_articles' %}">
+            {% csrf_token %}
+            {{ get_searched_articles_form.as_p}}
+        <button id="ajaxButton">Submit</button>
+        </form>
+    </div>
+
+    <!-- 
+    <div>
+        Task id: {{ get_new_articles_task_id }}
+    </div>
+    <div>
+        Result: {{ get_new_articles_result }}
+    </div>
+    <div>
+        Scraping finished: {{ get_new_articles_finished }}
+    </div>
+    <div>
+        Scraping in progress: {{ get_new_articles_in_progress }}
+    </div>
+    -->
+    
+
+
+    {% block javascript %}
+    {% if request.method == 'POST' %}
+    <script>
+
+        function checkSearchArticleNeedsScraping() {
+            $.ajax({
+                method: 'GET',
+                data: "{{ get_searched_articles_data_exists }}",
+                success: function (data) {
+                    if (data["get_searched_articles_data_exists"] == true) {
+                        window.location.href = '/get_searched_articles_result/';
+                    }
+                }
+
+            });
+        }
+        
+        function checkSearchTaskSessionValue() {
+            var get_searched_articles_task_id = "{{ get_searched_articles_task_id }}";
+            $.ajax({
+                url: '/get_searched_articles_check/' + get_searched_articles_task_id + '/', 
+                method: 'GET',
+                data: "{{ get_searched_articles_result }}",
+                success: function (data) {
+                    if (data["get_searched_articles_result"] !== false) {
+                        window.location.href = '/get_searched_articles_result/';
+                    }
+                    else {
+                        setTimeout(checkSearchTaskSessionValue, 1000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                        console.error('AJAX request failed:', status, error);
+                    }
+            });
+        }
+        window.onload = checkSearchArticleNeedsScraping;
+        window.onload = checkSearchTaskSessionValue;
+
+    </script>
+    {% endif %}
+    {% endblock javascript %}
+    {% endblock content %}
+</body>
+
+    

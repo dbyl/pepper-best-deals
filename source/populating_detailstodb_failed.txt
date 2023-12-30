@@ -1,0 +1,7 @@
+Error message: Traceback (most recent call last):
+  File "/home/dbyl/pepper-best-deals/source/pepper_app/populate_database.py", line 61, in load_to_db
+    discount_price = self.na_discount_price(row),
+  File "/home/dbyl/pepper-best-deals/source/pepper_app/populate_database.py", line 78, in na_discount_price
+    return float(row["discount_price"])
+TypeError: float() argument must be a string or a real number, not 'NoneType'
+, float() argument must be a string or a real number, not 'NoneType' 

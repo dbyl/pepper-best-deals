@@ -5,8 +5,10 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.list import ListView
-from .tasks import scrap_new_articles
-from pepper_app.forms import ScrapingRequest
+from .tasks import (scrap_new_articles,
+                    scrap_searched_articles)
+from pepper_app.forms import (ScrapingRequest,
+                              ScrapingSearchedArticleRequest)
 from pepper_app.models import PepperArticle
 
 
@@ -63,7 +65,8 @@ class GetNewArticles(TemplateView):
             
             request.session.update(session_variables)
 
-            context = {"get_new_articles_form": ScrapingRequest(),
+            context = {"get_new_articles_form": ScrapingRequest(initial={'articles_to_retrieve':articles_to_retrieve,
+                                                                         'category_type':category_type}),
                         "get_new_articles_task_id": request.session.get("get_new_articles_task_id"),
                         "get_new_articles_result": request.session.get("get_new_articles_result"),
                         "get_new_articles_in_progress": request.session.get("get_new_articles_in_progress"),
@@ -110,6 +113,110 @@ class CheckGetNewArticleTaskResult(TemplateView):
 
     def get(self, request):
         results = PepperArticle.objects.order_by('-item_id')[:request.session.get("articles_to_retrieve")][::-1]
+        context = {"results": results}
+
+        return render(request, self.template_name, context)
+
+
+class GetSearchedArticles(TemplateView):
+    """The class returns a view of the subpage and performs a celery task with the parameters set by the user (searching articles)."""
+    def __init__(self, *args, **kwargs):
+        self.template_name = "get_searched_articles.html"
+
+    def get(self, request):
+        session_keys = ["get_searched_articles_task_id",
+                        "get_searched_articles_result",
+                        "get_searched_articles_finished",
+                        "get_searched_articles_in_progress",
+                        "get_searched_articles_data_exists",
+                        ]
+        
+        for key in session_keys:
+            request.session[key] = False
+
+        context = {key: request.session.get(key) for key in session_keys}
+        context["get_searched_articles_form"] = ScrapingSearchedArticleRequest()
+
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        get_searched_articles_form = ScrapingSearchedArticleRequest(request.POST)
+        if get_searched_articles_form.is_valid():
+            articles_to_retrieve = get_searched_articles_form.cleaned_data["articles_to_retrieve"]
+            searched_article = get_searched_articles_form.cleaned_data["searched_article"]
+            scrap_data = get_searched_articles_form.cleaned_data["scrap_data"]
+
+
+            if scrap_data == True:
+                get_searched_articles_task = scrap_searched_articles.delay(searched_article, articles_to_retrieve)
+
+                session_variables = {"get_searched_articles_task_id": get_searched_articles_task.id,
+                                    "get_searched_articles_result": False,
+                                    "get_searched_articles_finished": False,
+                                    "get_searched_articles_in_progress": True,
+                                    "searched_articles_to_retrieve": articles_to_retrieve,
+                                    "searched_article": searched_article,
+                                    "get_searched_articles_data_exists": False,
+                                    }
+            else:
+                session_variables = {"get_searched_articles_data_exists": True}
+
+            
+            request.session.update(session_variables)
+
+            context = {"get_searched_articles_form": ScrapingSearchedArticleRequest(initial={'articles_to_retrieve':articles_to_retrieve,
+                                                                                            'searched_article':searched_article,
+                                                                                            'scrap_data':scrap_data}),
+                        "get_searched_articles_task_id": request.session.get("get_searched_articles_task_id"),
+                        "get_searched_articles_result": request.session.get("get_searched_articles_result"),
+                        "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
+                        "get_searched_articles_finished": request.session.get("get_searched_articles_finished"),
+                        "searched_article": searched_article,
+                        "get_searched_articles_data_exists": request.session.get("get_searched_articles_data_exists"),
+                        }
+
+        return render(request, self.template_name, context)
+
+
+class CheckGetSearchedArticleTaskStatus(TemplateView):
+    """The class checks if the celery task is ready by returning the corresponding django session values.""" 
+    def get(self, request, **kwargs):
+        get_searched_articles_task_id = self.kwargs['get_searched_articles_task_id']
+        request.session["get_searched_articles_result"] = False
+        task = AsyncResult(get_searched_articles_task_id)
+        request.session["searching_task_data"] = dict()
+
+        if task.ready():
+            request.session["get_searched_articles_in_progress"] = False
+            request.session["get_searched_articles_finished"] = True
+            request.session["get_searched_articles_result"] = True
+
+            request.session["searching_task_data"]["get_searched_articles_in_progress"] = request.session["get_searched_articles_in_progress"]
+            request.session["searching_task_data"]["get_searched_articles_finished"] = request.session["get_searched_articles_finished"]
+            request.session["searching_task_data"]["get_searched_articles_result"] = request.session["get_searched_articles_result"]
+            
+            return JsonResponse(request.session["searching_task_data"], safe=False)
+        else:
+            request.session["get_searched_articles_in_progress"] = True
+            request.session["get_searched_articles_result"] = False
+            request.session["get_searched_articles_finished"] = False
+
+            request.session["searching_task_data"]["get_searched_articles_in_progress"] = request.session["get_searched_articles_in_progress"]
+            request.session["searching_task_data"]["get_searched_articles_finished"] = request.session["get_searched_articles_finished"]
+            request.session["searching_task_data"]["get_searched_articles_result"] = request.session["get_searched_articles_result"]
+
+            return JsonResponse(request.session["searching_task_data"], safe=False)
+
+
+class CheckGetSearchedArticleTaskResult(TemplateView):
+    """The class returns results on a database query for new articles.""" 
+    def __init__(self, *args, **kwargs):
+        self.template_name = "get_searched_articles_result.html"
+
+    def get(self, request):
+
+        searched_article = request.session.get('searched_article')
+        results = PepperArticle.objects.filter(article_name__contains=searched_article).order_by('-item_id')[:request.session.get("searched_articles_to_retrieve")][::-1]
         context = {"results": results}
 
         return render(request, self.template_name, context)

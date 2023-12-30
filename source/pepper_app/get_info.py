@@ -83,12 +83,15 @@ class GetItemDiscountPrice:
     def get_data(self) -> Union[float, str]:
         try:
             discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
+            if len(discount_price) == 0:
+                discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl text--color-greyShade"})
+
             if len(discount_price) > 0:
                 discount_price = discount_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ','')
                 if discount_price == "ZADARMO":
                     discount_price = float(0)
                 else:
-                    discount_price = float(discount_price)
+                    discount_price = float(discount_price)                
             else:
                 """The attribute does not exist or the class name is invalid."""
                 discount_price = "NA"

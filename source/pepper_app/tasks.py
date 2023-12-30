@@ -12,6 +12,8 @@ def scrap_new_articles(category_type, articles_to_retrieve):
 @app.task()
 def scrap_searched_articles(searched_article, articles_to_retrieve):
 
-    output = ScrapPage(category_type, searched_article, articles_to_retrieve)
-    output.get_items_details_depending_on_the_function()
+    category_type = "search"
+
+    output1 = ScrapPage(category_type, articles_to_retrieve, searched_article=searched_article)
+    output1.get_items_details_depending_on_the_function()
  
