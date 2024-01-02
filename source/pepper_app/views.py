@@ -10,6 +10,9 @@ from .tasks import (scrap_new_articles,
 from pepper_app.forms import (ScrapingRequest,
                               ScrapingSearchedArticleRequest)
 from pepper_app.models import PepperArticle
+from django.db.models import Q
+from django.shortcuts import redirect
+
 
 
 class HomeView(ListView):
@@ -82,7 +85,7 @@ class CheckGetNewArticleTaskStatus(TemplateView):
         get_new_articles_task_id = self.kwargs['get_new_articles_task_id']
         request.session["get_new_articles_result"] = False
         task = AsyncResult(get_new_articles_task_id)
-        request.session["data"] = {}
+        request.session["data"] = dict()
 
         if task.ready():
             request.session["get_new_articles_in_progress"] = False
@@ -108,11 +111,11 @@ class CheckGetNewArticleTaskStatus(TemplateView):
 
 class CheckGetNewArticleTaskResult(TemplateView):
     """The class returns results on a database query for new articles.""" 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.template_name = "get_new_articles_result.html"
 
     def get(self, request):
-        results = PepperArticle.objects.order_by('-item_id')[:request.session.get("articles_to_retrieve")][::-1]
+        results = PepperArticle.objects.order_by('-date_added').order_by('-item_id')[:request.session.get("articles_to_retrieve")][::-1]
         context = {"results": results}
 
         return render(request, self.template_name, context)
@@ -128,7 +131,9 @@ class GetSearchedArticles(TemplateView):
                         "get_searched_articles_result",
                         "get_searched_articles_finished",
                         "get_searched_articles_in_progress",
-                        "get_searched_articles_data_exists",
+                        #"searched_article",
+                        #"scrap_data",
+                        #"excluded_terms",
                         ]
         
         for key in session_keys:
@@ -145,34 +150,45 @@ class GetSearchedArticles(TemplateView):
             articles_to_retrieve = get_searched_articles_form.cleaned_data["articles_to_retrieve"]
             searched_article = get_searched_articles_form.cleaned_data["searched_article"]
             scrap_data = get_searched_articles_form.cleaned_data["scrap_data"]
+            excluded_terms = get_searched_articles_form.cleaned_data["excluded_terms"]
 
-
-            if scrap_data == True:
+            if scrap_data == "Yes":
                 get_searched_articles_task = scrap_searched_articles.delay(searched_article, articles_to_retrieve)
 
+                
                 session_variables = {"get_searched_articles_task_id": get_searched_articles_task.id,
-                                    "get_searched_articles_result": False,
-                                    "get_searched_articles_finished": False,
-                                    "get_searched_articles_in_progress": True,
+                                    #"get_searched_articles_result": False,
+                                    #"get_searched_articles_finished": False,
+                                    #"get_searched_articles_in_progress": True,
                                     "searched_articles_to_retrieve": articles_to_retrieve,
                                     "searched_article": searched_article,
-                                    "get_searched_articles_data_exists": False,
-                                    }
-            else:
-                session_variables = {"get_searched_articles_data_exists": True}
+                                    "scrap_data": scrap_data,
+                                    "excluded_terms": excluded_terms,
+                                    }             
 
-            
-            request.session.update(session_variables)
+                request.session.update(session_variables)
+                
+            else:
+                session_variables = {"searched_articles_to_retrieve": articles_to_retrieve,
+                                    "searched_article": searched_article,
+                                    "scrap_data": scrap_data,
+                                    "excluded_terms": excluded_terms,}
+                
+                request.session.update(session_variables)
+
+                return redirect('get_searched_articles_result')
 
             context = {"get_searched_articles_form": ScrapingSearchedArticleRequest(initial={'articles_to_retrieve':articles_to_retrieve,
                                                                                             'searched_article':searched_article,
-                                                                                            'scrap_data':scrap_data}),
+                                                                                            'scrap_data':scrap_data,
+                                                                                            'excluded_terms': excluded_terms}),
                         "get_searched_articles_task_id": request.session.get("get_searched_articles_task_id"),
                         "get_searched_articles_result": request.session.get("get_searched_articles_result"),
                         "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
                         "get_searched_articles_finished": request.session.get("get_searched_articles_finished"),
-                        "searched_article": searched_article,
-                        "get_searched_articles_data_exists": request.session.get("get_searched_articles_data_exists"),
+                        "searched_article": request.session.get("searched_article"),
+                        "scrap_data": request.session.get("scrap_data"),
+                        "excluded_terms": request.session.get("excluded_terms"),
                         }
 
         return render(request, self.template_name, context)
@@ -210,13 +226,41 @@ class CheckGetSearchedArticleTaskStatus(TemplateView):
 
 class CheckGetSearchedArticleTaskResult(TemplateView):
     """The class returns results on a database query for new articles.""" 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.template_name = "get_searched_articles_result.html"
+
+    def searching_conditions(self, request):
+        """Adding conditions for better data filtering. 
+        Necessary to improve the search by name and to include expressions to be ignored."""
+        conditions = Q()
+
+        searched_article_list = request.session.get('searched_article').split()
+        excluded_terms = request.session.get('excluded_terms')
+
+        if len(excluded_terms) != 0:
+            excluded_terms_list = excluded_terms.split(', ')
+            for term in excluded_terms_list:
+                conditions &= ~Q(article_name__icontains=term)
+        
+        for word in searched_article_list:
+            conditions &= Q(article_name__icontains=word)
+        
+        return conditions
+
 
     def get(self, request):
 
-        searched_article = request.session.get('searched_article')
-        results = PepperArticle.objects.filter(article_name__contains=searched_article).order_by('-item_id')[:request.session.get("searched_articles_to_retrieve")][::-1]
+        conditions = self.searching_conditions(request)  
+
+        results = PepperArticle.objects.filter(conditions).order_by('date_added')[:request.session.get("searched_articles_to_retrieve")][::-1]
+
+        session_variables = {"searched_articles_to_retrieve": False,
+                            "searched_article": False,
+                            "scrap_data": False,
+                            "excluded_terms": False,}
+                
+        request.session.update(session_variables)
+
         context = {"results": results}
 
         return render(request, self.template_name, context)
@@ -224,10 +268,23 @@ class CheckGetSearchedArticleTaskResult(TemplateView):
 
 def task_status(request):
 
+    '''
     context = {"get_new_articles_task_id": request.session.get("get_new_articles_task_id"),
                 "get_new_articles_result": request.session.get("get_new_articles_result"),
                 "get_new_articles_in_progress": request.session.get("get_new_articles_in_progress"),
                 "get_new_articles_finished": request.session.get("get_new_articles_finished"),
                 }
+    '''
+    
+    #'''
+    context = {"get_searched_articles_task_id": request.session.get("get_searched_articles_task_id"),
+                "get_searched_articles_result": request.session.get("get_searched_articles_result"),
+                "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
+                "get_searched_articles_finished": request.session.get("get_searched_articles_finished"),
+                "scrap_data": request.session.get("scrap_data"),
+                "excluded_terms": request.session.get("excluded_terms"),
+                "searched_article": request.session.get("searched_article"),
+                }
+    #'''
     
     return JsonResponse(context)

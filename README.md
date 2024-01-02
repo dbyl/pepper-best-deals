@@ -23,7 +23,12 @@ Selected functions of the application that will be implemented:
 7) correct selenium setup inside a docker-container
 8) implementation of sample views along with celery task
 9) implementation of auto-refreshing task status with javascript and redirecting when ready
-
+10) implementation of basic bootstrap-based frontend 
+11) implementation of scraping new articles
+12) implementation of scraping of searched articles
+13) improving searching articles by adding the feature to skip provided by the user
+14) fixing errors that occurred as a result of changes made to the scraped page
+15) updating tests
 
 
 ## App Setup
@@ -50,8 +55,20 @@ Create a .env file in project root directory (source). The file format can be un
 DEBUG=True
 SECRET_KEY=your-secret-key #generate your own secret key
 URL=https://www.pepper.pl/
-DATABASE_URL=postgres://postgres:postgres@host.docker.internal/postgres
-ALLOWED_HOSTS=0.0.0.0,localhost
+POSTGRES_DB_ENGINE=django.db.backends.postgresql
+POSTGRES_DB_NAME=your-postgres-name #generate your own postgres name
+POSTGRES_USER=your-postgres-user #generate your own postgres user
+POSTGRES_PASSWORD=your-postgres-password #generate your own postgres password
+POSTGRES_HOST=host.docker.internal #change to localhost for running locally
+ALLOWED_HOSTS=0.0.0.0,postgres,127.0.0.1,localhost
+CELERY_BROKER_URL=redis://redis:6379 #change redis to localhost for running locally
+CELERY_RESULT_BACKEND=redis://redis:6379
+CELERY_ACCEPT_CONTENT=json
+CELERY_TASK_SERIALIZER=json
+CELERY_RESULT_SERIALIZER=json
+CELERY_IGNORE_RESULT=False
+CELERY_TRACK_STARTED=True
+SELENIUM_CONTAINTER_NAME=selenium-hub
 ```
 
 Application runs on docker so docker must be configured *(sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin)* and Docker Desktop must be installed.

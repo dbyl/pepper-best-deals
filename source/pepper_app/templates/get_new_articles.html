@@ -23,9 +23,8 @@
     <div>
         Scraping in progress: {{ get_new_articles_in_progress }}
     </div>
-    -->
-    
 
+    -->
 
     {% block javascript %}
     {% if request.method == 'POST' %}
@@ -49,7 +48,7 @@
                         console.error('AJAX request failed:', status, error);
                     }
             });
-        }
+        };
         window.onload = checkSessionValue;
 
     </script>

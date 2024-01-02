@@ -30,20 +30,7 @@
     {% block javascript %}
     {% if request.method == 'POST' %}
     <script>
-
-        function checkSearchArticleNeedsScraping() {
-            $.ajax({
-                method: 'GET',
-                data: "{{ get_searched_articles_data_exists }}",
-                success: function (data) {
-                    if (data["get_searched_articles_data_exists"] == true) {
-                        window.location.href = '/get_searched_articles_result/';
-                    }
-                }
-
-            });
-        }
-        
+    
         function checkSearchTaskSessionValue() {
             var get_searched_articles_task_id = "{{ get_searched_articles_task_id }}";
             $.ajax({
@@ -62,8 +49,7 @@
                         console.error('AJAX request failed:', status, error);
                     }
             });
-        }
-        window.onload = checkSearchArticleNeedsScraping;
+        };
         window.onload = checkSearchTaskSessionValue;
 
     </script>

@@ -8,16 +8,7 @@ class ScrapingRequest(forms.Form):
                 ("nowe", "Nowe"),
     )
 
-    numbers_of_articles = (
-        (5, 5),
-        (10, 10),
-        (15, 15),
-        (20, 20),
-        (30, 30),
-        (40, 40),
-        (50, 50),
-        (100, 100),
-    )
+    numbers_of_articles = tuple((x, x) for x in range(10, 401, 10))
 
     category_type = forms.ChoiceField(
         required=True, choices=category_choices, initial="nowe"
@@ -30,20 +21,13 @@ class ScrapingRequest(forms.Form):
 
 class ScrapingSearchedArticleRequest(forms.Form):
 
-    numbers_of_articles = (
-        (5, 5),
-        (10, 10),
-        (15, 15),
-        (20, 20),
-        (30, 30),
-        (40, 40),
-        (50, 50),
-        (100, 100),
-    )
+    numbers_of_articles = tuple((x, x) for x in range(10, 401, 10))
 
     articles_to_retrieve = forms.TypedChoiceField(
         required=True, choices=numbers_of_articles, coerce=int, initial=5
     )
-    scrap_data = forms.BooleanField(required=False, initial=True)
+    scrap_data = forms.TypedChoiceField(required=True, choices=(("Yes", "Yes"), ("No", "No")), 
+                                        coerce=str, initial="Yes", label="Scrap data: (If the data are already in the database you can skip scraping the data.)")
+    
     searched_article = forms.CharField(required=True)
-    avoid_expressions = forms.CharField(required=False)
+    excluded_terms = forms.CharField(required=False, label="Exclude terms: (list terms: item, item2, ... )")

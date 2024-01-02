@@ -56,6 +56,9 @@ class GetItemName:
         try:
             name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
             return name
+        except IndexError as e:
+            name = self.article.find_all(attrs={'class': "thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
+            return name
         except Exception as e:
             logging.warning(f"Getting item name failed: {e}\n Tracking: {traceback.format_exc()}")
 
@@ -144,6 +147,9 @@ class GetItemUrl:
     def get_data(self) -> str:
         try:
             item_url = self.article.find_all('a', {"class":"cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['href']
+            return item_url
+        except IndexError as e:
+            item_url = 'NA - Login Required.'
             return item_url
         except Exception as e:
             logging.warning(f"Getting item url failed: {e}\n Tracking: {traceback.format_exc()}")
