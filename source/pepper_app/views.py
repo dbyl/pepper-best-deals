@@ -159,7 +159,7 @@ class GetSearchedArticles(TemplateView):
                 session_variables = {"get_searched_articles_task_id": get_searched_articles_task.id,
                                     #"get_searched_articles_result": False,
                                     #"get_searched_articles_finished": False,
-                                    #"get_searched_articles_in_progress": True,
+                                    "get_searched_articles_in_progress": True,
                                     "searched_articles_to_retrieve": articles_to_retrieve,
                                     "searched_article": searched_article,
                                     "scrap_data": scrap_data,

@@ -26,7 +26,7 @@ Selected functions of the application that will be implemented:
 10) implementation of basic bootstrap-based frontend 
 11) implementation of scraping new articles
 12) implementation of scraping of searched articles
-13) improving searching articles by adding the feature to skip provided by the user
+13) improving searching articles by adding the feature to skip phrases provided by the user
 14) fixing errors that occurred as a result of changes made to the scraped page
 15) updating tests
 

@@ -10,21 +10,11 @@
         </form>
     </div>
 
-    <!-- 
-    <div>
-        Task id: {{ get_new_articles_task_id }}
-    </div>
-    <div>
-        Result: {{ get_new_articles_result }}
-    </div>
-    <div>
-        Scraping finished: {{ get_new_articles_finished }}
-    </div>
-    <div>
-        Scraping in progress: {{ get_new_articles_in_progress }}
-    </div>
 
-    -->
+    {% if get_new_articles_in_progress == True %}
+    <p>Scraping...</p>
+    {% endif %}
+
 
     {% block javascript %}
     {% if request.method == 'POST' %}
