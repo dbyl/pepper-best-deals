@@ -4,7 +4,7 @@ from pytest_mock import mocker
 import time
 import pytest
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import ScrapPage, CheckConditions
+from source.pepper_app.scrape import ScrapePage, CheckConditions
 
 
 @pytest.fixture
@@ -30,10 +30,10 @@ def test_get_items_details_depending_on_the_function_1(monkeypatch, mocker):
 
     monkeypatch.setattr(time, "sleep", mock_sleep)
 
-    infinite_scroll_handling_mock = mocker.patch("pepper_app.scrap.ScrapPage.infinite_scroll_handling")
-    get_items_details_mock = mocker.patch("pepper_app.scrap.ScrapPage.get_items_details")
+    infinite_scroll_handling_mock = mocker.patch("pepper_app.scrape.ScrapPage.infinite_scroll_handling")
+    get_items_details_mock = mocker.patch("pepper_app.scrape.ScrapPage.get_items_details")
 
-    ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, \
+    ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, \
         scrap_continuously=scrap_continuously, scrap_choosen_data=scrap_choosen_data).get_items_details_depending_on_the_function()
 
     get_items_details_mock.assert_called_once()

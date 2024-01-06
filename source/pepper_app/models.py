@@ -30,14 +30,14 @@ class ScrapingStatistic(models.Model):
     searched_article = models.CharField(max_length=500,  null=True, blank=True)
     to_csv = models.BooleanField()
     to_database = models.BooleanField()
-    scrap_continuously = models.BooleanField()
-    scrap_choosen_data = models.BooleanField()
+    scrape_continuously = models.BooleanField()
+    scrape_choosen_data = models.BooleanField()
 
 
     def __str__(self):
         fields = [str(self.stats_id), str(self.category_type), str(self.retrieved_articles_quantity),
                 str(self.time_of_the_action), str(self.action_execution_datetime), str(self.searched_article),
-                str(self.to_csv), str(self.to_database), str(self.scrap_continuously), str(self.scrap_choosen_data)]
+                str(self.to_csv), str(self.to_database), str(self.scrape_continuously), str(self.scrape_choosen_data)]
 
         return ', '.join(fields)
 

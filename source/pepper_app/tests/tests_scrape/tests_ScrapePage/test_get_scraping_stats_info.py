@@ -4,7 +4,7 @@ from pytest_mock import mocker
 import pytest
 from datetime import datetime, timedelta, date, timezone
 from bs4 import BeautifulSoup, Tag
-from source.pepper_app.scrap import ScrapPage, CheckConditions
+from source.pepper_app.scrape import ScrapPage, CheckConditions
 
 
 @pytest.fixture

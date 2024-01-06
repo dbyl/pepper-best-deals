@@ -108,11 +108,11 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
                     searched_article = self.if_no_search_item(row),
                     to_csv = bool(row["to_csv"]),
                     to_database = bool(row["to_database"]),
-                    scrap_continuously = bool(row["scrap_continuously"]),
-                    scrap_choosen_data = bool(row["scrap_choosen_data"])
+                    scrape_continuously = bool(row["scrape_continuously"]),
+                    scrape_choosen_data = bool(row["scrape_choosen_data"])
                 )
             except Exception as e:
-                with open("populating_scrapstats_failed.txt", "w") as bad_row:
+                with open("populating_scrapestats_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
 
     def if_no_search_item(self, row):

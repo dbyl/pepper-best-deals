@@ -2,12 +2,12 @@ from pathlib import Path
 import html5lib
 import pytest
 from bs4 import BeautifulSoup, Tag
-from source.pepper_app.scrap import CheckConditions
+from source.pepper_app.scrape import CheckConditions
 
 @pytest.fixture
 def soup():
     """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrap/soup.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrape/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
@@ -16,7 +16,7 @@ def soup():
 @pytest.fixture
 def soup_nowe_last_page():
     """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrap/soup_nowe_last_page.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrape/soup_nowe_last_page.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup_nowe_last_page = BeautifulSoup(soup, "html5lib")
@@ -25,7 +25,7 @@ def soup_nowe_last_page():
 @pytest.fixture
 def soup_searched_item_last_page():
     """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrap/soup_searched_item_last_page.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrape/soup_searched_item_last_page.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup_searched_item_last_page = BeautifulSoup(soup, "html5lib")

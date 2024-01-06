@@ -1,12 +1,14 @@
 from typing import Any, Dict
 from django.http import JsonResponse
 from celery.result import AsyncResult
+from celery import Celery
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.list import ListView
-from .tasks import (scrap_new_articles,
-                    scrap_searched_articles)
+from .tasks import (scrape_new_articles,
+                    scrape_searched_articles,
+                    scrape_all_new)
 from pepper_app.forms import (ScrapingRequest,
                               ScrapingSearchedArticleRequest)
 from pepper_app.models import PepperArticle
@@ -30,6 +32,7 @@ class HomeView(ListView):
         }
 
         return context
+
 
 class GetNewArticles(TemplateView):
     """The class returns a view of the subpage and performs a celery task with the parameters set by the user."""
@@ -57,7 +60,7 @@ class GetNewArticles(TemplateView):
             category_type = get_new_articles_form.cleaned_data["category_type"]
             articles_to_retrieve = get_new_articles_form.cleaned_data["articles_to_retrieve"]
 
-            get_new_articles_task = scrap_new_articles.delay(category_type, articles_to_retrieve)
+            get_new_articles_task = scrape_new_articles.delay(category_type, articles_to_retrieve)
 
             session_variables = {"get_new_articles_task_id": get_new_articles_task.id,
                                 "get_new_articles_result": False,
@@ -131,9 +134,6 @@ class GetSearchedArticles(TemplateView):
                         "get_searched_articles_result",
                         "get_searched_articles_finished",
                         "get_searched_articles_in_progress",
-                        #"searched_article",
-                        #"scrap_data",
-                        #"excluded_terms",
                         ]
         
         for key in session_keys:
@@ -149,20 +149,18 @@ class GetSearchedArticles(TemplateView):
         if get_searched_articles_form.is_valid():
             articles_to_retrieve = get_searched_articles_form.cleaned_data["articles_to_retrieve"]
             searched_article = get_searched_articles_form.cleaned_data["searched_article"]
-            scrap_data = get_searched_articles_form.cleaned_data["scrap_data"]
+            scrape_data = get_searched_articles_form.cleaned_data["scrape_data"]
             excluded_terms = get_searched_articles_form.cleaned_data["excluded_terms"]
 
-            if scrap_data == "Yes":
-                get_searched_articles_task = scrap_searched_articles.delay(searched_article, articles_to_retrieve)
+            if scrape_data == "Yes":
+                get_searched_articles_task = scrape_searched_articles.delay(searched_article, articles_to_retrieve)
 
                 
                 session_variables = {"get_searched_articles_task_id": get_searched_articles_task.id,
-                                    #"get_searched_articles_result": False,
-                                    #"get_searched_articles_finished": False,
                                     "get_searched_articles_in_progress": True,
                                     "searched_articles_to_retrieve": articles_to_retrieve,
                                     "searched_article": searched_article,
-                                    "scrap_data": scrap_data,
+                                    "scrape_data": scrape_data,
                                     "excluded_terms": excluded_terms,
                                     }             
 
@@ -171,7 +169,7 @@ class GetSearchedArticles(TemplateView):
             else:
                 session_variables = {"searched_articles_to_retrieve": articles_to_retrieve,
                                     "searched_article": searched_article,
-                                    "scrap_data": scrap_data,
+                                    "scrape_data": scrape_data,
                                     "excluded_terms": excluded_terms,}
                 
                 request.session.update(session_variables)
@@ -180,14 +178,14 @@ class GetSearchedArticles(TemplateView):
 
             context = {"get_searched_articles_form": ScrapingSearchedArticleRequest(initial={'articles_to_retrieve':articles_to_retrieve,
                                                                                             'searched_article':searched_article,
-                                                                                            'scrap_data':scrap_data,
+                                                                                            'scrape_data':scrape_data,
                                                                                             'excluded_terms': excluded_terms}),
                         "get_searched_articles_task_id": request.session.get("get_searched_articles_task_id"),
                         "get_searched_articles_result": request.session.get("get_searched_articles_result"),
                         "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
                         "get_searched_articles_finished": request.session.get("get_searched_articles_finished"),
                         "searched_article": request.session.get("searched_article"),
-                        "scrap_data": request.session.get("scrap_data"),
+                        "scrape_data": request.session.get("scrape_data"),
                         "excluded_terms": request.session.get("excluded_terms"),
                         }
 
@@ -256,7 +254,7 @@ class CheckGetSearchedArticleTaskResult(TemplateView):
 
         session_variables = {"searched_articles_to_retrieve": False,
                             "searched_article": False,
-                            "scrap_data": False,
+                            "scrape_data": False,
                             "excluded_terms": False,}
                 
         request.session.update(session_variables)
@@ -265,6 +263,87 @@ class CheckGetSearchedArticleTaskResult(TemplateView):
 
         return render(request, self.template_name, context)
 
+
+
+class ScrapeContinouslyTasks(TemplateView):
+    """Comm"""
+    def __init__(self):
+        self.template_name = "scrape.html"
+    
+    def get(self, request):
+
+        context = {"scrape_all_new_task_in_progress": request.session.get("scrape_all_new_task_in_progress"),
+                    "scrape_all_new_invalid_action": request.session.get("scrape_all_new_invalid_action")}
+        
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        scrape_all_new_task_status = request.POST.get('scrape_all_new_task_status')
+        if scrape_all_new_task_status == 'start':
+            if request.session.get("scrape_all_new_task_in_progress") == True:
+                session_variables = {"scrape_all_new_invalid_action": True}
+                pass
+            else:
+                scrape_all_new_task = scrape_all_new.delay()
+
+                session_variables = {"scrape_all_new_task_id": scrape_all_new_task.id,
+                                    "scrape_all_new_task_in_progress": True,
+                                    "scrape_all_new_invalid_action": False}
+        elif scrape_all_new_task_status == 'stop':
+            scrape_all_new_task_id = request.session.get("scrape_all_new_task_id")
+            if scrape_all_new_task_id == False:
+                pass
+            else:
+                task = AsyncResult(request.session.get("scrape_all_new_task_id"))
+                task.revoke(terminate=True)
+
+            session_variables = {"scrape_all_new_task_in_progress": False,
+                                "scrape_all_new_task_id": False,
+                                "scrape_all_new_invalid_action": False}
+        else:
+            session_variables = {"scrape_all_new_invalid_action": True}
+
+        request.session.update(session_variables)
+
+        context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress")}
+
+        return render(request, self.template_name, context)
+
+
+def scrape_all_new_task(request):
+
+    context = {"scrape_all_new_task_in_progress": request.session.get("scrape_all_new_task_in_progress"),
+        "scrape_all_new_invalid_action": request.session.get("scrape_all_new_invalid_action")}
+
+    if request.method == 'POST':
+        scrape_all_new_task_status = request.POST.get('scrape_all_new_task_status')
+        if scrape_all_new_task_status == 'start':
+            scrape_all_new_task = scrape_all_new.delay()
+
+            session_variables = {"scrape_all_new_task_id": scrape_all_new_task.id,
+                                 "scrape_all_new_task_in_progress": True,
+                                 "scrape_all_new_invalid_action": False}
+        elif scrape_all_new_task_status == 'stop':
+            scrape_all_new_task_id = request.session.get("scrape_all_new_task_id")
+            if scrape_all_new_task_id == False:
+                pass
+            else:
+                task = AsyncResult(request.session.get("scrape_all_new_task_id"))
+                task.revoke(terminate=True)
+
+            session_variables = {"scrape_all_new_task_in_progress": False,
+                                "scrape_all_new_task_id": False,
+                                "scrape_all_new_invalid_action": False}
+        else:
+            session_variables = {"scrape_all_new_invalid_action": True}
+
+        request.session.update(session_variables)
+
+        context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress")}
+
+        return render(request, 'scrape.html', context)
+
+    return render(request, 'scrape.html', context)
 
 def task_status(request):
 
@@ -281,10 +360,18 @@ def task_status(request):
                 "get_searched_articles_result": request.session.get("get_searched_articles_result"),
                 "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
                 "get_searched_articles_finished": request.session.get("get_searched_articles_finished"),
-                "scrap_data": request.session.get("scrap_data"),
+                "scrape_data": request.session.get("scrape_data"),
                 "excluded_terms": request.session.get("excluded_terms"),
                 "searched_article": request.session.get("searched_article"),
                 }
     #'''
+    '''
+    context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress"),
+               "scrape_all_new_task_id": request.session.get("scrape_all_new_task_id"),
+               }
+    '''
+
+
     
     return JsonResponse(context)
+

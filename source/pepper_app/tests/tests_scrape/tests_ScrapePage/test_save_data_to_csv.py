@@ -6,9 +6,9 @@ from bs4 import BeautifulSoup, Tag
 import pandas as pd
 import os
 import time
-import source.pepper_app.scrap
+import source.pepper_app.scrape
 import csv
-from source.pepper_app.scrap import ScrapPage, CheckConditions
+from source.pepper_app.scrape import ScrapePage, CheckConditions
 
 
 
@@ -40,14 +40,14 @@ def mock_read_csv(filepath):
 
 @pytest.fixture
 def mocking_class_instance(monkeypatch):
-    """Patching methods for the instance of ScrapPage"""
+    """Patching methods for the instance of ScrapePage"""
     monkeypatch.setattr(os.path, 'exists', mock_exists)
     monkeypatch.setattr(pd, 'read_csv', mock_read_csv)
 
     category_type = "nowe"
     articles_to_retrieve = 50
 
-    return ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve)
+    return ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve)
 
 def test_save_data_to_csv_new_item(mocking_class_instance, monkeypatch):
     """Test if csv file is created."""

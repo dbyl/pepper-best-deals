@@ -175,7 +175,7 @@ class GetItemAddedDate:
             date_string_likely = filtered_list[0]
             if date_string_likely == "NA":
                 url_with_item = GetItemUrl.get_data(self)
-                soup = self.scrap_page(url_with_item)
+                soup = self.scrape_page(url_with_item)
                 prepared_data = self.fill_missing_date(soup)
                 return prepared_data
             else:
@@ -193,6 +193,9 @@ class GetItemAddedDate:
                 return stripped_date_string_likely
             elif date_string_likely.endswith("Lokalnie"):
                 stripped_date_string_likely = date_string_likely.rstrip("Lokalnie")
+                return stripped_date_string_likely
+            elif date_string_likely.startswith("Zaktualizowano "):
+                stripped_date_string_likely = date_string_likely.lstrip("Zaktualizowano ")
                 return stripped_date_string_likely
             else:
                 stripped_date_string_likely = date_string_likely
@@ -282,7 +285,7 @@ class GetItemAddedDate:
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-    def scrap_page(self, url_with_item: str, driver: webdriver=None) -> BeautifulSoup:
+    def scrape_page(self, url_with_item: str, driver: webdriver=None) -> BeautifulSoup:
         try:
             options = Options()
             options.add_argument("--headless")

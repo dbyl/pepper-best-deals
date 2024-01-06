@@ -26,8 +26,8 @@ class ScrapingSearchedArticleRequest(forms.Form):
     articles_to_retrieve = forms.TypedChoiceField(
         required=True, choices=numbers_of_articles, coerce=int, initial=5
     )
-    scrap_data = forms.TypedChoiceField(required=True, choices=(("Yes", "Yes"), ("No", "No")), 
-                                        coerce=str, initial="Yes", label="Scrap data: (If the data are already in the database you can skip scraping the data.)")
+    scrape_data = forms.TypedChoiceField(required=True, choices=(("Yes", "Yes"), ("No", "No")), 
+                                        coerce=str, initial="Yes", label="Scrape data: (If the data are already in the database you can skip scraping the data.)")
     
     searched_article = forms.CharField(required=True)
     excluded_terms = forms.CharField(required=False, label="Exclude terms: (list terms: item, item2, ... )")

@@ -112,3 +112,4 @@ CELERY_TRACK_STARTED = CustomEnvironment.get_celery_track_started()
 
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10200

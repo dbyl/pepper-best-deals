@@ -7,7 +7,7 @@ from datetime import date, datetime, timezone
 import pytest
 import logging
 from bs4 import BeautifulSoup, Tag
-from pepper_app.scrap import (ScrapPage,
+from source.pepper_app.scrape import (ScrapePage,
                             CheckConditions)
 from pepper_app.populate_database import (LoadItemDetailsToDatabase,
                                         LoadScrapingStatisticsToDatabase)
@@ -64,7 +64,7 @@ def test_get_items_details_1(retrived_articles):
     to_csv=False
     to_statistics=False
 
-    all_items = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     date_1 = str(date.today().strftime("%Y-%m-%d"))
@@ -85,7 +85,7 @@ def test_get_items_details_2(retrived_articles_with_duplicates):
     to_statistics=False
 
 
-    all_items = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_with_duplicates)
 
     count_duplicates = Counter(tuple(article) for article in all_items)
@@ -106,7 +106,7 @@ def test_get_items_details_3(caplog, retrived_articles_with_none_values):
     caplog.set_level(logging.WARNING)
     logging.getLogger()
 
-    all_items = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_with_none_values)
 
     expected_message = "Data retrieving failed. None values detected"
@@ -122,9 +122,9 @@ def test_get_items_details_4(mocker, retrived_articles):
     to_csv=True
     to_statistics=False
 
-    save_data_to_csv_mock = mocker.patch("pepper_app.scrap.ScrapPage.save_data_to_csv")
+    save_data_to_csv_mock = mocker.patch("pepper_app.scrape.ScrapPage.save_data_to_csv")
 
-    all_items = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     save_data_to_csv_mock.assert_called()
@@ -141,7 +141,7 @@ def test_get_items_details_5(mocker, retrived_articles):
 
     load_to_db_mock = mocker.patch("pepper_app.populate_database.LoadItemDetailsToDatabase.load_to_db")
 
-    all_items = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     load_to_db_mock.assert_called()
@@ -157,10 +157,10 @@ def test_get_items_details_6(mocker, retrived_articles):
     to_statistics=True
 
     load_statistics_to_db_mock = mocker.patch("pepper_app.populate_database.LoadScrapingStatisticsToDatabase.load_to_db")
-    get_scraping_stats_info_mock = mocker.patch("pepper_app.scrap.ScrapPage.get_scraping_stats_info")
+    get_scraping_stats_info_mock = mocker.patch("pepper_app.scrape.ScrapPage.get_scraping_stats_info")
 
 
-    all_items = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     load_statistics_to_db_mock.assert_called_once()
