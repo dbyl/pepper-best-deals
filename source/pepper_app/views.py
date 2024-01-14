@@ -5,16 +5,98 @@ from celery import Celery
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView, DetailView
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
 from django.views.generic.list import ListView
 from .tasks import (scrape_new_articles,
                     scrape_searched_articles,
-                    scrape_all_new)
-from pepper_app.forms import (ScrapingRequest,
-                              ScrapingSearchedArticleRequest)
+                    scrape_all_new,
+                    scrape_by_refreshing,
+                    )
+from pepper_app.forms import (CreateUserForm,
+                            LoginUserForm,
+                            ScrapingRequest,
+                            ScrapingSearchedArticleRequest,
+                            )
 from pepper_app.models import PepperArticle
 from django.db.models import Q
 from django.shortcuts import redirect
 
+
+
+
+def register_page(request):
+
+    register_form = CreateUserForm()
+
+    if request.user.is_authenticated:
+        return redirect("home")
+    else:
+        if request.method == "POST":
+            register_form = CreateUserForm(request.POST)
+            if register_form.is_valid():
+                register_form.save()
+                user = register_form.cleaned_data.get("username")
+                messages.success(request, "Account was created for " + user)
+                return redirect("login")
+
+    context = {"register_form": register_form}
+
+    return render(request, "accounts/register.html", context)
+
+
+def login_page(request):
+
+    login_form = LoginUserForm()
+
+    if request.user.is_authenticated:
+        return redirect("home")
+    else:
+        if request.method == "POST":
+            login_form = LoginUserForm(request.POST)
+            username = request.POST.get("username")
+            password = request.POST.get("password1")
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect("home")
+            else:
+                messages.info(request, "Username or password is incorrect")
+
+    context = {"login_form": login_form}
+
+    return render(request, "accounts/login.html", context)
+
+
+def login_req(request):
+    login_form = LoginUserForm()
+
+    if request.method == "POST":
+        login_form = LoginUserForm(request.POST)
+        username = request.POST.get("username")
+        password = request.POST.get("password1")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("/home/")
+        else:
+            messages.info(request, "Username or password is incorrect")
+
+    context = {"login_form": login_form}
+
+    return render(request, "accounts/login_required.html", context)
+
+
+def logout_user(request):
+
+    logout(request)
+
+    return redirect("login")
 
 
 class HomeView(ListView):
@@ -273,12 +355,16 @@ class ScrapeContinouslyTasks(TemplateView):
     def get(self, request):
 
         context = {"scrape_all_new_task_in_progress": request.session.get("scrape_all_new_task_in_progress"),
-                    "scrape_all_new_invalid_action": request.session.get("scrape_all_new_invalid_action")}
+                    "scrape_all_new_invalid_action": request.session.get("scrape_all_new_invalid_action"),
+                    "scrape_by_refreshing_task_in_progress": request.session.get("scrape_by_refreshing_task_in_progress"),
+                    }
         
         return render(request, self.template_name, context)
     
     def post(self, request):
-        scrape_all_new_task_status = request.POST.get('scrape_all_new_task_status')
+        scrape_all_new_task_status = request.POST.get("scrape_all_new_task_status")
+        scrape_by_refreshing_task_status = request.POST.get("scrape_by_refreshing_task_status")
+        
         if scrape_all_new_task_status == 'start':
             if request.session.get("scrape_all_new_task_in_progress") == True:
                 session_variables = {"scrape_all_new_invalid_action": True}
@@ -289,7 +375,7 @@ class ScrapeContinouslyTasks(TemplateView):
                 session_variables = {"scrape_all_new_task_id": scrape_all_new_task.id,
                                     "scrape_all_new_task_in_progress": True,
                                     "scrape_all_new_invalid_action": False}
-        elif scrape_all_new_task_status == 'stop':
+        if scrape_all_new_task_status == 'stop':
             scrape_all_new_task_id = request.session.get("scrape_all_new_task_id")
             if scrape_all_new_task_id == False:
                 pass
@@ -300,50 +386,39 @@ class ScrapeContinouslyTasks(TemplateView):
             session_variables = {"scrape_all_new_task_in_progress": False,
                                 "scrape_all_new_task_id": False,
                                 "scrape_all_new_invalid_action": False}
-        else:
-            session_variables = {"scrape_all_new_invalid_action": True}
+        
+        
+        if scrape_by_refreshing_task_status == 'start':
+            if request.session.get("scrape_by_refreshing_task_in_progress") == True:
+                session_variables = {"scrape_by_refreshing_invalid_action": True}
+                pass
+            else:
+                scrape_by_refreshing_task = scrape_by_refreshing.delay()
+
+                session_variables = {"scrape_by_refreshing_task_id": scrape_by_refreshing_task.id,
+                                    "scrape_by_refreshing_task_in_progress": True,
+                                    "scrape_by_refreshing_invalid_action": False,}
+        if scrape_by_refreshing_task_status == 'stop':
+            scrape_by_refreshing_task_id = request.session.get("scrape_by_refreshing_task_id")
+            if scrape_by_refreshing_task_id == False:
+                pass
+            else:
+                task1 = AsyncResult(request.session.get("scrape_by_refreshing_task_id"))
+                task1.revoke(terminate=True)
+
+            session_variables = {"scrape_by_refreshing_task_in_progress": False,
+                                "scrape_by_refreshing_task_id": False,
+                                "scrape_by_refreshing_invalid_action": False}
+
 
         request.session.update(session_variables)
 
-        context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress")}
+        context = {"scrape_all_new_task_in_progress": request.session.get("scrape_all_new_task_in_progress"),
+                   "scrape_by_refreshing_task_in_progress": request.session.get("scrape_by_refreshing_task_in_progress")
+                   }
 
         return render(request, self.template_name, context)
 
-
-def scrape_all_new_task(request):
-
-    context = {"scrape_all_new_task_in_progress": request.session.get("scrape_all_new_task_in_progress"),
-        "scrape_all_new_invalid_action": request.session.get("scrape_all_new_invalid_action")}
-
-    if request.method == 'POST':
-        scrape_all_new_task_status = request.POST.get('scrape_all_new_task_status')
-        if scrape_all_new_task_status == 'start':
-            scrape_all_new_task = scrape_all_new.delay()
-
-            session_variables = {"scrape_all_new_task_id": scrape_all_new_task.id,
-                                 "scrape_all_new_task_in_progress": True,
-                                 "scrape_all_new_invalid_action": False}
-        elif scrape_all_new_task_status == 'stop':
-            scrape_all_new_task_id = request.session.get("scrape_all_new_task_id")
-            if scrape_all_new_task_id == False:
-                pass
-            else:
-                task = AsyncResult(request.session.get("scrape_all_new_task_id"))
-                task.revoke(terminate=True)
-
-            session_variables = {"scrape_all_new_task_in_progress": False,
-                                "scrape_all_new_task_id": False,
-                                "scrape_all_new_invalid_action": False}
-        else:
-            session_variables = {"scrape_all_new_invalid_action": True}
-
-        request.session.update(session_variables)
-
-        context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress")}
-
-        return render(request, 'scrape.html', context)
-
-    return render(request, 'scrape.html', context)
 
 def task_status(request):
 
@@ -352,10 +427,10 @@ def task_status(request):
                 "get_new_articles_result": request.session.get("get_new_articles_result"),
                 "get_new_articles_in_progress": request.session.get("get_new_articles_in_progress"),
                 "get_new_articles_finished": request.session.get("get_new_articles_finished"),
-                }
+                "articles_to_retrieve":  request.session.get("articles_to_retrieve")}
     '''
     
-    #'''
+    '''
     context = {"get_searched_articles_task_id": request.session.get("get_searched_articles_task_id"),
                 "get_searched_articles_result": request.session.get("get_searched_articles_result"),
                 "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
@@ -364,12 +439,13 @@ def task_status(request):
                 "excluded_terms": request.session.get("excluded_terms"),
                 "searched_article": request.session.get("searched_article"),
                 }
-    #'''
     '''
+    #'''
     context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress"),
                "scrape_all_new_task_id": request.session.get("scrape_all_new_task_id"),
-               }
-    '''
+               'scrape_by_refreshing_task_in_progress': request.session.get("scrape_by_refreshing_task_in_progress"),
+               "scrape_by_refreshing_task_id": request.session.get("scrape_by_refreshing_task_id"),}
+    #'''
 
 
     

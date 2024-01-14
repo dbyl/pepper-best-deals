@@ -1,4 +1,91 @@
 from django import forms
+from django.contrib.auth.forms import (
+    PasswordChangeForm,
+    PasswordResetForm,
+    SetPasswordForm,
+    UserCreationForm,
+)
+from django.contrib.auth.models import User
+
+class CreateUserForm(UserCreationForm):
+
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={"type": "charfield",
+                                      "class": "form_widgets"})
+    )
+    email = forms.CharField(
+        widget=forms.TextInput(attrs={"type": "charfield",
+                                      "class": "form_widgets"})
+    )
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+    password2 = forms.CharField(
+        label="Repeat password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1", "password2"]
+
+
+class LoginUserForm(forms.Form):
+
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={"type": "charfield",
+                                      "class": "form_widgets"})
+    )
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+
+
+class PassResetForm(PasswordResetForm):
+
+    email = forms.CharField(
+        widget=forms.TextInput(attrs={"type": "charfield",
+                                      "class": "form_widgets"})
+    )
+
+
+class PassSetForm(SetPasswordForm):
+
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+    new_password2 = forms.CharField(
+        label="Confirm new password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+
+
+class PassChangeForm(PasswordChangeForm):
+
+    old_password = forms.CharField(
+        label="Old password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+    new_password2 = forms.CharField(
+        label="Confirm new password",
+        widget=forms.TextInput(attrs={"type": "password",
+                                      "class": "form_widgets"}),
+    )
+
 
 
 class ScrapingRequest(forms.Form):

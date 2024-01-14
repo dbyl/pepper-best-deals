@@ -88,44 +88,50 @@ class ScrapePage:
                 soup = self.scrape_page(url_to_scrape)
                 flag_nowe = CheckConditions(soup).check_if_last_page_nowe()
                 flag_search = CheckConditions(soup).check_if_last_page_search()
+
                 if flag_nowe == False or flag_search == False:
                     flag = False
-                    return retrived_articles[:self.articles_to_retrieve]
                 flag = CheckConditions(soup).check_if_no_items_found()
-                if flag == False:
-                    return retrived_articles[:self.articles_to_retrieve]
-                if flag == True:
-                    articles = soup.find_all('article')
-                    retrived_articles += articles
-                else:
-                    return retrived_articles[:self.articles_to_retrieve]
+
+                articles = soup.find_all('article')
+                retrived_articles += articles
+
                 if len(retrived_articles) >= self.articles_to_retrieve:
                     flag = False
-                    return retrived_articles[:self.articles_to_retrieve]
-                self.get_items_details(retrived_articles)
-                self.start_page += 1
+                else:
+                    if self.scrape_continuously == True:
+                        time.sleep(10)
+                    else:
+                        self.start_page += 1
+                
+                prepared_articles = articles[:self.articles_to_retrieve]
+                all_items = self.get_items_details(prepared_articles)
+            return all_items
         except Exception as e:
             raise Exception(f"Infinite scroll failed:\
                             {e}\n Tracking: {traceback.format_exc()}")
+        
 
     def get_items_details_depending_on_the_function(self):
         """Completing the list of articles and extracting data details depending on the type of scraping."""
         if self.scrape_continuously == True and self.scrape_choosen_data == False:
             while True:
-                retrived_articles = self.scrape_continuously_by_refreshing_page()
-                self.get_items_details(retrived_articles)
+                all_items = self.infinite_scroll_handling()
+                return all_items
         elif self.scrape_continuously == False and self.scrape_choosen_data == True:
-            retrived_articles = self.infinite_scroll_handling()
+            all_items = self.infinite_scroll_handling()
+            return all_items
         else:
             raise Exception(f"Matching get_items_details depending on the selected \
                             functionality failed. \n Tracking: {traceback.format_exc()}")
-
-    def get_items_details(self, retrived_articles):
+        
+    
+    def get_items_details(self, prepared_articles):
         """Getting item detailes."""
         start_time = datetime.utcnow().replace(tzinfo=timezone.utc)
         all_items = list()
         try:
-            for article in retrived_articles:
+            for article in prepared_articles:
                 item = list()
                 item.extend([GetItemId(article).get_data(), 
                             GetItemName(article).get_data(),
@@ -143,6 +149,7 @@ class ScrapePage:
                     self.save_data_to_csv(item)
                 if self.to_database:
                     LoadItemDetailsToDatabase(item).load_to_db()
+            return all_items
         except Exception as e:
             logging.warning(f"Getting item details failed :\
                         {e}\n Tracking: {traceback.format_exc()}")
@@ -156,7 +163,7 @@ class ScrapePage:
                 LoadScrapingStatisticsToDatabase(stats_info).load_to_db()
             except Exception as e:
                 logging.warning(f"Populating ScrapingStatistics table failed: {e}\n Tracking: {traceback.format_exc()}")
-
+        return all_items
 
     def save_data_to_csv(self, item) -> None:
         """Saving data to csv file."""
@@ -197,18 +204,6 @@ class ScrapePage:
             stats_info.append(field)
 
         return stats_info
-
-    def scrape_continuously_by_refreshing_page(self) -> List[str]:
-        """Scraping data function for continuously scraping feature."""
-        retrived_articles = list()
-
-        soup = self.scrape_page()
-        time.sleep(10)
-        articles = soup.find_all('article')
-        retrived_articles += articles
-        self.get_items_details(retrived_articles)
-
-        return retrived_articles
     
 
 class CheckConditions:

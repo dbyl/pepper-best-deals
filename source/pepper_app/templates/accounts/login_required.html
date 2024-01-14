@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div>Content for logged-in users only.</div>
+<div>
+<form method="POST" action="">
+    {% csrf_token %}
+    {{login_form.as_p}}
+  
+    <div>
+      <button>Log In</button>
+    </div>
+    <div>
+      <p>Don't have an account? <a class="font_url" href="{% url 'register' %}">Sign Up</a></p>
+    </div>
+    <div>
+      <p>Forgot your password? <a class="font_url" href="{% url 'reset_password' %}">Reset Password</a></p>
+    </div>
+    <div>
+      {% for message in messages %}
+      <p id="messages">{{message}}</p>
+      {% endfor %}
+  </div>
+</form>
+</div>
+
+{% endblock %}
