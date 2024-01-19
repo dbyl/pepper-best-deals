@@ -49,9 +49,10 @@ class UserRequest(models.Model):
     request_time = models.DateTimeField()
     desired_article = models.CharField(max_length=500,  null=True, blank=True)
     desired_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    minimum_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        fields = [str(self.request_id), str(self.user), str(self.request_time), str(self.desired_article), str(self.desired_price)]
+        fields = [str(self.request_id), str(self.user), str(self.request_time), str(self.desired_article), str(self.desired_price), str(self.minimum_price)]
 
 
 class SuccessfulResponse(models.Model):

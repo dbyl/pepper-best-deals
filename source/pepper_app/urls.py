@@ -14,6 +14,7 @@ from pepper_app.views import (HomeView,
                               CheckGetSearchedArticleTaskStatus,
                               CheckGetSearchedArticleTaskResult,
                               ScrapeContinouslyTasks,
+                              PriceAlertRequest,
                               )
 
 
@@ -56,5 +57,6 @@ urlpatterns = [
     path('get_searched_articles_result/', CheckGetSearchedArticleTaskResult.as_view(), name="get_searched_articles_result"),
     path('task_status/', views.task_status, name="task_status"),
     path('scrape/', ScrapeContinouslyTasks.as_view(), name="scrape"),
+    path('requests/', PriceAlertRequest.as_view(), name="requests"),
     ]
 

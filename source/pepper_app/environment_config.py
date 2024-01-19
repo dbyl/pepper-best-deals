@@ -25,6 +25,8 @@ class CustomEnvironment:
     _celery_result_serializer = env.str("CELERY_RESULT_SERIALIZER")
     _celery_ignore_result = env.str("CELERY_IGNORE_RESULT")
     _celery_track_started = env.str("CELERY_TRACK_STARTED")
+    _email = env.str("EMAIL")
+    _email_password = env.str("EMAIL_PASSWORD")
     #_selenium_container_name = env.str("SELENIUM_CONTAINTER_NAME")
 
     
@@ -123,6 +125,18 @@ class CustomEnvironment:
         if cls._celery_track_started is None:
             raise ValueError("Celery track started is not provided.")
         return cls._celery_track_started
+    
+    @classmethod
+    def get_email(cls) -> str:
+        if cls._email is None:
+            raise ValueError("Email is not provided.")
+        return cls._email
+
+    @classmethod
+    def get_email_password(cls) -> str:
+        if cls._email_password is None:
+            raise ValueError("Email password is not provided.")
+        return cls._email_password
     
     '''@classmethod
     def get_selenium_container_name(cls) -> str:

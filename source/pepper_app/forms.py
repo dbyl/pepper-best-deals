@@ -7,6 +7,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.models import User
 
+
 class CreateUserForm(UserCreationForm):
 
     username = forms.CharField(
@@ -87,7 +88,6 @@ class PassChangeForm(PasswordChangeForm):
     )
 
 
-
 class ScrapingRequest(forms.Form):
 
     category_choices = (
@@ -118,3 +118,9 @@ class ScrapingSearchedArticleRequest(forms.Form):
     
     searched_article = forms.CharField(required=True)
     excluded_terms = forms.CharField(required=False, label="Exclude terms: (list terms: item, item2, ... )")
+
+class UserRequestForm(forms.Form):
+
+    desired_article = forms.CharField(required=True)
+    desired_price = forms.IntegerField(required=True)
+    minimum_price = forms.IntegerField(required=False, initial=0)

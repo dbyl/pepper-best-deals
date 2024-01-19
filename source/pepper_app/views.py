@@ -7,7 +7,10 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from .tasks import (scrape_new_articles,
                     scrape_searched_articles,
@@ -18,6 +21,7 @@ from pepper_app.forms import (CreateUserForm,
                             LoginUserForm,
                             ScrapingRequest,
                             ScrapingSearchedArticleRequest,
+                            UserRequestForm,
                             )
 from pepper_app.models import PepperArticle
 from django.db.models import Q
@@ -346,9 +350,8 @@ class CheckGetSearchedArticleTaskResult(TemplateView):
         return render(request, self.template_name, context)
 
 
-
 class ScrapeContinouslyTasks(TemplateView):
-    """Comm"""
+    """The view class contains implementations of the continuous page scraping function in two variants."""
     def __init__(self):
         self.template_name = "scrape.html"
     
@@ -420,6 +423,62 @@ class ScrapeContinouslyTasks(TemplateView):
         return render(request, self.template_name, context)
 
 
+class PriceAlertRequest(TemplateView):
+    """comm"""
+    def __init__(self):
+        self.template_name = "requests.html"
+
+    @method_decorator(login_required, name='login_required')
+    def get(self, request):
+
+        session_variables = {"desired_article": False,
+                            "desired_price": False,
+                            "minimum_price": False,
+                            "request_time": False,
+                            "user_id": request.user.id,
+                            }             
+
+        request.session.update(session_variables)
+
+        context = {"user_request_form": UserRequestForm()}
+
+        return render(request, self.template_name, context)
+    
+    @method_decorator(login_required, name='login_required')
+    def post(self, request):
+
+        user_request_form = UserRequestForm(request.POST)
+        if user_request_form.is_valid():
+
+            desired_article = user_request_form.cleaned_data["desired_article"]
+            desired_price = user_request_form.cleaned_data["desired_price"]
+            minimum_price = user_request_form.cleaned_data["desired_price"]
+            request_time = str(datetime.now())
+            user_id = request.user.id
+
+            session_variables = {"desired_article": desired_article,
+                                "desired_price": desired_price,
+                                "minimum_price": minimum_price,
+                                "request_time": request_time,
+                                "user_id": user_id,
+                                }             
+
+            request.session.update(session_variables)
+
+
+            context = {"user_request_form": UserRequestForm(initial={'desired_article':desired_article,
+                                                                    'desired_price':desired_price,
+                                                                    'minimum_price':minimum_price,}),
+                        #"desired_article": request.session.get("desired_article"),
+                       # "desired_price": request.session.get("desired_price"),
+                        #"minimum_price": request.session.get("minimum_price"),
+                        #"request_time": request.session.get("request_time"),
+                        #"user_id": request.session.get("user_id"),
+                        }
+
+        return render(request, self.template_name, context)
+
+
 def task_status(request):
 
     '''
@@ -440,14 +499,18 @@ def task_status(request):
                 "searched_article": request.session.get("searched_article"),
                 }
     '''
-    #'''
+    '''
     context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress"),
                "scrape_all_new_task_id": request.session.get("scrape_all_new_task_id"),
                'scrape_by_refreshing_task_in_progress': request.session.get("scrape_by_refreshing_task_in_progress"),
                "scrape_by_refreshing_task_id": request.session.get("scrape_by_refreshing_task_id"),}
-    #'''
-
-
+    '''
+    context = {'desired_article': request.session.get("desired_article"),
+               "desired_price": request.session.get("desired_price"),
+               'minimum_price': request.session.get("minimum_price"),
+               "request_time": request.session.get("request_time"),
+               'user_id': request.session.get("user_id"),
+               }
     
     return JsonResponse(context)
 
