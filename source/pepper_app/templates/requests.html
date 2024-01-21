@@ -3,7 +3,7 @@
 <body>
     {% block content %}
     <div class="frame">
-        <form method="POST" id="form_id" name="form" action="{% url 'requests' %}">
+        <form method="POST" action="{% url 'requests' %}">
             {% csrf_token %}
             {{ user_request_form.as_p}}
         <button>Submit</button>

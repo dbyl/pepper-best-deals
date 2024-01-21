@@ -3,6 +3,7 @@ import logging.config
 from pepper_app.constans import DATA_HEADER, STATS_HEADER, REQUEST_HEADER, RESPONSE_HEADER
 import traceback
 import pandas as pd
+from django.utils import timezone
 from django.core.management import BaseCommand
 from django.db import IntegrityError
 from pepper_app.models import PepperArticle, ScrapingStatistic, UserRequest, SuccessfulResponse
@@ -10,18 +11,19 @@ from pepper_app.models import PepperArticle, ScrapingStatistic, UserRequest, Suc
 
 class LoadUserRequestToDatabase(BaseCommand):
     def __init__(self, item) -> None:
-        self.request = request
+        self.item = item
 
     def load_to_db(self) -> None:
-        data = self.request
-        request_df = pd.DataFrame([data], columns=REQUEST_HEADER)
+        data = self.item
+        item_df = pd.DataFrame([data], columns=REQUEST_HEADER)
         for _, row in item_df.iterrows():
             try:
                 userrequest_obj, _ = UserRequest.objects.get_or_create(
-                    user_id = request.user.id,
-                    request_time = row["request_time"],
                     desired_article = row["desired_article"],
                     desired_price = row["desired_price"],
+                    minimum_price = row["minimum_price"],
+                    user_id = request.user.id,
+                    request_time = row["request_time"],
                 )
             except Exception as e:
                 with open("populating_requests_failed.txt", "w") as bad_row:

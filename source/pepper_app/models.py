@@ -45,11 +45,11 @@ class ScrapingStatistic(models.Model):
 class UserRequest(models.Model):
 
     request_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    request_time = models.DateTimeField()
     desired_article = models.CharField(max_length=500,  null=True, blank=True)
     desired_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     minimum_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    request_time = models.DateTimeField()
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         fields = [str(self.request_id), str(self.user), str(self.request_time), str(self.desired_article), str(self.desired_price), str(self.minimum_price)]

@@ -7,8 +7,8 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from datetime import datetime
-
+from django.utils import timezone
+from pepper_app.populate_database import LoadUserRequestToDatabase
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
@@ -26,6 +26,10 @@ from pepper_app.forms import (CreateUserForm,
 from pepper_app.models import PepperArticle
 from django.db.models import Q
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
+from django.db import models
+
+
 
 
 
@@ -431,15 +435,6 @@ class PriceAlertRequest(TemplateView):
     @method_decorator(login_required, name='login_required')
     def get(self, request):
 
-        session_variables = {"desired_article": False,
-                            "desired_price": False,
-                            "minimum_price": False,
-                            "request_time": False,
-                            "user_id": request.user.id,
-                            }             
-
-        request.session.update(session_variables)
-
         context = {"user_request_form": UserRequestForm()}
 
         return render(request, self.template_name, context)
@@ -452,29 +447,41 @@ class PriceAlertRequest(TemplateView):
 
             desired_article = user_request_form.cleaned_data["desired_article"]
             desired_price = user_request_form.cleaned_data["desired_price"]
-            minimum_price = user_request_form.cleaned_data["desired_price"]
-            request_time = str(datetime.now())
+            minimum_price = user_request_form.cleaned_data["minimum_price"]
+            request_time = timezone.now()
             user_id = request.user.id
+
+
+            item = [desired_article, desired_price, minimum_price, request_time, user_id]
+
+            try:    
+                LoadUserRequestToDatabase(item).load_to_db()
+                session_variables = {"successful": True}
+            except:
+                session_variables = {"successful": False}
+
 
             session_variables = {"desired_article": desired_article,
                                 "desired_price": desired_price,
                                 "minimum_price": minimum_price,
-                                "request_time": request_time,
-                                "user_id": user_id,
+                                #"request_time": request_time,
+                                #"user_id": user_id,
                                 }             
 
             request.session.update(session_variables)
 
 
             context = {"user_request_form": UserRequestForm(initial={'desired_article':desired_article,
-                                                                    'desired_price':desired_price,
-                                                                    'minimum_price':minimum_price,}),
-                        #"desired_article": request.session.get("desired_article"),
-                       # "desired_price": request.session.get("desired_price"),
-                        #"minimum_price": request.session.get("minimum_price"),
+                                                                        'desired_price':desired_price,
+                                                                        'minimum_price':minimum_price}),
+                        "desired_article": request.session.get("desired_article"),
+                        "desired_price": request.session.get("desired_price"),
+                        "minimum_price": request.session.get("minimum_price"),
                         #"request_time": request.session.get("request_time"),
                         #"user_id": request.session.get("user_id"),
+                        "successful": request.session.get("successful"),
                         }
+            return render(request, self.template_name, context)
 
         return render(request, self.template_name, context)
 
@@ -499,18 +506,22 @@ def task_status(request):
                 "searched_article": request.session.get("searched_article"),
                 }
     '''
+    
     '''
     context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress"),
                "scrape_all_new_task_id": request.session.get("scrape_all_new_task_id"),
                'scrape_by_refreshing_task_in_progress': request.session.get("scrape_by_refreshing_task_in_progress"),
                "scrape_by_refreshing_task_id": request.session.get("scrape_by_refreshing_task_id"),}
     '''
-    context = {'desired_article': request.session.get("desired_article"),
+    
+    context = {"desired_article": request.session.get("desired_article"),
                "desired_price": request.session.get("desired_price"),
-               'minimum_price': request.session.get("minimum_price"),
+               "desired_price": request.session.get("minimum_price"),
                "request_time": request.session.get("request_time"),
-               'user_id': request.session.get("user_id"),
+               "user_id": request.session.get("user_id"),
+               "succesful": request.session.get("succesful"),
                }
+    
     
     return JsonResponse(context)
 
