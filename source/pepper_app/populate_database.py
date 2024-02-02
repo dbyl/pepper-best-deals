@@ -22,7 +22,7 @@ class LoadUserRequestToDatabase(BaseCommand):
                     desired_article = row["desired_article"],
                     desired_price = row["desired_price"],
                     minimum_price = row["minimum_price"],
-                    user_id = request.user.id,
+                    user_id = row["user_id"],
                     request_time = row["request_time"],
                 )
             except Exception as e:
@@ -32,12 +32,12 @@ class LoadUserRequestToDatabase(BaseCommand):
 
 class LoadSuccessfulResponse(BaseCommand):
     def __init__(self, item) -> None:
-        self.response = response
+        self.item = item
 
     def load_to_db(self) -> None:
-        data = self.response
+        data = self.item
         response_df = pd.DataFrame([data], columns=RESPONSE_HEADER)
-        for _, row in item_df.iterrows():
+        for _, row in response_df.iterrows():
             try:
                 successfulresponse_obj, _ = SuccessfulResponse.objects.get_or_create(
                     response_time = row["response_time"],
@@ -66,8 +66,6 @@ class LoadItemDetailsToDatabase(BaseCommand):
                     date_added = row["date_added"],
                     url = row["url"],
                 )
-            except IntegrityError:
-                pass
             except Exception as e:
                 with open("populating_detailstodb_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")

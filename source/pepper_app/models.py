@@ -52,8 +52,9 @@ class UserRequest(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        fields = [str(self.request_id), str(self.user), str(self.request_time), str(self.desired_article), str(self.desired_price), str(self.minimum_price)]
+        fields = [str(self.request_id), str(self.user_id), str(self.request_time), str(self.desired_article), str(self.desired_price), str(self.minimum_price)]
 
+        return ', '.join(fields)
 
 class SuccessfulResponse(models.Model):
 
@@ -64,6 +65,8 @@ class SuccessfulResponse(models.Model):
 
     def __str__(self):
         fields = [str(self.response_id), str(self.request_id), str(self.response_time)]
+
+        return ', '.join(fields)
 
 
 

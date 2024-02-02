@@ -26,8 +26,9 @@ from pepper_app.forms import (CreateUserForm,
 from pepper_app.models import PepperArticle
 from django.db.models import Q
 from django.shortcuts import redirect
-from django.contrib.auth.models import User
-from django.db import models
+import traceback
+import logging
+
 
 
 
@@ -449,40 +450,19 @@ class PriceAlertRequest(TemplateView):
             desired_price = user_request_form.cleaned_data["desired_price"]
             minimum_price = user_request_form.cleaned_data["minimum_price"]
             request_time = timezone.now()
-            user_id = request.user.id
+            user_id = request.user
 
 
             item = [desired_article, desired_price, minimum_price, request_time, user_id]
-
             try:    
                 LoadUserRequestToDatabase(item).load_to_db()
-                session_variables = {"successful": True}
-            except:
-                session_variables = {"successful": False}
-
-
-            session_variables = {"desired_article": desired_article,
-                                "desired_price": desired_price,
-                                "minimum_price": minimum_price,
-                                #"request_time": request_time,
-                                #"user_id": user_id,
-                                }             
-
-            request.session.update(session_variables)
+            except Exception as e:
+                logging.warning(f"Saving data to csv failed: {e}\n Tracking: {traceback.format_exc()}")
 
 
             context = {"user_request_form": UserRequestForm(initial={'desired_article':desired_article,
                                                                         'desired_price':desired_price,
-                                                                        'minimum_price':minimum_price}),
-                        "desired_article": request.session.get("desired_article"),
-                        "desired_price": request.session.get("desired_price"),
-                        "minimum_price": request.session.get("minimum_price"),
-                        #"request_time": request.session.get("request_time"),
-                        #"user_id": request.session.get("user_id"),
-                        "successful": request.session.get("successful"),
-                        }
-            return render(request, self.template_name, context)
-
+                                                                        'minimum_price':minimum_price})}
         return render(request, self.template_name, context)
 
 
@@ -519,7 +499,7 @@ def task_status(request):
                "desired_price": request.session.get("minimum_price"),
                "request_time": request.session.get("request_time"),
                "user_id": request.session.get("user_id"),
-               "succesful": request.session.get("succesful"),
+               "successful": request.session.get("successful"),
                }
     
     
