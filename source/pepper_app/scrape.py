@@ -149,6 +149,9 @@ class ScrapePage:
                     self.save_data_to_csv(item)
                 if self.to_database:
                     LoadItemDetailsToDatabase(item).load_to_db()
+                    if self.scrape_continuously == True:
+                        pass
+                
             return all_items
         except Exception as e:
             logging.warning(f"Getting item details failed :\

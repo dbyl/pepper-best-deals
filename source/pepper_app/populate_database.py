@@ -31,17 +31,19 @@ class LoadUserRequestToDatabase(BaseCommand):
 
 
 class LoadSuccessfulResponse(BaseCommand):
-    def __init__(self, item) -> None:
-        self.item = item
+    def __init__(self, item_sp) -> None:
+        self.item_sp = item_sp
 
     def load_to_db(self) -> None:
-        data = self.item
+        data = self.item_sp
         response_df = pd.DataFrame([data], columns=RESPONSE_HEADER)
         for _, row in response_df.iterrows():
             try:
                 successfulresponse_obj, _ = SuccessfulResponse.objects.get_or_create(
+                    request_id = row["request_id"],
                     response_time = row["response_time"],
-                )
+                    item_id = row["item_id"],
+                    )
             except Exception as e:
                 with open("populating_responses_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
