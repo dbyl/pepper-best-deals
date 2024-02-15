@@ -35,6 +35,7 @@ class ScrapingStatistic(models.Model):
 
 
     def __str__(self):
+        
         fields = [str(self.stats_id), str(self.category_type), str(self.retrieved_articles_quantity),
                 str(self.time_of_the_action), str(self.action_execution_datetime), str(self.searched_article),
                 str(self.to_csv), str(self.to_database), str(self.scrape_continuously), str(self.scrape_choosen_data)]
@@ -59,7 +60,7 @@ class UserRequest(models.Model):
 class SuccessfulResponse(models.Model):
 
     response_id = models.AutoField(primary_key=True)
-    request_id = models.ForeignKey(UserRequest, on_delete=models.CASCADE)
+    request_id = models.PositiveIntegerField()
     response_time = models.DateTimeField()
     item_id = models.ForeignKey(PepperArticle, on_delete=models.CASCADE)
 

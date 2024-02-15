@@ -19,7 +19,7 @@ class LoadUserRequestToDatabase(BaseCommand):
         for _, row in item_df.iterrows():
             try:
                 userrequest_obj, _ = UserRequest.objects.get_or_create(
-                    desired_article = row["desired_article"],
+                    desired_article = row["desired_article"].lower(),
                     desired_price = row["desired_price"],
                     minimum_price = row["minimum_price"],
                     user_id = row["user_id"],
@@ -42,7 +42,7 @@ class LoadSuccessfulResponse(BaseCommand):
                 successfulresponse_obj, _ = SuccessfulResponse.objects.get_or_create(
                     request_id = row["request_id"],
                     response_time = row["response_time"],
-                    item_id = row["item_id"],
+                    item_id = PepperArticle.objects.get(item_id=row["item_id"]),
                     )
             except Exception as e:
                 with open("populating_responses_failed.txt", "w") as bad_row:
@@ -111,7 +111,7 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
                     to_csv = bool(row["to_csv"]),
                     to_database = bool(row["to_database"]),
                     scrape_continuously = bool(row["scrape_continuously"]),
-                    scrape_choosen_data = bool(row["scrape_choosen_data"])
+                    scrape_choosen_data = bool(row["scrape_choosen_data"]),
                 )
             except Exception as e:
                 with open("populating_scrapestats_failed.txt", "w") as bad_row:

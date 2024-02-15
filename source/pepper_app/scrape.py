@@ -20,6 +20,7 @@ from pepper_app.populate_database import (LoadItemDetailsToDatabase,
                                         LoadScrapingStatisticsToDatabase)
 from pepper_app.environment_config import CustomEnvironment
 from pepper_app.constans import (CSV_COLUMNS)
+from pepper_app.notifications import RequestChecking
 
 
 class ScrapePage:
@@ -150,7 +151,7 @@ class ScrapePage:
                 if self.to_database:
                     LoadItemDetailsToDatabase(item).load_to_db()
                     if self.scrape_continuously == True:
-                        pass
+                        RequestChecking(item).matching_request()
                 
             return all_items
         except Exception as e:

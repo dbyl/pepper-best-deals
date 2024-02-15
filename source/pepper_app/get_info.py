@@ -54,10 +54,10 @@ class GetItemName:
 
     def get_data(self) -> str:
         try:
-            name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
+            name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['title'].lower()
             return name
         except IndexError as e:
-            name = self.article.find_all(attrs={'class': "thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
+            name = self.article.find_all(attrs={'class': "thread-link linkPlain thread-title--list js-thread-title"})[0]['title'].lower()
             return name
         except Exception as e:
             logging.warning(f"Getting item name failed: {e}\n Tracking: {traceback.format_exc()}")
@@ -85,7 +85,7 @@ class GetItemDiscountPrice:
 
     def get_data(self) -> Union[float, str]:
         try:
-            discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
+            discount_price = self.article.find_all("span", {'class': "threadItemCard-price text--b thread-price size--all-l size--fromW3-xl space--mr-0"})
             if len(discount_price) == 0:
                 discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl text--color-greyShade"})
 
@@ -162,7 +162,7 @@ class GetItemAddedDate:
 
     def get_raw_data(self) -> List[str]:
         try:
-            date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
+            date_tag = self.article.find_all('div', {"class":"flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
             raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
             return raw_string_list
         except Exception as e:
