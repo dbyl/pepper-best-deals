@@ -110,7 +110,7 @@ class GetItemRegularPrice:
 
     def get_data(self) -> Union[float, str]:
         try:
-            regular_price = self.article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"})
+            regular_price = self.article.find_all("span", {'class': "mute--text text--lineThrough space--ml-1 size--all-l size--fromW3-xl"})
             if len(regular_price) > 0:
                 regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ',''))
             else:
@@ -128,7 +128,7 @@ class GetItemPercentageDiscount:
 
     def get_data(self) -> Union[float, str]:
         try:
-            percentage_discount = self.article.find_all(attrs={'class': "space--ml-1 size--all-l size--fromW3-xl"})
+            percentage_discount = self.article.find_all("span", {'class': "text--color-charcoal space--ml-1 size--all-l size--fromW3-xl"})
             if len(percentage_discount) > 0:
                 percentage_discount = float(percentage_discount[0].get_text().strip('%'))
             else:

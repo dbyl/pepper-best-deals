@@ -119,8 +119,17 @@ class ScrapingSearchedArticleRequest(forms.Form):
     searched_article = forms.CharField(required=True)
     excluded_terms = forms.CharField(required=False, label="Exclude terms: (list terms: item, item2, ... )")
 
+
 class UserRequestForm(forms.Form):
 
     desired_article = forms.CharField(required=True)
     desired_price = forms.IntegerField(required=True)
     minimum_price = forms.IntegerField(required=False, initial=0)
+
+
+class ArticlePriceHistoryForm(forms.Form):
+    
+    article = forms.CharField(required=True)
+    price_min = forms.IntegerField(required=False)
+    price_max = forms.IntegerField(required=False)
+    excluded_terms = forms.CharField(required=False)

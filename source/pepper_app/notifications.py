@@ -10,8 +10,6 @@ import os
 
 
 
-
-
 class RequestChecking:
 
     def __init__(self, item):
@@ -22,7 +20,7 @@ class RequestChecking:
 
 
     def check_conditions(self, request_id, desired_article_list, article_name_list, desired_price, 
-                         discount_price, minimum_price, user_id):
+                         discount_price, minimum_price, user_id) -> None:
 
         item_sp = [request_id, timezone.now(), self.item_id]
 
@@ -41,7 +39,7 @@ class RequestChecking:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
 
 
-    def matching_request(self):
+    def matching_request(self) -> None:
         
 
         article_name_list = self.article_name.split()
@@ -62,7 +60,6 @@ class RequestChecking:
         except Exception as e:
                 with open("matching_request_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
-
 
 
 class EmailNotifications:
@@ -86,7 +83,6 @@ class EmailNotifications:
                 with open("sending_emails.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
         
-
 
 class SMSNotifications:
     pass 

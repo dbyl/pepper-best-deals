@@ -57,6 +57,7 @@ class UserRequest(models.Model):
 
         return ', '.join(fields)
 
+
 class SuccessfulResponse(models.Model):
 
     response_id = models.AutoField(primary_key=True)

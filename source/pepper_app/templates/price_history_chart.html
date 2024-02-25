@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+<div>The chart shows how many times songs by a particular artist have appeared in the ranking for user-specified parameters such as time period, region, chart, artist and top ranking.</div>
+<div>
+  <form method="GET" name="form" action="{% url 'price_history_chart' %}">
+    
+    {% csrf_token %}
+    {{ article_price_history_form.as_p}}
+    <div class="button_box">
+      <button>Submit</button>
+    </div>
+  </form>
+</div>
+<div>
+    {{ chart|safe }}
+</div>
+<div>
+    {{filtered_data}}
+</div>
+{% endblock content %}
+</body>

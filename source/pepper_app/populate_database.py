@@ -10,7 +10,7 @@ from pepper_app.models import PepperArticle, ScrapingStatistic, UserRequest, Suc
 
 
 class LoadUserRequestToDatabase(BaseCommand):
-    def __init__(self, item) -> None:
+    def __init__(self, item: list) -> None:
         self.item = item
 
     def load_to_db(self) -> None:
@@ -31,7 +31,7 @@ class LoadUserRequestToDatabase(BaseCommand):
 
 
 class LoadSuccessfulResponse(BaseCommand):
-    def __init__(self, item_sp) -> None:
+    def __init__(self, item_sp: list) -> None:
         self.item_sp = item_sp
 
     def load_to_db(self) -> None:
@@ -51,7 +51,7 @@ class LoadSuccessfulResponse(BaseCommand):
 
 class LoadItemDetailsToDatabase(BaseCommand):
 
-    def __init__(self, item) -> None:
+    def __init__(self, item: list) -> None:
         self.item = item
 
     def load_to_db(self) -> None:
@@ -72,20 +72,20 @@ class LoadItemDetailsToDatabase(BaseCommand):
                 with open("populating_detailstodb_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
 
-    def na_discount_price(self, row):
+    def na_discount_price(self, row: pd.Series):
 
         if row["discount_price"] == 'NA':
             return None
         else:
             return float(row["discount_price"])
 
-    def na_percentage_discount(self, row):
+    def na_percentage_discount(self, row: pd.Series):
         if row["percentage_discount"] == 'NA':
             return None
         else:
             return float(row["percentage_discount"])
 
-    def na_regular_price(self, row):
+    def na_regular_price(self, row: pd.Series):
         if row["regular_price"] == 'NA':
             return None
         else:
@@ -94,7 +94,7 @@ class LoadItemDetailsToDatabase(BaseCommand):
 
 class LoadScrapingStatisticsToDatabase(BaseCommand):
 
-    def __init__(self, stats_info) -> None:
+    def __init__(self, stats_info: list) -> None:
         self.stats_info = stats_info
 
     def load_to_db(self) -> None:
@@ -117,42 +117,9 @@ class LoadScrapingStatisticsToDatabase(BaseCommand):
                 with open("populating_scrapestats_failed.txt", "w") as bad_row:
                     bad_row.write(f"Error message: {traceback.format_exc()}, {e} \n")
 
-    def if_no_search_item(self, row):
+    def if_no_search_item(self, row: pd.Series):
         if row["category_type"] == 'nowe':
             return None
         else:
             return row["searched_article"]
 
-
-class LoadDataFromCsv(BaseCommand):
-
-    def add_arguments(self, parser: str) -> None:
-        self.parser.add_argument(
-            "input", type=str, help="Choose directory path with input csv files"
-        )
-
-    def handle(self, *args, **options) -> None:
-        path = options["input"]
-        logging.info(f"Preparing data from {path}...")
-        df = self.read_csv(path)
-        self.load_to_db(df)
-
-    def read_csv(self, path: str) -> pd.DataFrame:
-        df = pd.read_csv(path)
-        return df
-
-    def load_to_db(self, df) -> None:
-        for _, row in df.iterrows():
-            try:
-                pepperarticle_obj, _ = PepperArticle.objects.get_or_create(
-                    item_id = row["item_id"],
-                    article_name = row["name"],
-                    discount_price = row["discount_price"],
-                    percentage_discount = row["percentage_discount"],
-                    regular_price = row["regular_price"],
-                    date_added = row["date_added"],
-                    url = row["url"],
-                )
-            except Exception as e:
-                with open("populating_pepart_from_csv_failed.txt", "w") as bad_row:
-                    bad_row.write(f"Error message: {e} \n")
