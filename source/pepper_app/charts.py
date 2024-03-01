@@ -7,15 +7,17 @@ import pandas as pd
 def article_price_history_chart(discount_price_list, date_added_list, article_name_list):
     """To fix"""
 
-    #data_x = [c for c in discount_price_list]
-    #data_y = [c for c in date_added_list]
+    data = {"Date": pd.to_datetime(date_added_list),
+            "Price": discount_price_list,
+            "Name": article_name_list}
+    
+    df = pd.DataFrame(data)
 
-
-    fig = go.Figure()
-    df = pd.DataFrame({'x':date_added_list, 'y':discount_price_list})
-    fig = px.scatter(template="plotly_dark")
-    fig2 = px.scatter(df, x="x", y="y")
-    fig.add_trace(fig2.data[0])
-
+    fig = px.scatter(df, 
+                     x="Date", 
+                     y="Price", 
+                     hover_data="Name",
+                     trendline="ols", 
+                     template="plotly_dark")
 
     return fig

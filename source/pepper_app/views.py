@@ -30,6 +30,8 @@ from django.db.models import Q
 from django.shortcuts import redirect
 import traceback
 import logging
+from decimal import Decimal
+
 
 
 
@@ -468,6 +470,85 @@ class PriceAlertRequest(TemplateView):
         return render(request, self.template_name, context)
 
 
+class ArticlePriceHistory(TemplateView):
+    """To fix"""
+    model = PepperArticle
+    context_object_name = "price_history_chart"
+
+    def __init__(self):
+        self.template_name = "price_history_chart.html"
+
+    def searching_conditions(self, article, price_min, price_max, excluded_terms):
+        """To fix"""
+        conditions = Q()
+
+        article_list = article.split()
+
+
+                
+        for word in article_list:
+            conditions &= Q(article_name__icontains=word)        
+        
+        
+        if excluded_terms:
+            excluded_terms_list = excluded_terms.split(', ')
+            for term in excluded_terms_list:
+                conditions &= ~Q(article_name__icontains=term)
+
+        if price_min:
+            conditions &= Q(discount_price__gte=price_min)
+
+        if price_max:
+            conditions &= Q(discount_price__lte=price_max)
+
+        
+        return conditions
+    
+
+    def generate_article_price_history_chart(self, filtered_data):
+
+        discount_price_list = list(filtered_data.values_list("discount_price", flat=True))
+        date_added_list = list(filtered_data.values_list("date_added", flat=True))
+        article_name_list = list(filtered_data.values_list("article_name", flat=True))
+        
+        chart_html = article_price_history_chart(discount_price_list, date_added_list, article_name_list).to_html()
+       
+        return chart_html
+    
+
+     
+    def get(self, request):
+        """To fix"""
+
+        article = self.request.GET.get("article")
+        price_min = self.request.GET.get("price_min")
+        price_max = self.request.GET.get("price_max")
+        excluded_terms = self.request.GET.get("exclude_terms")
+
+        #conditions = self.searching_conditions(article_list, price_min, price_max, excluded_terms)  
+        #filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
+
+        #chart_html = self.generate_article_price_history_chart(filtered_data)
+
+        context = {"article_price_history_form": ArticlePriceHistoryForm()}
+
+        article_price_history_form = ArticlePriceHistoryForm(self.request.GET)
+
+        if article_price_history_form.is_valid():
+            excluded_terms = self.request.GET.get("exclude_terms")
+            conditions = self.searching_conditions(article, price_min, price_max, excluded_terms)  
+            filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
+
+            chart_html = self.generate_article_price_history_chart(filtered_data)
+
+
+            context = {"chart_html": chart_html,
+                       "excluded_terms": excluded_terms,
+                    "article_price_history_form": ArticlePriceHistoryForm()}
+
+        return render(request, self.template_name, context)
+
+
 def task_status(request):
 
     '''
@@ -506,153 +587,3 @@ def task_status(request):
     
     
     return JsonResponse(context)
-
-class ArticlePriceHistory(TemplateView):
-    """To fix"""
-    model = PepperArticle
-    context_object_name = "price_history_chart"
-
-    def __init__(self):
-        self.template_name = "price_history_chart.html"
-
-    def searching_conditions(self, article_list, price_min, price_max, excluded_terms):
-        """To fix"""
-        conditions = Q()
-
-        if excluded_terms is not None:
-            if len(excluded_terms) != 0 or excluded_terms is None:
-                excluded_terms_list = excluded_terms.split(', ')
-                for term in excluded_terms_list:
-                    conditions &= ~Q(article_name__icontains=term)
-        
-            for word in article_list:
-                conditions &= Q(article_name__icontains=word)
-
-        if price_min is not None:
-            conditions &= Q(discount_price__gte=price_min)
-
-        if price_max is not None:
-            conditions &= Q(discount_price__lte=price_max)
-
-        
-        return conditions
-    
-    '''
-    def get(self, request):
-        if self.request.method == 'GET':
-            article_price_history_form = ArticlePriceHistoryForm()
-            #context = super().get_context_data(**kwargs)
-            context = {"chart": chart,
-                        "article_price_history_form": ArticlePriceHistoryForm()}
-
-                
-            return render(request, self.template_name, context)
-
-    def post(self, request):
-        article_list = self.request.GET.get("article")
-        price_min = self.request.GET.get("price_min")
-        price_max = self.request.GET.get("price_max")
-        excluded_terms = self.request.GET.get("exclude_terms")
-
-        conditions = self.searching_conditions(article_list, price_min, price_max, excluded_terms)  
-
-
-        filtered_data = list(
-                PepperArticle.objects.filter(conditions).values_list("discount_price", "date_added", "article_name")
-            )
-
-        discount_price_list = filtered_data[0]
-        date_added_list = filtered_data[1]
-        article_name_list = filtered_data[2]
-
-        figure = article_price_history_chart(discount_price_list, date_added_list, article_name_list)
-        chart = figure.to_html()
-
-        context = {"chart": chart,
-                    "article_price_history_form": ArticlePriceHistoryForm()}
-        
-        return render(request, self.template_name, context)
-    '''
-
-     
-    def get(self, request):
-        """To fix"""
-
-        #context = super().get_context_data(**kwargs)
-
-        article_list = self.request.GET.get("article")
-        price_min = self.request.GET.get("price_min")
-        price_max = self.request.GET.get("price_max")
-        excluded_terms = self.request.GET.get("exclude_terms")
-
-        conditions = self.searching_conditions(article_list, price_min, price_max, excluded_terms)  
-
-
-        filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
-            
-
-
-        discount_price_list = filtered_data.values_list("discount_price", flat=True).first()
-        date_added_list = filtered_data.values_list("date_added", flat=True).first()
-        article_name_list = filtered_data.values_list("article_name", flat=True).first()
-
-
-        figure = article_price_history_chart(discount_price_list, date_added_list, article_name_list)
-
-        chart = figure.to_html()
-
-        context = {"chart": chart,
-                   "filtered_data": filtered_data,
-                    "article_price_history_form": ArticlePriceHistoryForm()}
-
-        if self.request.method == 'GET':
-            article_price_history_form = ArticlePriceHistoryForm(self.request.GET)
-            #context = super().get_context_data(**kwargs)
-
-            if article_price_history_form.is_valid():
-
-                context = {"chart": chart,
-                           "filtered_data": filtered_data[1],
-                           "article_price_history_form": ArticlePriceHistoryForm()}
-       
-
-
-        return render(request ,self.template_name, context)
-        
-'''
-        def searching_conditions(self, request):
-        """Adding conditions for better data filtering. 
-        Necessary to improve the search by name and to include expressions to be ignored."""
-        conditions = Q()
-
-        searched_article_list = request.session.get('searched_article').split()
-        excluded_terms = request.session.get('excluded_terms')
-
-        if len(excluded_terms) != 0:
-            excluded_terms_list = excluded_terms.split(', ')
-            for term in excluded_terms_list:
-                conditions &= ~Q(article_name__icontains=term)
-        
-        for word in searched_article_list:
-            conditions &= Q(article_name__icontains=word)
-        
-        return conditions
-
-
-    def get(self, request):
-
-        conditions = self.searching_conditions(request)  
-
-        results = PepperArticle.objects.filter(conditions).order_by('date_added')[:request.session.get("searched_articles_to_retrieve")][::-1]
-
-        session_variables = {"searched_articles_to_retrieve": False,
-                            "searched_article": False,
-                            "scrape_data": False,
-                            "excluded_terms": False,}
-                
-        request.session.update(session_variables)
-
-        context = {"results": results}
-
-        return render(request, self.template_name, context)
-'''
