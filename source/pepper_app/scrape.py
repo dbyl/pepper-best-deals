@@ -30,8 +30,8 @@ class ScrapePage:
                 scrape_continuously: bool=False, scrape_choosen_data: bool=True) -> None:
         self.category_type = category_type
         self.articles_to_retrieve = articles_to_retrieve
-        self.to_database = to_database
         self.to_csv = to_csv
+        self.to_database = to_database
         self.to_statistics = to_statistics
         self.start_page = 1
         self.searched_article = searched_article

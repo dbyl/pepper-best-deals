@@ -2,7 +2,6 @@ from pepper_app.models import UserRequest, User, PepperArticle
 from django.db.models import Q, Count
 from django.utils import timezone
 from pepper_app.populate_database import LoadSuccessfulResponse
-from smsapi.client import SmsApiPlClient
 import traceback
 from django.core.mail import send_mail
 from pepper_app.environment_config import CustomEnvironment

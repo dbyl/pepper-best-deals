@@ -484,7 +484,6 @@ class ArticlePriceHistory(TemplateView):
 
         article_list = article.split()
 
-
                 
         for word in article_list:
             conditions &= Q(article_name__icontains=word)        
@@ -523,7 +522,7 @@ class ArticlePriceHistory(TemplateView):
         article = self.request.GET.get("article")
         price_min = self.request.GET.get("price_min")
         price_max = self.request.GET.get("price_max")
-        excluded_terms = self.request.GET.get("exclude_terms")
+        excluded_terms = self.request.GET.get("excluded_terms")
 
         #conditions = self.searching_conditions(article_list, price_min, price_max, excluded_terms)  
         #filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
@@ -535,7 +534,7 @@ class ArticlePriceHistory(TemplateView):
         article_price_history_form = ArticlePriceHistoryForm(self.request.GET)
 
         if article_price_history_form.is_valid():
-            excluded_terms = self.request.GET.get("exclude_terms")
+            excluded_terms = self.request.GET.get("excluded_terms")
             conditions = self.searching_conditions(article, price_min, price_max, excluded_terms)  
             filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
 

@@ -28,7 +28,7 @@ def test_scrape_continuously_by_refreshing_page_1(monkeypatch, mocker, soup):
     category_type = "nowe"
     articles_to_retrieve = 50
 
-    scrape_page_mock = mocker.patch("source.pepper_app.scrap.ScrapPage.scrape_page")
+    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.scrape_page")
 
     scrape_page_mock.return_value = soup
 

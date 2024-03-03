@@ -51,13 +51,13 @@ def mock_driver_read_timeout(mocker):
     return mock
 
 
-def test_scrap_page(mock_driver):
+def test_scrape_page(mock_driver):
     """Testing mocked webdriver."""
     url_with_item = "https://example.com"
-    html_content = "<html><body><div>Mocked content</div></body></html>"
-    mock_driver.page_source = html_content
-
-    soup = GetItemAddedDate(article).scrap_page(url_with_item, driver=mock_driver)
+    html_content = "<html><body><div>Mocked content</div></body></html>" 
+    mock_driver.page_source = html_content 
+ 
+    soup = GetItemAddedDate(article).scrape_page(url_with_item, driver=mock_driver)
 
     assert soup is not None
     assert isinstance(soup, BeautifulSoup)
@@ -68,7 +68,7 @@ def test_connection_error(mock_driver_connection_error):
     url_with_item = "https://example.com"
 
     with pytest.raises(ConnectionError) as exc_info:
-        GetItemAddedDate(article).scrap_page(url_with_item, driver=mock_driver_connection_error)
+        GetItemAddedDate(article).scrape_page(url_with_item, driver=mock_driver_connection_error)
 
     assert "ConnectionError occured" in str(exc_info)
 
@@ -77,7 +77,7 @@ def test_missing_schema(mock_driver_missing_schema):
     url_with_item = "https://example.com"
 
     with pytest.raises(MissingSchema) as exc_info:
-        GetItemAddedDate(article).scrap_page(url_with_item, driver=mock_driver_missing_schema)
+        GetItemAddedDate(article).scrape_page(url_with_item, driver=mock_driver_missing_schema)
 
     assert "MissingSchema occured" in str(exc_info)
 
@@ -86,7 +86,7 @@ def test_http_error(mock_driver_http_error):
     url_with_item = "https://example.com"
 
     with pytest.raises(HTTPError) as exc_info:
-        GetItemAddedDate(article).scrap_page(url_with_item, driver=mock_driver_http_error)
+        GetItemAddedDate(article).scrape_page(url_with_item, driver=mock_driver_http_error)
 
     assert "HTTPError occured" in str(exc_info)
 
@@ -95,6 +95,6 @@ def test_read_timeout(mock_driver_read_timeout):
     url_with_item = "https://example.com"
 
     with pytest.raises(ReadTimeout) as exc_info:
-        GetItemAddedDate(article).scrap_page(url_with_item, driver=mock_driver_read_timeout)
+        GetItemAddedDate(article).scrape_page(url_with_item, driver=mock_driver_read_timeout)
 
     assert "ReadTimeout occured" in str(exc_info)

@@ -10,7 +10,7 @@ from source.pepper_app.scrape import ScrapePage, CheckConditions
 @pytest.fixture
 def soup():
     """Preparing article for tests."""
-    path_to_file = Path("pepper_app/tests/fixtures/to_test_scrap/soup.html")
+    path_to_file = Path("pepper_app/tests/fixtures/to_test_scrape/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
@@ -30,11 +30,11 @@ def test_get_items_details_depending_on_the_function_1(monkeypatch, mocker):
 
     monkeypatch.setattr(time, "sleep", mock_sleep)
 
-    infinite_scroll_handling_mock = mocker.patch("pepper_app.scrape.ScrapPage.infinite_scroll_handling")
-    get_items_details_mock = mocker.patch("pepper_app.scrape.ScrapPage.get_items_details")
+    infinite_scroll_handling_mock = mocker.patch("pepper_app.scrape.ScrapePage.infinite_scroll_handling")
+    get_items_details_mock = mocker.patch("pepper_app.scrape.ScrapePage.get_items_details")
 
     ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, \
-        scrap_continuously=scrap_continuously, scrap_choosen_data=scrap_choosen_data).get_items_details_depending_on_the_function()
+        scrape_continuously=scrape_continuously, scrape_choosen_data=scrape_choosen_data).get_items_details_depending_on_the_function()
 
     get_items_details_mock.assert_called_once()
     infinite_scroll_handling_mock.assert_called_once()

@@ -20,14 +20,14 @@ from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemUrl)
 
 @pytest.fixture
-def retrived_articles():
+def retrived_articles_all():
     """Preparing article for tests."""
     path_to_file = Path("source/pepper_app/tests/fixtures/to_test_get_info/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    retrived_articles = articles[1:]
+    retrived_articles = articles
     return retrived_articles
 
 
@@ -39,7 +39,7 @@ def retrived_articles_with_duplicates():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    retrived_articles = articles[1:]
+    retrived_articles = articles
     return retrived_articles
 
 
@@ -55,29 +55,29 @@ def retrived_articles_with_none_values():
     return retrived_articles
 
 
-def test_get_items_details_1(retrived_articles):
+def test_get_items_details_1(retrived_articles_all):
     """Test if correct list filled with all items detailes is returned."""
-    scrap_continuously = False
+    scrape_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
     to_database=False
     to_csv=False
     to_statistics=False
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
-        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
+        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_all)
 
-    date_1 = str(date.today().strftime("%Y-%m-%d"))
+    date_1 = "2024-03-01"
 
     assert isinstance(all_items, list)
-    assert len(all_items) == 29
-    assert all_items[0] == [704487, "Zegarek sportowy Garmin Instinct 2 Solar", 1149.0,
-                            -17.0, 1386.0, date_1, "https://www.pepper.pl/promocje/garmin-instinct-2-solar-704487"]
+    assert len(all_items) == 30
+    assert all_items[0] == [803602, "słuchawki soundcore p40i // 49 eur", 211.72,
+                            -30.0, 302.41, date_1, "https://www.pepper.pl/promocje/soundcore-p40i-49-eur-803602"]
 
 
 def test_get_items_details_2(retrived_articles_with_duplicates):
     """Test if no duplicates are returned."""
-    scrap_continuously = False
+    scrape_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
     to_database=False
@@ -85,18 +85,19 @@ def test_get_items_details_2(retrived_articles_with_duplicates):
     to_statistics=False
 
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_with_duplicates)
 
     count_duplicates = Counter(tuple(article) for article in all_items)
 
-    assert len(all_items) == 29
+    assert len(retrived_articles_with_duplicates) == 31
+    assert len(all_items) == 30
     assert any(val > 1 for val in count_duplicates.values()) == False
 
 
 def test_get_items_details_3(caplog, retrived_articles_with_none_values):
     """Test if functions is broken if none values is in retrived articles."""
-    scrap_continuously = False
+    scrape_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
     to_database=False
@@ -106,7 +107,7 @@ def test_get_items_details_3(caplog, retrived_articles_with_none_values):
     caplog.set_level(logging.WARNING)
     logging.getLogger()
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_with_none_values)
 
     expected_message = "Data retrieving failed. None values detected"
@@ -115,16 +116,16 @@ def test_get_items_details_3(caplog, retrived_articles_with_none_values):
 
 def test_get_items_details_4(mocker, retrived_articles):
     """Test if the correct function has been started when to csv is on."""
-    scrap_continuously = False
+    scrape_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
     to_database=False
     to_csv=True
     to_statistics=False
 
-    save_data_to_csv_mock = mocker.patch("pepper_app.scrape.ScrapPage.save_data_to_csv")
+    save_data_to_csv_mock = mocker.patch("pepper_app.scrape.ScrapePage.save_data_to_csv")
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     save_data_to_csv_mock.assert_called()
@@ -132,7 +133,7 @@ def test_get_items_details_4(mocker, retrived_articles):
 
 def test_get_items_details_5(mocker, retrived_articles):
     """Test if the correct function has been started when saving data to database is on."""
-    scrap_continuously = False
+    scrape_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
     to_database=True
@@ -141,7 +142,7 @@ def test_get_items_details_5(mocker, retrived_articles):
 
     load_to_db_mock = mocker.patch("pepper_app.populate_database.LoadItemDetailsToDatabase.load_to_db")
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     load_to_db_mock.assert_called()
@@ -149,7 +150,7 @@ def test_get_items_details_5(mocker, retrived_articles):
 @pytest.mark.django_db
 def test_get_items_details_6(mocker, retrived_articles):
     """Test if the correct function has been started when saving data to statistics is on."""
-    scrap_continuously = False
+    scrape_continuously = False
     category_type = "nowe"
     articles_to_retrieve = 50
     to_database=False
@@ -160,7 +161,7 @@ def test_get_items_details_6(mocker, retrived_articles):
     get_scraping_stats_info_mock = mocker.patch("pepper_app.scrape.ScrapPage.get_scraping_stats_info")
 
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrap_continuously=scrap_continuously, \
+    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
 
     load_statistics_to_db_mock.assert_called_once()

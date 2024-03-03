@@ -10,7 +10,7 @@ from source.pepper_app.scrape import ScrapePage, CheckConditions
 @pytest.fixture
 def soup():
     """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrap/soup.html")
+    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrape/soup.html")
     with open(path_to_file, "r", encoding="utf-8") as file:
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
@@ -23,8 +23,8 @@ def test_infinite_scroll_handling_1(mocker, soup):
     category_type = "nowe"
     articles_to_retrieve = 50
 
-    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.select_url")
-    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.scrape_page")
+    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.select_url")
+    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.scrape_page")
     check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_nowe")
     check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_search")
     check_if_no_items_found_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_no_items_found")
@@ -47,8 +47,8 @@ def test_infinite_scroll_handling_2(mocker, soup):
     category_type = "nowe"
     articles_to_retrieve = 1
 
-    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.select_url")
-    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.scrape_page")
+    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.select_url")
+    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.scrape_page")
     check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_nowe")
     check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_search")
     check_if_no_items_found_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_no_items_found")
@@ -71,8 +71,8 @@ def test_infinite_scroll_handling_3(mocker, soup):
     category_type = "search"
     articles_to_retrieve = 50
 
-    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.select_url")
-    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.scrape_page")
+    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.select_url")
+    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.scrape_page")
     check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_nowe")
     check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_search")
 
@@ -93,8 +93,8 @@ def test_infinite_scroll_handling_4(mocker, soup):
     category_type = "search"
     articles_to_retrieve = 50
 
-    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.select_url")
-    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapPage.scrape_page")
+    select_url_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.select_url")
+    scrape_page_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.scrape_page")
     check_if_last_page_nowe_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_nowe")
     check_if_last_page_search_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_last_page_search")
     check_if_no_items_found_mock = mocker.patch("source.pepper_app.scrape.CheckConditions.check_if_no_items_found")

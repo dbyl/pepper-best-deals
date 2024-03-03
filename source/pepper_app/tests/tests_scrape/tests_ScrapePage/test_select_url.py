@@ -62,7 +62,7 @@ def test_select_url_5():
     searched_article = "s21"
 
     with pytest.raises(Exception) as exc_info:
-        url_to_scrape = ScrapPage(category_type=category_type, articles_to_retrieve=articles_to_retrieve,
+        url_to_scrape = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve,
                             searched_article=searched_article, scrape_continuously=scrape_continuously).select_url()
     assert "The variables were defined incorrectly." in str(exc_info)
 
