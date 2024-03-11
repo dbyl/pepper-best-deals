@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "pepper_app",
     "bootstrap5",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "django_extensions",
 ]
 
@@ -90,6 +92,9 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LANGUAGE_CODE = "en-us"
 

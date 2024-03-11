@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 {% block content %}
 <body>
-<div>The chart shows how many times songs by a particular artist have appeared in the ranking for user-specified parameters such as time period, region, chart, artist and top ranking.</div>
-<div>
-  <form method="GET" name="form" action="{% url 'price_history_chart' %}">
-    
-    {% csrf_token %}
-    {{ article_price_history_form.as_p}}
-    <div class="button_box">
-      <button>Submit</button>
+
+<div class="container">
+  <p>The chart shows how promotional prices for the searched item have changed.</p>
+  <p>Remember that the data must be in the database. If they have not been scraped before, 
+    you must use the scraping functions in the "Search Articles" section.</p>
+    <div class="row justify-content-center">
+        <div class="mb-3">
+          <form method="GET" name="form" action="{% url 'price_history_chart' %}">
+              {% csrf_token %}
+              {{ article_price_history_form|crispy }}
+              <div class="d-grid gap-2 col-6 mx-auto">
+                <input  class="btn btn-primary btn-lg" type="submit" value="Submit"/>
+              </div>
+          </form>
+        </div>
     </div>
-  </form>
 </div>
-<div>
-    {{ chart_html|safe }}
-</div>
-<div>
-    {{excluded_terms}}
+
+<div class="container">
+  {{ chart_html|safe }}
 </div>
 {% endblock content %}
+
 </body>

@@ -14,5 +14,7 @@ celery
 redis
 eventlet
 django-bootstrap-v5
+django-crispy-forms
+crispy-bootstrap5
 statsmodels
 

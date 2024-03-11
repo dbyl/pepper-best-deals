@@ -372,7 +372,7 @@ class ScrapeContinouslyTasks(TemplateView):
         scrape_all_new_task_status = request.POST.get("scrape_all_new_task_status")
         scrape_by_refreshing_task_status = request.POST.get("scrape_by_refreshing_task_status")
         
-        if scrape_all_new_task_status == 'start':
+        if scrape_all_new_task_status == 'Start Scraping':
             if request.session.get("scrape_all_new_task_in_progress") == True:
                 session_variables = {"scrape_all_new_invalid_action": True}
                 pass
@@ -382,7 +382,7 @@ class ScrapeContinouslyTasks(TemplateView):
                 session_variables = {"scrape_all_new_task_id": scrape_all_new_task.id,
                                     "scrape_all_new_task_in_progress": True,
                                     "scrape_all_new_invalid_action": False}
-        if scrape_all_new_task_status == 'stop':
+        if scrape_all_new_task_status == 'Stop Scraping':
             scrape_all_new_task_id = request.session.get("scrape_all_new_task_id")
             if scrape_all_new_task_id == False:
                 pass
@@ -395,7 +395,7 @@ class ScrapeContinouslyTasks(TemplateView):
                                 "scrape_all_new_invalid_action": False}
         
         
-        if scrape_by_refreshing_task_status == 'start':
+        if scrape_by_refreshing_task_status == 'Start Refreshing':
             if request.session.get("scrape_by_refreshing_task_in_progress") == True:
                 session_variables = {"scrape_by_refreshing_invalid_action": True}
                 pass
@@ -405,7 +405,7 @@ class ScrapeContinouslyTasks(TemplateView):
                 session_variables = {"scrape_by_refreshing_task_id": scrape_by_refreshing_task.id,
                                     "scrape_by_refreshing_task_in_progress": True,
                                     "scrape_by_refreshing_invalid_action": False,}
-        if scrape_by_refreshing_task_status == 'stop':
+        if scrape_by_refreshing_task_status == 'Stop Refreshing':
             scrape_by_refreshing_task_id = request.session.get("scrape_by_refreshing_task_id")
             if scrape_by_refreshing_task_id == False:
                 pass

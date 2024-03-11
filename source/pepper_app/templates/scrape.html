@@ -1,49 +1,51 @@
 {% extends 'base.html' %}
 
-
 <body>
 {% block content %}
-    <div>
-        <div class="frame">
-            Scrape all pages
-        </div>
-        <div class="frame">
+
+    <div class="container">
+        Scrape all pages
+        <div class="row justify-content-center">
             <p>Scrape the data in depth. It starts from the first page of the "new" 
                 category following through the subsequent pages adding articles to the database. </p>
-            <form method="post" action="{% url 'scrape' %}">
-                {% csrf_token %}
-                <button type="submit" name="scrape_all_new_task_status" value="start">Start Scraping</button>
-                <button type="submit" name="scrape_all_new_task_status" value="stop">Stop Scraping</button>
-            </form>
-            <div>
+            <div class="mb-3">
+                <form method="post" action="{% url 'scrape' %}">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="d-grid gap-2 d-md-block auto">
+                            <input  class="btn btn-primary btn-lg" type="submit" name="scrape_all_new_task_status" value="Start Scraping"/>
+                            <input  class="btn btn-primary btn-lg" type="submit" name="scrape_all_new_task_status" value="Stop Scraping"/>
+                        </div> 
+                    </div>
+                </form>
                 {% if scrape_all_new_task_in_progress == True %}
                 <p>Scraping...</p>
                 {% endif %}
             </div>
         </div>
     </div>
-   
-    <div style="padding-top: 20px;">
-        <div class="frame">
-            Keep refreshing
-        </div>
-        <div class="frame">
+
+    <div class="container">
+        Keep refreshing
+        <div class="row justify-content-center">
             <p>Scrape the data by refreshing the "new" category. 
                 It populates the database with new articles appearing on the site. </p>
-            <form method="post" action="{% url 'scrape' %}">
-                {% csrf_token %}
-                <button type="submit" name="scrape_by_refreshing_task_status" value="start">Start Refreshing</button>
-                <button type="submit" name="scrape_by_refreshing_task_status" value="stop">Stop Refreshing</button>
-            </form>
-            <div>
+            <div class="mb-3">
+                <form method="post" action="{% url 'scrape' %}">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="d-grid gap-2 d-md-block auto">
+                            <input  class="btn btn-primary btn-lg" type="submit" name="scrape_by_refreshing_task_status" value="Start Refreshing"/>
+                            <input  class="btn btn-primary btn-lg" type="submit" name="scrape_by_refreshing_task_status" value="Stop Refreshing"/>
+                        </div> 
+                    </div>
+                </form>
                 {% if scrape_by_refreshing_task_in_progress == True %}
                 <p>Refreshing...</p>
                 {% endif %}
             </div>
         </div>
     </div>
-{% if response %}
-    <p>{{ response }}</p>
-{% endif %}
+
 {% endblock content %}
 </body>
