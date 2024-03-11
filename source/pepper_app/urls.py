@@ -56,7 +56,6 @@ urlpatterns = [
     path('get_searched_articles/', GetSearchedArticles.as_view(template_name="get_searched_articles.html"), name="get_searched_articles"),
     path('get_searched_articles_check/<get_searched_articles_task_id>/', CheckGetSearchedArticleTaskStatus.as_view(), name="get_searched_articles_check"),
     path('get_searched_articles_result/', CheckGetSearchedArticleTaskResult.as_view(), name="get_searched_articles_result"),
-    path('task_status/', views.task_status, name="task_status"),
     path('scrape/', ScrapeContinouslyTasks.as_view(), name="scrape"),
     path('requests/', PriceAlertRequest.as_view(), name="requests"),
     path('price_history_chart/', ArticlePriceHistory.as_view(), name="price_history_chart"),

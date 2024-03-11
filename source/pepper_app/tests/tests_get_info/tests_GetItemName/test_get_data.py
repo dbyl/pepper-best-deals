@@ -19,7 +19,7 @@ def article():
 def test_get_data_returns_correct_name(article):
     """Test retriving correct article's name."""
     name = GetItemName(article).get_data()
-    assert name == "Czerwona papryka kg @Lidl"
+    assert name == "słuchawki soundcore p40i // 49 eur"
 
 
 def test_get_data_returns_correct_type(article):

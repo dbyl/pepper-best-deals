@@ -16,6 +16,7 @@ def article_price_history_chart(discount_price_list, date_added_list, article_na
     fig = px.scatter(df, 
                      x="Date", 
                      y="Price", 
+                     title=f"{' '.join(list)}",
                      hover_data="Name",
                      trendline="ols", 
                      template="plotly_dark")

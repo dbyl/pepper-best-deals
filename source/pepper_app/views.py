@@ -152,10 +152,9 @@ class GetNewArticles(TemplateView):
     def post(self, request):
         get_new_articles_form = ScrapingRequest(request.POST)
         if get_new_articles_form.is_valid():
-            category_type = get_new_articles_form.cleaned_data["category_type"]
             articles_to_retrieve = get_new_articles_form.cleaned_data["articles_to_retrieve"]
 
-            get_new_articles_task = scrape_new_articles.delay(category_type, articles_to_retrieve)
+            get_new_articles_task = scrape_new_articles.delay(articles_to_retrieve)
 
             session_variables = {"get_new_articles_task_id": get_new_articles_task.id,
                                 "get_new_articles_result": False,
@@ -166,8 +165,7 @@ class GetNewArticles(TemplateView):
             
             request.session.update(session_variables)
 
-            context = {"get_new_articles_form": ScrapingRequest(initial={'articles_to_retrieve':articles_to_retrieve,
-                                                                         'category_type':category_type}),
+            context = {"get_new_articles_form": ScrapingRequest(initial={'articles_to_retrieve':articles_to_retrieve}),
                         "get_new_articles_task_id": request.session.get("get_new_articles_task_id"),
                         "get_new_articles_result": request.session.get("get_new_articles_result"),
                         "get_new_articles_in_progress": request.session.get("get_new_articles_in_progress"),
@@ -342,16 +340,13 @@ class CheckGetSearchedArticleTaskResult(TemplateView):
 
 
     def get(self, request):
-
         conditions = self.searching_conditions(request)  
-
         results = PepperArticle.objects.filter(conditions).order_by('date_added')[:request.session.get("searched_articles_to_retrieve")][::-1]
 
         session_variables = {"searched_articles_to_retrieve": False,
                             "searched_article": False,
                             "scrape_data": False,
-                            "excluded_terms": False,}
-                
+                            "excluded_terms": False,}  
         request.session.update(session_variables)
 
         context = {"results": results}
@@ -524,11 +519,6 @@ class ArticlePriceHistory(TemplateView):
         price_max = self.request.GET.get("price_max")
         excluded_terms = self.request.GET.get("excluded_terms")
 
-        #conditions = self.searching_conditions(article_list, price_min, price_max, excluded_terms)  
-        #filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
-
-        #chart_html = self.generate_article_price_history_chart(filtered_data)
-
         context = {"article_price_history_form": ArticlePriceHistoryForm()}
 
         article_price_history_form = ArticlePriceHistoryForm(self.request.GET)
@@ -548,41 +538,5 @@ class ArticlePriceHistory(TemplateView):
         return render(request, self.template_name, context)
 
 
-def task_status(request):
 
-    '''
-    context = {"get_new_articles_task_id": request.session.get("get_new_articles_task_id"),
-                "get_new_articles_result": request.session.get("get_new_articles_result"),
-                "get_new_articles_in_progress": request.session.get("get_new_articles_in_progress"),
-                "get_new_articles_finished": request.session.get("get_new_articles_finished"),
-                "articles_to_retrieve":  request.session.get("articles_to_retrieve")}
-    '''
     
-    '''
-    context = {"get_searched_articles_task_id": request.session.get("get_searched_articles_task_id"),
-                "get_searched_articles_result": request.session.get("get_searched_articles_result"),
-                "get_searched_articles_in_progress": request.session.get("get_searched_articles_in_progress"),
-                "get_searched_articles_finished": request.session.get("get_searched_articles_finished"),
-                "scrape_data": request.session.get("scrape_data"),
-                "excluded_terms": request.session.get("excluded_terms"),
-                "searched_article": request.session.get("searched_article"),
-                }
-    '''
-    
-    '''
-    context = {'scrape_all_new_task_in_progress': request.session.get("scrape_all_new_task_in_progress"),
-               "scrape_all_new_task_id": request.session.get("scrape_all_new_task_id"),
-               'scrape_by_refreshing_task_in_progress': request.session.get("scrape_by_refreshing_task_in_progress"),
-               "scrape_by_refreshing_task_id": request.session.get("scrape_by_refreshing_task_id"),}
-    '''
-    
-    context = {"desired_article": request.session.get("desired_article"),
-               "desired_price": request.session.get("desired_price"),
-               "desired_price": request.session.get("minimum_price"),
-               "request_time": request.session.get("request_time"),
-               "user_id": request.session.get("user_id"),
-               "successful": request.session.get("successful"),
-               }
-    
-    
-    return JsonResponse(context)

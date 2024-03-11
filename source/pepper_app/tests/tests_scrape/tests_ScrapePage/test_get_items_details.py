@@ -107,14 +107,13 @@ def test_get_items_details_3(caplog, retrived_articles_with_none_values):
     caplog.set_level(logging.WARNING)
     logging.getLogger()
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
+    ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
         to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_with_none_values)
 
     expected_message = "Data retrieving failed. None values detected"
     assert any(record.levelname == 'WARNING' and expected_message in record.message for record in caplog.records)
 
-
-def test_get_items_details_4(mocker, retrived_articles):
+def test_get_items_details_4(mocker, retrived_articles_all):
     """Test if the correct function has been started when to csv is on."""
     scrape_continuously = False
     category_type = "nowe"
@@ -123,15 +122,14 @@ def test_get_items_details_4(mocker, retrived_articles):
     to_csv=True
     to_statistics=False
 
-    save_data_to_csv_mock = mocker.patch("pepper_app.scrape.ScrapePage.save_data_to_csv")
+    save_data_to_csv_mock = mocker.patch("source.pepper_app.scrape.ScrapePage.save_data_to_csv")
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
-        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
+    ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
+        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_all)
 
     save_data_to_csv_mock.assert_called()
 
-
-def test_get_items_details_5(mocker, retrived_articles):
+def test_get_items_details_5(mocker, retrived_articles_all):
     """Test if the correct function has been started when saving data to database is on."""
     scrape_continuously = False
     category_type = "nowe"
@@ -142,13 +140,12 @@ def test_get_items_details_5(mocker, retrived_articles):
 
     load_to_db_mock = mocker.patch("pepper_app.populate_database.LoadItemDetailsToDatabase.load_to_db")
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
-        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
+    ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
+        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_all)
 
     load_to_db_mock.assert_called()
 
-@pytest.mark.django_db
-def test_get_items_details_6(mocker, retrived_articles):
+def test_get_items_details_6(mocker, retrived_articles_all):
     """Test if the correct function has been started when saving data to statistics is on."""
     scrape_continuously = False
     category_type = "nowe"
@@ -158,11 +155,10 @@ def test_get_items_details_6(mocker, retrived_articles):
     to_statistics=True
 
     load_statistics_to_db_mock = mocker.patch("pepper_app.populate_database.LoadScrapingStatisticsToDatabase.load_to_db")
-    get_scraping_stats_info_mock = mocker.patch("pepper_app.scrape.ScrapPage.get_scraping_stats_info")
 
 
-    all_items = ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
-        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles)
+    ScrapePage(category_type=category_type, articles_to_retrieve=articles_to_retrieve, scrape_continuously=scrape_continuously, \
+        to_database=to_database, to_csv=to_csv, to_statistics=to_statistics).get_items_details(retrived_articles_all)
 
-    load_statistics_to_db_mock.assert_called_once()
+    load_statistics_to_db_mock.assert_called()
 

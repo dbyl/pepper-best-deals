@@ -6,8 +6,11 @@ import traceback
 from datetime import datetime, timezone
 from typing import List, Union
 from bs4 import BeautifulSoup
+from selenium.common.exceptions import NoSuchElementException
 from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
 from selenium import webdriver
 from pepper_app.get_info import (GetItemAddedDate,
                                 GetItemDiscountPrice,
@@ -49,6 +52,8 @@ class ScrapePage:
                 #driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrape)
+            if self.category_type == "search":
+                self.accept_cookies_and_change_interval_if_searching(driver)
             time.sleep(0.7)
             page = driver.page_source
             driver.quit()
@@ -62,6 +67,17 @@ class ScrapePage:
             raise HTTPError(f"HTTPError occured: {e}. \nMake sure that website url is valid")
         except ReadTimeout as e:
             raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")
+        
+    def accept_cookies_and_change_interval_if_searching(self, driver) -> None:
+        """Function accepts cookies and sets the correct time interval to search for all articles"""
+        try:
+            time.sleep(1)
+            driver.find_element(By.XPATH, "//button[contains(@class, 'overflow--wrap-on flex--grow-1 flex--fromW3-grow-0 width--fromW3-ctrl-m space--mb-3 space--fromW3-mb-0 space--fromW3-mr-2 button button--shape-circle button--type-primary button--mode-brand')]").click()
+            select = Select(driver.find_element(By.XPATH,"//div[contains(@class, 'space--mt-3 space--t-3 space--r-3 space--l-3 border--t border--color-greyBackground')]//select[contains(@class, 'select-ctrl input clickable')]"))
+            select.select_by_value('0')
+        except NoSuchElementException as e:
+            logging.warning(f"Accepting cookies and changing time interval failed :\
+                        {e}\n Tracking: {traceback.format_exc()}")
 
     def select_url(self) -> str:
         """Selection of the website address depending on the type of scraping."""
@@ -87,12 +103,17 @@ class ScrapePage:
             while flag:
                 url_to_scrape = self.select_url()
                 soup = self.scrape_page(url_to_scrape)
-                flag_nowe = CheckConditions(soup).check_if_last_page_nowe()
-                flag_search = CheckConditions(soup).check_if_last_page_search()
+                flag_nowe = CheckConditions(soup, self.start_page).check_if_last_page_nowe()
+                flag_search = CheckConditions(soup, self.start_page).check_if_last_page_search()
 
                 if flag_nowe == False or flag_search == False:
                     flag = False
-                flag = CheckConditions(soup).check_if_no_items_found()
+
+                if self.category_type == "search":
+                    flag_found = CheckConditions(soup, self.start_page).check_if_no_items_found()
+                    if flag_found == False:
+                        all_items = list()
+                        return all_items
 
                 articles = soup.find_all('article')
                 retrived_articles += articles
@@ -153,7 +174,6 @@ class ScrapePage:
                     if self.scrape_continuously == True:
                         RequestChecking(item).matching_request()
                 
-            return all_items
         except Exception as e:
             logging.warning(f"Getting item details failed :\
                         {e}\n Tracking: {traceback.format_exc()}")
@@ -212,42 +232,47 @@ class ScrapePage:
 
 class CheckConditions:
 
-    def __init__(self, soup: BeautifulSoup) -> None:
+    def __init__(self, soup: BeautifulSoup, start_page: int) -> None:
         self.soup = soup
+        self.start_page = start_page
 
     def check_if_last_page_nowe(self) -> bool:
         """Checking 'nowe' category to verify if the scraped page is the last one."""
         try:
-            searched_ending_string = self.soup.find_all('h1', {"class":"size--all-xl size--fromW3-xxl text--b space--b-2"})[0].get_text()
-            if searched_ending_string.startswith("Ups"):
-                logging.warning("No more pages to scrape.")
+            if self.start_page == 335:
                 return False
-        except:
-            return True
+            else:
+                return True
+        except Exception as e:
+            raise Exception(f"Checking if page in nowe category is last failed:\
+                            {e}\n Tracking: {traceback.format_exc()}")
+        
 
     def check_if_last_page_search(self) -> bool:
         """Checking 'search' category to verify if the scraped page is the last one."""
         try:
-            searched_ending_string = self.soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
-            searched_articles_number = self.soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
-            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
+            searched_ending_string = self.soup.find_all('h3', {"class":"size--all-xl text--b"})[0].get_text()
+            searched_articles_number = self.soup.find_all('span', {"class":"text--color-charcoalTint size--all-m"})[0].get_text()
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t okazje"))
             if searched_ending_string.startswith("Ups") and searched_articles_number > 0:
                 logging.warning("No more pages to scrape.")
                 return False
-        except:
+        except Exception:
             return True
+
 
     def check_if_no_items_found(self) -> bool:
         """Checking if searched item was found."""
         try:
-            searched_ending_string = self.soup.find_all('h3', {"class":"size--all-l"})[0].get_text()
-            searched_articles_number = self.soup.find_all('span', {"class":"box--all-i size--all-s vAlign--all-m"})[0].get_text()
-            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t Okazje()"))
+            searched_ending_string = self.soup.find_all('h3', {"class":"size--all-xl text--b"})[0].get_text()
+            searched_articles_number = self.soup.find_all('span', {"class":"text--color-charcoalTint size--all-m"})[0].get_text()
+            searched_articles_number = int(searched_articles_number.replace(" ","").strip("\n\t okazje"))
             if searched_ending_string.startswith("Ups") and searched_articles_number == 0:
                 logging.warning("The searched item was not found.")
                 return False
-        except:
+        except Exception:
             return True
+
         
 
 

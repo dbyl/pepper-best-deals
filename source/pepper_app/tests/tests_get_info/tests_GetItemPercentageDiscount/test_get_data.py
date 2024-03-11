@@ -24,7 +24,7 @@ def article_without_percentage_discount():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    article_without_percentage_discount = articles[8] #Example article without percentage discount
+    article_without_percentage_discount = articles[15] #Example article without percentage discount
     return article_without_percentage_discount
 
 
@@ -32,7 +32,7 @@ def article_without_percentage_discount():
 def test_get_data_returns_correct_percentage_discount_if_exists(article):
     """Test retriving correct percentage discount."""
     percentage_discount = GetItemPercentageDiscount(article).get_data()
-    assert percentage_discount == -50.0
+    assert percentage_discount == -30.0
     assert isinstance(percentage_discount, float)
 
 

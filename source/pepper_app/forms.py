@@ -90,28 +90,21 @@ class PassChangeForm(PasswordChangeForm):
 
 class ScrapingRequest(forms.Form):
 
-    category_choices = (
-                ("gorące","Gorące"),
-                ("nowe", "Nowe"),
-    )
 
-    numbers_of_articles = tuple((x, x) for x in range(10, 401, 10))
+    numbers_of_articles = tuple((x, x) for x in range(10, 1001, 10))
 
-    category_type = forms.ChoiceField(
-        required=True, choices=category_choices, initial="nowe"
-    )
 
     articles_to_retrieve = forms.TypedChoiceField(
-        required=True, choices=numbers_of_articles, coerce=int, initial=5
+        required=True, choices=numbers_of_articles, coerce=int, initial=10
     )
 
 
 class ScrapingSearchedArticleRequest(forms.Form):
 
-    numbers_of_articles = tuple((x, x) for x in range(10, 401, 10))
+    numbers_of_articles = tuple((x, x) for x in range(10, 1001, 10))
 
     articles_to_retrieve = forms.TypedChoiceField(
-        required=True, choices=numbers_of_articles, coerce=int, initial=5
+        required=True, choices=numbers_of_articles, coerce=int, initial=10
     )
     scrape_data = forms.TypedChoiceField(required=True, choices=(("Yes", "Yes"), ("No", "No")), 
                                         coerce=str, initial="Yes", label="Scrape data: (If the data are already in the database you can skip scraping the data.)")

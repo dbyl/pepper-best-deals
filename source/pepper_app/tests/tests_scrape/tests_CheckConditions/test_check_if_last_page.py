@@ -13,14 +13,6 @@ def soup():
     soup = BeautifulSoup(soup, "html5lib")
     return soup
 
-@pytest.fixture
-def soup_nowe_last_page():
-    """Preparing article for tests."""
-    path_to_file = Path("source/pepper_app/tests/fixtures/to_test_scrape/soup_nowe_last_page.html")
-    with open(path_to_file, "r", encoding="utf-8") as file:
-        soup = file.read()
-    soup_nowe_last_page = BeautifulSoup(soup, "html5lib")
-    return soup_nowe_last_page
 
 @pytest.fixture
 def soup_searched_item_last_page():
@@ -32,26 +24,30 @@ def soup_searched_item_last_page():
     return soup_searched_item_last_page
 
 
-def test_check_if_last_page_1(soup_nowe_last_page):
+def test_check_if_last_page_1(soup):
     """Test if False is received when last page in 'nowe' occured."""
-    result = CheckConditions(soup_nowe_last_page).check_if_last_page_nowe()
+    start_page = 335
+    result = CheckConditions(soup, start_page).check_if_last_page_nowe()
     assert result == False
 
 
 def test_check_if_last_page_2(soup_searched_item_last_page):
     """Test if False is received when last page in 'search' occured."""
-    result = CheckConditions(soup_searched_item_last_page).check_if_last_page_search()
+    start_page = 1
+    result = CheckConditions(soup_searched_item_last_page, start_page).check_if_last_page_search()
     assert result == False
 
 
 def test_check_if_last_page_nowe_non_last_page(soup):
     """Test if True is received when there are more pages in 'nowe' left."""
-    result = CheckConditions(soup).check_if_last_page_nowe()
+    start_page = 1
+    result = CheckConditions(soup, start_page).check_if_last_page_nowe()
     assert result == True
 
 
 def test_check_if_last_page_searched_item_non_last_page(soup):
     """Test if True is received when there are more pages in 'search' left."""
-    result = CheckConditions(soup).check_if_last_page_search()
+    start_page = 1
+    result = CheckConditions(soup, start_page).check_if_last_page_search()
     assert result == True
 

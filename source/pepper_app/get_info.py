@@ -230,7 +230,7 @@ class GetItemAddedDate:
                 prepared_data = '-'.join([year, month, day])
                 return prepared_data
         except Exception as e:
-            logging.error(f"Data format conversion tailed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.error(f"Data format conversion failed: {e}\n Tracking: {traceback.format_exc()}")
 
     def clean_list(self) -> List[str]:
         raw_string_list = self.get_raw_data()

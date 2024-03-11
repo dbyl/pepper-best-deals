@@ -5,7 +5,9 @@ import time
 app = Celery("configuration", include=['pepper_app.tasks'])
 
 @app.task()
-def scrape_new_articles(category_type, articles_to_retrieve):
+def scrape_new_articles(articles_to_retrieve):
+
+    category_type = "nowe"
 
     s = ScrapePage(category_type, articles_to_retrieve)
     s.get_items_details_depending_on_the_function()

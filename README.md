@@ -28,10 +28,11 @@ Selected functions of the application that will be implemented:
 12) implementation of scraping of searched articles
 13) improving searching articles by adding the feature to skip phrases provided by the user
 14) fixing errors that occurred as a result of changes made to the scraped page
-15) updating tests (to fix)
+15) fixing errors that occurred as a result of changes made to the scraped page part 2
 16) implementing user account creation with password recovery mechanism
 17) implementing user requests with price email alert notifications
-18) implementing ploting article price history charts
+18) implementing article price history charts
+19) updating functions (because of changes on pepper.pl)
 
 ## To fix/to do
 1) updating unit tests

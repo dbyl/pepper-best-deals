@@ -24,7 +24,7 @@ def article_without_regular_price():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    article_without_regular_price = articles[8] #Example article without regular price
+    article_without_regular_price = articles[15] #Example article without regular price
     return article_without_regular_price
 
 
@@ -32,7 +32,7 @@ def article_without_regular_price():
 def test_get_data_returns_correct_regular_price_if_exists(article):
     """Test retriving correct regular price."""
     regular_price = GetItemRegularPrice(article).get_data()
-    assert regular_price == 9.99
+    assert regular_price == 302.41
     assert isinstance(regular_price, float)
 
 

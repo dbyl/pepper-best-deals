@@ -19,7 +19,7 @@ def article():
 def test_get_data_returns_correct_id_string(article):
     """Test retriving correct id string."""
     item_id = GetItemId(article).get_data()
-    assert item_id == 704489
+    assert item_id == 803602
     assert isinstance(item_id, int)
 
 
