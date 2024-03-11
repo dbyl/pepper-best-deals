@@ -428,7 +428,8 @@ class ScrapeContinouslyTasks(TemplateView):
 
 
 class PriceAlertRequest(TemplateView):
-    """comm"""
+    """The class contains functions that allow users to make
+      their own notification requests if an item reaches the desired price."""
     def __init__(self):
         self.template_name = "requests.html"
 
@@ -466,23 +467,19 @@ class PriceAlertRequest(TemplateView):
 
 
 class ArticlePriceHistory(TemplateView):
-    """To fix"""
-    model = PepperArticle
-    context_object_name = "price_history_chart"
-
+    """The class contains functions that allow users to generate a 
+    chart of the history of price changes of a given item for the set parameters."""
     def __init__(self):
         self.template_name = "price_history_chart.html"
 
     def searching_conditions(self, article, price_min, price_max, excluded_terms):
-        """To fix"""
+        """Function returns filter conditions for user-set parameters"""
         conditions = Q()
 
         article_list = article.split()
-
                 
         for word in article_list:
             conditions &= Q(article_name__icontains=word)        
-        
         
         if excluded_terms:
             excluded_terms_list = excluded_terms.split(', ')
@@ -494,25 +491,24 @@ class ArticlePriceHistory(TemplateView):
 
         if price_max:
             conditions &= Q(discount_price__lte=price_max)
-
         
         return conditions
     
 
-    def generate_article_price_history_chart(self, filtered_data):
+    def generate_article_price_history_chart(self, filtered_data, article):
+        """The function that generates the html-chart."""
 
         discount_price_list = list(filtered_data.values_list("discount_price", flat=True))
         date_added_list = list(filtered_data.values_list("date_added", flat=True))
         article_name_list = list(filtered_data.values_list("article_name", flat=True))
         
-        chart_html = article_price_history_chart(discount_price_list, date_added_list, article_name_list).to_html()
+        chart_html = article_price_history_chart(discount_price_list, date_added_list, article_name_list, article).to_html()
        
         return chart_html
     
 
-     
+    @method_decorator(login_required, name='login_required')
     def get(self, request):
-        """To fix"""
 
         article = self.request.GET.get("article")
         price_min = self.request.GET.get("price_min")
@@ -528,14 +524,19 @@ class ArticlePriceHistory(TemplateView):
             conditions = self.searching_conditions(article, price_min, price_max, excluded_terms)  
             filtered_data = PepperArticle.objects.filter(conditions).values("discount_price", "date_added", "article_name")
 
-            chart_html = self.generate_article_price_history_chart(filtered_data)
+            chart_html = self.generate_article_price_history_chart(filtered_data, article)
 
 
             context = {"chart_html": chart_html,
                        "excluded_terms": excluded_terms,
-                    "article_price_history_form": ArticlePriceHistoryForm()}
+                        "article_price_history_form": ArticlePriceHistoryForm(initial={'article':article,
+                                                                        'price_min':price_min,
+                                                                        'price_max':price_max,
+                                                                        'excluded_terms':excluded_terms})}
 
         return render(request, self.template_name, context)
+    
+
 
 
 
