@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+
+    <div class="container-1">
+        <div class="container">
+            <div class="text-center">
+                <h3>Welcome! Learn more about the application and its features.</h3>
+                <div class="container-2">
+                    <p>The web application allows the user to scrape data from www.pepper.pl. The scraped data goes into a database. The application has many functionalities, some of which are available only to users who have created an account and are logged in. 
+                        Scraping is performed "in the background". Tasks are running asynchronously with Celery and Redis. 
+                        Statistics on running tasks also goes to the database. The site has a basic layout made in Bootstrap 5.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h4>List of functionalities:</h4>
+                <p>1. Scraping new articles and adding them to the database. - "Scrap New Articles"</p>
+                <p>2. Searching (and scraping) selected articles that have ever appeared. Allows the user to narrow down the results according to the set parameters. - "Search Articles"</p>
+                <p>3. Continuous scraping of all articles from newest to oldest. This will retrieve all articles that are available on the site.  - "Scrape/Scrape all pages"</p>
+                <p>4. Continuous refreshing of "new" category. This will ensure that newly added articles are immediately populate the database. The feature will also allow user requests to be handled.  - "Scrape/Keep refreshing"</p>
+                <p>5. An email notification system that notifies the user when an item appears at the desired price. - "Request Price Alert"</p>
+                <p>6. Visualizing the price changes of the searched item on a chart. Allows the user to narrow down the results according to the set parameters.  - "Data Analysis"</p>
+                <p>7. A system for creating a user account with password recovery through a form sent via email.</p>
+            </div>
+            <div class="container-2">
+                <div class="text-center">
+                    <h4>The database includes: {{ all_records }} articles.</h>
+                </div>      
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock content %}

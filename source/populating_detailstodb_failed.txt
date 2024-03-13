@@ -11,7 +11,7 @@ Traceback (most recent call last):
   File "/home/dbyl/pepper-best-deals/env/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
     return self.cursor.execute(sql, params)
 psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "pepper_app_pepperarticle_pkey"
-DETAIL:  Key (item_id)=(784674) already exists.
+DETAIL:  Key (item_id)=(808522) already exists.
 
 
 The above exception was the direct cause of the following exception:
@@ -52,8 +52,8 @@ Traceback (most recent call last):
   File "/home/dbyl/pepper-best-deals/env/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
     return self.cursor.execute(sql, params)
 django.db.utils.IntegrityError: duplicate key value violates unique constraint "pepper_app_pepperarticle_pkey"
-DETAIL:  Key (item_id)=(784674) already exists.
+DETAIL:  Key (item_id)=(808522) already exists.
 
 , duplicate key value violates unique constraint "pepper_app_pepperarticle_pkey"
-DETAIL:  Key (item_id)=(784674) already exists.
+DETAIL:  Key (item_id)=(808522) already exists.
  

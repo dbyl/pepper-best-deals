@@ -1,26 +1,53 @@
 {% extends 'base.html' %}
-{% block content %}
+{% load crispy_forms_tags %}
 
-<div>
-<form method="POST" action="">
-    {% csrf_token %}
-    {{login_form.as_p}}
-  
-    <div>
-      <button>Log In</button>
-    </div>
-    <div>
-      <p>Don't have an account? <a class="font_url" href="{% url 'register' %}">Sign Up</a></p>
-    </div>
-    <div>
-      <p>Forgot your password? <a class="font_url" href="{% url 'reset_password' %}">Reset Password</a></p>
-    </div>
-    <div>
-      {% for message in messages %}
-      <p id="messages">{{message}}</p>
-      {% endfor %}
-    </div>
-</form>
-</div>
+<body>
+  {% block content %}
+  <div class="container-1">
+      <div class="row justify-content-center">
+          <div class="text-center">
+            <h3>Log in</h3>
+            <p>Welcome! Log in to use all features.</p>
+              <div class="container" >
+                  <form method="POST" action="">
+                    {% csrf_token %}
+                    {{ login_form|crispy}}
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <input  class="btn btn-primary" type="submit" value="Log in"/>
+                    </div>
+                    <div class="container-3">
+                      {% for message in messages %}
+                      <p id="messages">{{message}}</p>
+                      {% endfor %}
+                    </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
 
-{% endblock %}
+  <div class="text-center">
+    <div class="container-3">
+      <p class="par-1">Don't have an account?</p>
+      <input  class="btn btn-primary" onclick="toRegister()" type="submit" value="Sign up"/>
+    </div>
+    <div class="container-3">
+      <p class="par-1">Forgot your password?</p>
+      <input  class="btn btn-primary" onclick="toResetPassword()" type="submit" value="Reset password"/>
+    </div>
+  </div>
+
+
+  {% block javascript %}
+  <script>
+      function toRegister() {
+      window.location.href = "/register/";
+      }
+
+      function toResetPassword() {
+      window.location.href = "/reset_password/";
+      }
+   </script>
+  {% endblock javascript %}
+  {% endblock content %}
+</body>

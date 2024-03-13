@@ -110,7 +110,7 @@ class ScrapingSearchedArticleRequest(forms.Form):
                                         coerce=str, initial="Yes", label="Scrape data: (If the data are already in the database you can skip scraping the data.)")
     
     searched_article = forms.CharField(required=True)
-    excluded_terms = forms.CharField(required=False, label="Exclude terms: (list terms: item, item2, ... )")
+    excluded_terms = forms.CharField(required=False, label="Exclude terms: (item, item2, ... )")
 
 
 class UserRequestForm(forms.Form):

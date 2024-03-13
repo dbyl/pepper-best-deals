@@ -1,19 +1,38 @@
 {% extends 'base.html' %}
-{% block content %}
+{% load crispy_forms_tags %}
 
-<div>
-<form method="POST" action="">
-    {% csrf_token %}
-    {{register_form.as_p}}
-  
-    <div>
-      <button>Register</button>
-    </div>
-    <div>
-      <p>Already have an account? <a href="{% url 'login' %}">Sign in.</a></p>
-    </div>
-</form>
-</div>
 
-  
-{% endblock %}
+<body>
+  {% block content %}
+  <div class="container">
+    <div class="text-center">
+      <div class="container-1">
+        <h3>Registration</h3>
+        <p>Complete the form to create an account.</p>
+      </div>
+      <form method="POST" action="">
+        {% csrf_token %}
+        {{ register_form|crispy}}
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <input  class="btn btn-primary" type="submit" value="Register"/>
+        </div>
+      </form>
+      <div class="container-1">
+        <p>Already have an account?</p>
+        <div class="d-grid gap-2 d-md-block auto">
+          <input  class="btn btn-primary" onclick="toLogin()" type="submit" value="Log in"/>
+        </div> 
+      </div>
+    </div>
+  </div>
+ 
+
+  {% block javascript %}
+    <script>
+        function toLogin() {
+        window.location.href = "/login/";
+        }
+     </script>
+  {% endblock javascript %} 
+  {% endblock content %}
+</body>

@@ -4,25 +4,30 @@
 
 <body>
     {% block content %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="mb-3">
-                <form method="POST" id="form_id" name="form" action="{% url 'get_new_articles' %}">
-                    {% csrf_token %}
-                    {{ get_new_articles_form|crispy }}
-                    <div class="d-grid gap-2 col-6 mx-auto">
-                        <input  id="ajaxButton" class="btn btn-primary btn-lg" type="submit" value="Submit"/>
+    <div class="container-1">
+        <div class="container">
+            <div class="text-center">
+                <h3>Scrap New Articles</h3>
+                <p>The functionality allows scraping new articles. They will be added to the database.</p>
+                <div class="mb-3">
+                    <form method="POST" id="form_id" name="form" action="{% url 'get_new_articles' %}">
+                        {% csrf_token %}
+                        {{ get_new_articles_form|crispy }}
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <input  id="ajaxButton" class="btn btn-primary" type="submit" value="Submit"/>
+                        </div>
+                    </form>
+                    <div class="container-3">
+                        {% if get_new_articles_in_progress == True %}
+                        <h5>Task status: Scraping...</h5>
+                        {% else %}
+                        <h5>Task status: Inactive<h5>
+                        {% endif %} 
                     </div>
-                </form>
-                <div>
-                    {% if get_new_articles_in_progress == True %}
-                    <p>Scraping...</p>
-                    {% endif %} 
                 </div>
             </div>
         </div>
     </div>
-
 
 
     {% block javascript %}

@@ -96,7 +96,7 @@ def login_req(request):
 
         if user is not None:
             login(request, user)
-            return redirect("/home/")
+            return redirect("home")
         else:
             messages.info(request, "Username or password is incorrect")
 
@@ -111,6 +111,10 @@ def logout_user(request):
 
     return redirect("login")
 
+
+def profile(request):
+
+    return render(request, "features/profile.html")
 
 class HomeView(ListView):
     """Creating home page"""
@@ -132,7 +136,7 @@ class HomeView(ListView):
 class GetNewArticles(TemplateView):
     """The class returns a view of the subpage and performs a celery task with the parameters set by the user."""
     def __init__(self, *args, **kwargs):
-        self.template_name = "get_new_articles.html"
+        self.template_name = "features/get_new_articles.html"
 
     def get(self, request):
         session_keys = ["get_new_articles_task_id",
@@ -208,7 +212,7 @@ class CheckGetNewArticleTaskStatus(TemplateView):
 class CheckGetNewArticleTaskResult(TemplateView):
     """The class returns results on a database query for new articles.""" 
     def __init__(self):
-        self.template_name = "get_new_articles_result.html"
+        self.template_name = "features/get_new_articles_result.html"
 
     def get(self, request):
         results = PepperArticle.objects.order_by('-date_added').order_by('-item_id')[:request.session.get("articles_to_retrieve")][::-1]
@@ -220,7 +224,7 @@ class CheckGetNewArticleTaskResult(TemplateView):
 class GetSearchedArticles(TemplateView):
     """The class returns a view of the subpage and performs a celery task with the parameters set by the user (searching articles)."""
     def __init__(self, *args, **kwargs):
-        self.template_name = "get_searched_articles.html"
+        self.template_name = "features/get_searched_articles.html"
 
     def get(self, request):
         session_keys = ["get_searched_articles_task_id",
@@ -318,7 +322,7 @@ class CheckGetSearchedArticleTaskStatus(TemplateView):
 class CheckGetSearchedArticleTaskResult(TemplateView):
     """The class returns results on a database query for new articles.""" 
     def __init__(self):
-        self.template_name = "get_searched_articles_result.html"
+        self.template_name = "features/get_searched_articles_result.html"
 
     def searching_conditions(self, request):
         """Adding conditions for better data filtering. 
@@ -357,7 +361,7 @@ class CheckGetSearchedArticleTaskResult(TemplateView):
 class ScrapeContinouslyTasks(TemplateView):
     """The view class contains implementations of the continuous page scraping function in two variants."""
     def __init__(self):
-        self.template_name = "scrape.html"
+        self.template_name = "features/scrape.html"
     
     def get(self, request):
 
@@ -431,7 +435,7 @@ class PriceAlertRequest(TemplateView):
     """The class contains functions that allow users to make
       their own notification requests if an item reaches the desired price."""
     def __init__(self):
-        self.template_name = "requests.html"
+        self.template_name = "features/requests.html"
 
     @method_decorator(login_required, name='login_required')
     def get(self, request):
@@ -470,7 +474,7 @@ class ArticlePriceHistory(TemplateView):
     """The class contains functions that allow users to generate a 
     chart of the history of price changes of a given item for the set parameters."""
     def __init__(self):
-        self.template_name = "price_history_chart.html"
+        self.template_name = "features/price_history_chart.html"
 
     def searching_conditions(self, article, price_min, price_max, excluded_terms):
         """Function returns filter conditions for user-set parameters"""

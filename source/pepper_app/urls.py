@@ -24,6 +24,7 @@ urlpatterns = [
     path("login/", views.login_page, name="login"),
     path("login_required/", views.login_req, name="login_required"),
     path("logout/", views.logout_user, name="logout"),
+    path("profile/", views.profile, name="profile"),
     path("reset_password/",
         auth_views.PasswordResetView.as_view(
             form_class=PassResetForm, template_name="accounts/password_reset.html"
@@ -49,11 +50,11 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(
             template_name="accounts/password_sent_complete.html"
         ),name="password_reset_complete",),
-    path('', HomeView.as_view(template_name="index.html"), name="home"),
-    path('get_new_articles/', GetNewArticles.as_view(template_name="get_new_articles.html"), name="get_new_articles"),
+    path('', HomeView.as_view(template_name="features/index.html"), name="home"),
+    path('get_new_articles/', GetNewArticles.as_view(template_name="features/get_new_articles.html"), name="get_new_articles"),
     path('get_new_articles_check/<get_new_articles_task_id>/', CheckGetNewArticleTaskStatus.as_view(), name="get_new_articles_check"),
     path('get_new_articles_result/', CheckGetNewArticleTaskResult.as_view(), name="get_new_articles_result"),
-    path('get_searched_articles/', GetSearchedArticles.as_view(template_name="get_searched_articles.html"), name="get_searched_articles"),
+    path('get_searched_articles/', GetSearchedArticles.as_view(template_name="features/get_searched_articles.html"), name="get_searched_articles"),
     path('get_searched_articles_check/<get_searched_articles_task_id>/', CheckGetSearchedArticleTaskStatus.as_view(), name="get_searched_articles_check"),
     path('get_searched_articles_result/', CheckGetSearchedArticleTaskResult.as_view(), name="get_searched_articles_result"),
     path('scrape/', ScrapeContinouslyTasks.as_view(), name="scrape"),
