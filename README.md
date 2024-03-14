@@ -6,17 +6,7 @@
 ## Introduction
 
 This django web application scrapes information from www.pepper.pl. Pepper is a site where any user can post a price bargain. Other users rate whether the promotion is good or not. 
-The purpose of the application is to collect informations about all deals (articles), appearing on the site and to search historical data. Based on the scraped data, it will be possible to create a data warehouse.
-
-## To fix/to do
-1) updating unit tests
-2) implementing html "soup" unit tests (checking if there have been changes to the provider's website)
-3) docker 
-4) ploting charts
-5) ScrapingStatistic function - incorrect recording of statistics for continuous scraping
-6) Adding comments, cleaning code (PEP8)
-7) better frontend
-8) updating README with pictures, gifs
+The purpose of the application is to collect informations about all deals (articles), appearing on the site and search historical values. Based on the scraped data, it will be possible to create a data warehouse.
 
 ## List of functionalities
 1) Scraping new articles and adding them to the database. - "Scrap New Articles"
