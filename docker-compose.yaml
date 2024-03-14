@@ -63,13 +63,13 @@ services:
       - selenium-hub
       - chrome
     ports:
-      - "8000:8000"
+      - "7000:7000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     env_file: source/.env
     shm_size: 2gb
     working_dir: /source
-    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python3 manage.py runserver 0.0.0.0:7000"
 
   celery-worker:
     restart: always

@@ -27,7 +27,7 @@ class CustomEnvironment:
     _celery_track_started = env.str("CELERY_TRACK_STARTED")
     _email = env.str("EMAIL")
     _email_password = env.str("EMAIL_PASSWORD")
-    # _selenium_container_name = env.str("SELENIUM_CONTAINTER_NAME")
+    _selenium_container_name = env.str("SELENIUM_CONTAINTER_NAME")
 
     @classmethod
     def get_debug(cls) -> bool:
@@ -137,8 +137,8 @@ class CustomEnvironment:
             raise ValueError("Email password is not provided.")
         return cls._email_password
 
-    """@classmethod
+    @classmethod
     def get_selenium_container_name(cls) -> str:
         if cls._selenium_container_name is None:
             raise ValueError("Selenium container name is not provided.")
-        return cls._selenium_container_name"""
+        return cls._selenium_container_name

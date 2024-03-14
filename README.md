@@ -111,9 +111,9 @@ POSTGRES_DB_NAME=your-postgres-name #generate your own postgres name
 POSTGRES_USER=your-postgres-user #generate your own postgres user
 POSTGRES_PASSWORD=your-postgres-password #generate your own postgres password
 POSTGRES_HOST=host.docker.internal #change to localhost for running locally
-ALLOWED_HOSTS=0.0.0.0,postgres,127.0.0.1,localhost
+ALLOWED_HOSTS=0.0.0.0,postgres,127.0.0.1,localhost,127.0.0.0
 CELERY_BROKER_URL=redis://redis:6379 #change redis to localhost for running locally
-CELERY_RESULT_BACKEND=redis://localhost:6379
+CELERY_RESULT_BACKEND=redis://redis:6379
 CELERY_ACCEPT_CONTENT=json
 CELERY_TASK_SERIALIZER=json
 CELERY_RESULT_SERIALIZER=json
@@ -136,11 +136,11 @@ If project is setting up for the first time make sure that in source/pepper_app/
 To make migrations and create superuser open new terminal window and run:
 ```sh
 (env)$ docker exec -it pepper_app /bin/bash
-(env)$ python3 source/manage.py migrate
-(env)$ python3 source/manage.py makemigrations
-(env)$ python3 source/manage.py sqlmigrate pepper_app 0001
-(env)$ python3 source/manage.py createsuperuser
-(env)$ python3 source/manage.py migrate
+(env)$ python3 manage.py migrate
+(env)$ python3 manage.py makemigrations
+(env)$ python3 manage.py sqlmigrate pepper_app 0001
+(env)$ python3 manage.py createsuperuser
+(env)$ python3 manage.py migrate
 ```
 
 To run tests run:
