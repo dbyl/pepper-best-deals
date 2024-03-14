@@ -48,8 +48,8 @@ class ScrapePage:
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             if driver is None:
-                driver = webdriver.Chrome(options=options) #for local  
-                #driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
+                #driver = webdriver.Chrome(options=options) #for local  
+                driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
             driver.set_window_size(1400,1000)
             driver.get(url_to_scrape)
             if self.category_type == "search":
