@@ -1,7 +1,6 @@
 import logging
 import logging.config
 import traceback
-
 import pandas as pd
 from django.core.management import BaseCommand
 from django.db import IntegrityError

@@ -17,7 +17,6 @@ The purpose of the application is to collect informations about all deals (artic
 6) Visualizing the price changes of the searched item on a chart. Allows the user to narrow down the results according to the set parameters. - "Data Analysis"
 7) A system for creating a user account with password recovery through a form sent via email.
 
-
 ## For future work
 1) Refactoring and simplifying functions.
 2) More tests.
@@ -25,7 +24,6 @@ The purpose of the application is to collect informations about all deals (artic
 ## App overview
 
 *Sample images showing the functionalities of the web application*
-
 
 Home page view
 ![](images/1-home.png)

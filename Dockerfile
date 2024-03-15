@@ -11,6 +11,7 @@ COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./source /source
 WORKDIR ${APP_DIR}
 EXPOSE 7000
+EXPOSE 5432
 
 
 ARG DEV=false
