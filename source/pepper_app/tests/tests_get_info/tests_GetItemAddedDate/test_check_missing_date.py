@@ -12,7 +12,7 @@ def article():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    article = articles[0] #Example article
+    article = articles[24] #Example article
     return article
 
 

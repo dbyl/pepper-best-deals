@@ -173,4 +173,5 @@ scraped.csv
 .github
 jupyter_to_test.ipynb
 USEFUL_COMMANDS.md
-task.ipynb
+test.ipynb
+dump.rdb

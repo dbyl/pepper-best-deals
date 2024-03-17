@@ -29,8 +29,8 @@ def test_load_to_db_1(loadscrapingstatisticstodatabase):
     assert object_1.searched_article == None
     assert object_1.to_csv == False
     assert object_1.to_database == False
-    assert object_1.scrap_continuously == False
-    assert object_1.scrap_choosen_data == False
+    assert object_1.scrape_continuously == False
+    assert object_1.scrape_choosen_data == False
 
     object_1.delete()
 

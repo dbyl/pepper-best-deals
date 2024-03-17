@@ -23,4 +23,4 @@ def test_get_test(article):
 
     prepared_date = GetItemAddedDate(article).get_data()
 
-    assert prepared_date == date.today().strftime("%Y-%m-%d")
+    assert prepared_date == "2024-03-01"

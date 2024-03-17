@@ -19,7 +19,7 @@ def article():
 def test_get_data_returns_correct_url(article):
     """Test retriving correct article's url."""
     url = GetItemUrl(article).get_data()
-    assert url == "https://www.pepper.pl/promocje/czerwona-papryka-kg-at-lidl-704489"
+    assert url == "https://www.pepper.pl/promocje/soundcore-p40i-49-eur-803602"
 
 
 def test_get_data_returns_correct_type(article):

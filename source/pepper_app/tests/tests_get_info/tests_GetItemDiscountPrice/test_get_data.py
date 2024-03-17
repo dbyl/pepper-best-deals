@@ -24,14 +24,14 @@ def article_without_discount_price():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    article = articles[8] #Example article without discount price
+    article = articles[22] #Example article without discount price
     return article
 
 
 def test_get_data_1(article):
     """Test retriving correct discount price."""
     discount_price = GetItemDiscountPrice(article).get_data()
-    assert discount_price == 4.99
+    assert discount_price == 211.72
     assert isinstance(discount_price, float)
 
 

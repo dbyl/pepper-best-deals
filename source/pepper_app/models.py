@@ -30,14 +30,15 @@ class ScrapingStatistic(models.Model):
     searched_article = models.CharField(max_length=500,  null=True, blank=True)
     to_csv = models.BooleanField()
     to_database = models.BooleanField()
-    scrap_continuously = models.BooleanField()
-    scrap_choosen_data = models.BooleanField()
+    scrape_continuously = models.BooleanField()
+    scrape_choosen_data = models.BooleanField()
 
 
     def __str__(self):
+        
         fields = [str(self.stats_id), str(self.category_type), str(self.retrieved_articles_quantity),
                 str(self.time_of_the_action), str(self.action_execution_datetime), str(self.searched_article),
-                str(self.to_csv), str(self.to_database), str(self.scrap_continuously), str(self.scrap_choosen_data)]
+                str(self.to_csv), str(self.to_database), str(self.scrape_continuously), str(self.scrape_choosen_data)]
 
         return ', '.join(fields)
 
@@ -45,24 +46,29 @@ class ScrapingStatistic(models.Model):
 class UserRequest(models.Model):
 
     request_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    request_time = models.DateTimeField()
     desired_article = models.CharField(max_length=500,  null=True, blank=True)
     desired_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    minimum_price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    request_time = models.DateTimeField()
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        fields = [str(self.request_id), str(self.user), str(self.request_time), str(self.desired_article), str(self.desired_price)]
+        fields = [str(self.request_id), str(self.user_id), str(self.request_time), str(self.desired_article), str(self.desired_price), str(self.minimum_price)]
+
+        return ', '.join(fields)
 
 
 class SuccessfulResponse(models.Model):
 
     response_id = models.AutoField(primary_key=True)
-    request_id = models.ForeignKey(UserRequest, on_delete=models.CASCADE)
+    request_id = models.PositiveIntegerField()
     response_time = models.DateTimeField()
     item_id = models.ForeignKey(PepperArticle, on_delete=models.CASCADE)
 
     def __str__(self):
         fields = [str(self.response_id), str(self.request_id), str(self.response_time)]
+
+        return ', '.join(fields)
 
 
 

@@ -54,7 +54,7 @@ def test_if_valid_class_with_discount_price_exists(current_list_of_articles):
     bad, ok = 0, 0
 
     for article in current_list_of_articles:
-        if article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"}):
+        if article.find_all(attrs={'class': "threadItemCard-price text--b thread-price size--all-l size--fromW3-xl space--mr-0"}):
             ok += 1
         else:
             bad += 1
@@ -68,7 +68,7 @@ def test_if_valid_class_with_regular_price_exists(current_list_of_articles):
     bad, ok = 0, 0
 
     for article in current_list_of_articles:
-        if article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"}):
+        if article.find_all(attrs={'class': "mute--text text--lineThrough space--ml-1 size--all-l size--fromW3-xl"}):
             ok += 1
         else:
             bad += 1
@@ -82,7 +82,7 @@ def test_if_valid_class_with_percentage_discount_exists(current_list_of_articles
     bad, ok = 0, 0
 
     for article in current_list_of_articles:
-        if article.find_all(attrs={'class': "space--ml-1 size--all-l size--fromW3-xl"}):
+        if article.find_all(attrs={'class': "text--color-charcoal space--ml-1 size--all-l size--fromW3-xl"}):
             ok += 1
         else:
             bad += 1
@@ -110,7 +110,7 @@ def test_if_valid_class_with_added_date_exists(current_list_of_articles):
     bad, ok = 0, 0
 
     for article in current_list_of_articles:
-        if article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"}):
+        if article.find_all('div', {"class":"flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"}):
             ok += 1
         else:
             bad += 1

@@ -1,35 +1,34 @@
-from datetime import date
-import re
-from bs4 import BeautifulSoup, Tag
 import logging
-from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
-from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
-from pepper_app.environment_config import CustomEnvironment
-from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
-from enum import Enum
-from collections import Counter
-from selenium import webdriver
+import re
 import time
-from typing import List, Union
 import traceback
+from collections import Counter
+from datetime import date
+from enum import Enum
+from typing import List, Union
+
+from bs4 import BeautifulSoup, Tag
+from pepper_app.constans import OLD_DATES_DATA_PATTERN_1, OLD_DATES_DATA_PATTERN_2
+from pepper_app.environment_config import CustomEnvironment
+from requests.exceptions import ConnectionError, HTTPError, MissingSchema, ReadTimeout
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
 class Months(Enum):
-
-    sty = '01'
-    lut = '02'
-    mar = '03'
-    kwi = '04'
-    maj = '05'
-    cze = '06'
-    lip = '07'
-    sie = '08'
-    wrz = '09'
-    paz = '10'
-    paź = '10'
-    lis = '11'
-    gru = '12'
+    sty = "01"
+    lut = "02"
+    mar = "03"
+    kwi = "04"
+    maj = "05"
+    cze = "06"
+    lip = "07"
+    sie = "08"
+    wrz = "09"
+    paz = "10"
+    paź = "10"
+    lis = "11"
+    gru = "12"
 
     @classmethod
     def to_dict(cls):
@@ -48,43 +47,74 @@ class Months(Enum):
 
 
 class GetItemName:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> str:
         try:
-            name = self.article.find_all(attrs={'class': "cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['title']
+            name = self.article.find_all(
+                attrs={
+                    "class": "cept-tt thread-link linkPlain thread-title--list js-thread-title"
+                }
+            )[0]["title"].lower()
+            return name
+        except IndexError as e:
+            name = self.article.find_all(
+                attrs={
+                    "class": "thread-link linkPlain thread-title--list js-thread-title"
+                }
+            )[0]["title"].lower()
             return name
         except Exception as e:
-            logging.warning(f"Getting item name failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item name failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
 
 class GetItemId:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> int:
         try:
             item_id = self.article.get("id")
-            item_id = item_id.strip('thread_')
+            item_id = item_id.strip("thread_")
             item_id = int(item_id)
             return item_id
         except Exception as e:
-            logging.warning(f"Getting item id failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item id failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
 
 class GetItemDiscountPrice:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> Union[float, str]:
         try:
-            discount_price = self.article.find_all(attrs={'class': "thread-price text--b cept-tp size--all-l size--fromW3-xl"})
+            discount_price = self.article.find_all(
+                "span",
+                {
+                    "class": "threadItemCard-price text--b thread-price size--all-l size--fromW3-xl space--mr-0"
+                },
+            )
+            if len(discount_price) == 0:
+                discount_price = self.article.find_all(
+                    attrs={
+                        "class": "thread-price text--b cept-tp size--all-l size--fromW3-xl text--color-greyShade"
+                    }
+                )
+
             if len(discount_price) > 0:
-                discount_price = discount_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ','')
+                discount_price = (
+                    discount_price[0]
+                    .get_text()
+                    .strip("zł")
+                    .replace(".", "")
+                    .replace(",", ".")
+                    .replace(" ", "")
+                )
                 if discount_price == "ZADARMO":
                     discount_price = float(0)
                 else:
@@ -94,70 +124,108 @@ class GetItemDiscountPrice:
                 discount_price = "NA"
             return discount_price
         except Exception as e:
-            logging.warning(f"Getting item discount price failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item discount price failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
 
 class GetItemRegularPrice:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> Union[float, str]:
         try:
-            regular_price = self.article.find_all(attrs={'class': "mute--text text--lineThrough size--all-l size--fromW3-xl"})
+            regular_price = self.article.find_all(
+                "span",
+                {
+                    "class": "mute--text text--lineThrough space--ml-1 size--all-l size--fromW3-xl"
+                },
+            )
             if len(regular_price) > 0:
-                regular_price = float(regular_price[0].get_text().strip('zł').replace('.','').replace(',','.').replace(' ',''))
+                regular_price = float(
+                    regular_price[0]
+                    .get_text()
+                    .strip("zł")
+                    .replace(".", "")
+                    .replace(",", ".")
+                    .replace(" ", "")
+                )
             else:
                 """The attribute does not exist or the class name is invalid."""
                 regular_price = "NA"
             return regular_price
         except Exception as e:
-            logging.warning(f"Getting item regular price failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item regular price failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
 
 class GetItemPercentageDiscount:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> Union[float, str]:
         try:
-            percentage_discount = self.article.find_all(attrs={'class': "space--ml-1 size--all-l size--fromW3-xl"})
+            percentage_discount = self.article.find_all(
+                "span",
+                {
+                    "class": "text--color-charcoal space--ml-1 size--all-l size--fromW3-xl"
+                },
+            )
             if len(percentage_discount) > 0:
-                percentage_discount = float(percentage_discount[0].get_text().strip('%'))
+                percentage_discount = float(
+                    percentage_discount[0].get_text().strip("%")
+                )
             else:
                 """The attribute does not exist or the class name is invalid."""
                 percentage_discount = "NA"
             return percentage_discount
         except Exception as e:
-            logging.warning(f"Getting item percentage discount failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item percentage discount failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
 
 class GetItemUrl:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_data(self) -> str:
         try:
-            item_url = self.article.find_all('a', {"class":"cept-tt thread-link linkPlain thread-title--list js-thread-title"})[0]['href']
+            item_url = self.article.find_all(
+                "a",
+                {
+                    "class": "cept-tt thread-link linkPlain thread-title--list js-thread-title"
+                },
+            )[0]["href"]
+            return item_url
+        except IndexError as e:
+            item_url = "NA - Login Required."
             return item_url
         except Exception as e:
-            logging.warning(f"Getting item url failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item url failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
 
 class GetItemAddedDate:
-
     def __init__(self, article: Tag) -> None:
         self.article = article
 
     def get_raw_data(self) -> List[str]:
         try:
-            date_tag = self.article.find_all('div', {"class":"size--all-s flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"})
-            raw_string_list = date_tag[0].get_text(strip=True, separator='_').split('_')
+            date_tag = self.article.find_all(
+                "div",
+                {
+                    "class": "flex boxAlign-jc--all-fe boxAlign-ai--all-c flex--grow-1 overflow--hidden"
+                },
+            )
+            raw_string_list = date_tag[0].get_text(strip=True, separator="_").split("_")
             return raw_string_list
         except Exception as e:
-            logging.warning(f"Getting item added date failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.warning(
+                f"Getting item added date failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
     def get_data(self) -> str:
         try:
@@ -166,7 +234,7 @@ class GetItemAddedDate:
             date_string_likely = filtered_list[0]
             if date_string_likely == "NA":
                 url_with_item = GetItemUrl.get_data(self)
-                soup = self.scrap_page(url_with_item)
+                soup = self.scrape_page(url_with_item)
                 prepared_data = self.fill_missing_date(soup)
                 return prepared_data
             else:
@@ -178,47 +246,65 @@ class GetItemAddedDate:
 
     def strip_date_string(self, date_string_likely: str) -> str:
         try:
-            if date_string_likely.startswith("Zaktualizowano ") and date_string_likely.endswith(" temu"):
-                stripped_date_string_likely = date_string_likely.lstrip("Zaktualizowano ")
-                stripped_date_string_likely = stripped_date_string_likely.rstrip(" temu")
+            if date_string_likely.startswith(
+                "Zaktualizowano "
+            ) and date_string_likely.endswith(" temu"):
+                stripped_date_string_likely = date_string_likely.lstrip(
+                    "Zaktualizowano "
+                )
+                stripped_date_string_likely = stripped_date_string_likely.rstrip(
+                    " temu"
+                )
                 return stripped_date_string_likely
             elif date_string_likely.endswith("Lokalnie"):
                 stripped_date_string_likely = date_string_likely.rstrip("Lokalnie")
+                return stripped_date_string_likely
+            elif date_string_likely.startswith("Zaktualizowano "):
+                stripped_date_string_likely = date_string_likely.lstrip(
+                    "Zaktualizowano "
+                )
                 return stripped_date_string_likely
             else:
                 stripped_date_string_likely = date_string_likely
                 return stripped_date_string_likely
         except Exception as e:
-            logging.error(f"Stripping date string failed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.error(
+                f"Stripping date string failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
     def date_format_conversion(self, stripped_date_string_likely: str) -> str:
         try:
-            if stripped_date_string_likely.endswith(('min', 'g', 's')):
+            if stripped_date_string_likely.endswith(("min", "g", "s")):
                 prepared_data = date.today().strftime("%Y-%m-%d")
                 return prepared_data
-            elif stripped_date_string_likely.startswith(tuple(Months.keys())) and len(stripped_date_string_likely) < 8:
+            elif (
+                stripped_date_string_likely.startswith(tuple(Months.keys()))
+                and len(stripped_date_string_likely) < 8
+            ):
                 if len(stripped_date_string_likely[4:]) == 3:
                     day = stripped_date_string_likely[4:6]
                 else:
                     day = stripped_date_string_likely[4:5].zfill(2)
                 month = Months.__members__[stripped_date_string_likely[0:3]].value
                 year = str(date.today().year)
-                prepared_data = '-'.join([year, month, day])
+                prepared_data = "-".join([year, month, day])
                 return prepared_data
             elif bool(re.search(OLD_DATES_DATA_PATTERN_1, stripped_date_string_likely)):
                 day = stripped_date_string_likely[4:6]
                 month = Months.__members__[stripped_date_string_likely[0:3]].value
                 year = stripped_date_string_likely[8:13]
-                prepared_data = '-'.join([year, month, day])
+                prepared_data = "-".join([year, month, day])
                 return prepared_data
             elif bool(re.search(OLD_DATES_DATA_PATTERN_2, stripped_date_string_likely)):
                 day = stripped_date_string_likely[4:5].zfill(2)
                 month = Months.__members__[stripped_date_string_likely[0:3]].value
                 year = stripped_date_string_likely[7:12]
-                prepared_data = '-'.join([year, month, day])
+                prepared_data = "-".join([year, month, day])
                 return prepared_data
         except Exception as e:
-            logging.error(f"Data format conversion tailed: {e}\n Tracking: {traceback.format_exc()}")
+            logging.error(
+                f"Data format conversion failed: {e}\n Tracking: {traceback.format_exc()}"
+            )
 
     def clean_list(self) -> List[str]:
         raw_string_list = self.get_raw_data()
@@ -257,41 +343,52 @@ class GetItemAddedDate:
 
     def fill_missing_date(self, soup) -> str:
         try:
-            date_string = soup.find_all('div', {"class":"space--mv-3"})[0].find('span')['title']
+            date_string = soup.find_all("div", {"class": "space--mv-3"})[0].find(
+                "span"
+            )["title"]
             filtered_list = date_string.split()
             day_string = filtered_list[0]
             month_string = filtered_list[1]
-            year_string = filtered_list[2].strip(',')
+            year_string = filtered_list[2].strip(",")
             if len(day_string[0]) == 2:
                 day = day_string
             else:
                 day = day_string.zfill(2)
             month = Months.__members__[month_string].value
             year = year_string
-            prepared_data = '-'.join([year, month, day])
+            prepared_data = "-".join([year, month, day])
             return prepared_data
         except TypeError as e:
             raise TypeError(f"Input data must be a list: {e}")
 
-    def scrap_page(self, url_with_item: str, driver: webdriver=None) -> BeautifulSoup:
+    def scrape_page(
+        self, url_with_item: str, driver: webdriver = None
+    ) -> BeautifulSoup:
         try:
             options = Options()
             options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             if driver is None:
-                #driver = webdriver.Chrome(options=options) #for local  
-                driver = webdriver.Remote(command_executor=f'http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub', options=options) #for docker 
+                # driver = webdriver.Chrome(options=options) #for local
+                driver = webdriver.Remote(
+                    command_executor=f"http://{CustomEnvironment.get_selenium_container_name()}:4444/wd/hub",
+                    options=options,
+                )  # for docker
             driver.get(url_with_item)
             time.sleep(0.7)
             page_with_item = driver.page_source
             driver.quit()
-            soup = BeautifulSoup(page_with_item, 'html5lib')
+            soup = BeautifulSoup(page_with_item, "html5lib")
             return soup
         except ConnectionError as e:
             raise ConnectionError(f"ConnectionError occured: {e}. \nTry again later")
         except MissingSchema as e:
-            raise MissingSchema(f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url")
+            raise MissingSchema(
+                f"MissingSchema occured: {e}. \nMake sure that protocol indicator is icluded in the website url"
+            )
         except HTTPError as e:
-            raise HTTPError(f"HTTPError occured: {e}. \nMake sure that website url is valid")
+            raise HTTPError(
+                f"HTTPError occured: {e}. \nMake sure that website url is valid"
+            )
         except ReadTimeout as e:
             raise ReadTimeout(f"ReadTimeout occured: {e}. \nTry again later")

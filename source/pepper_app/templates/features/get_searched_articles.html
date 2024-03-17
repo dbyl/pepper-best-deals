@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+<body>
+    {% block content %}
+
+    <div class="container-1">
+        <div class="container">
+            <div class="text-center">
+                <h3>Search Articles</h3>
+                <p>The functionality allows searching and scraping articles. They will be added to the database.</p>
+                <div class="mb-3">
+                    <form method="POST" id="form_id" name="form" action="{% url 'get_searched_articles' %}">
+                        {% csrf_token %}
+                        {{ get_searched_articles_form|crispy}}
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <input  id="ajaxButton" class="btn btn-primary" type="submit" value="Submit"/>
+                        </div>
+                    </form>
+                    <div class="container-3">
+                        {% if get_searched_articles_in_progress == True %}
+                        <h5>Task status: Scraping...</h5>
+                        {% else %}
+                        <h5>Task status: Inactive<h5>
+                        {% endif %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% block javascript %}
+    {% if request.method == 'POST' %}
+    <script>
+    
+        function checkSearchTaskSessionValue() {
+            var get_searched_articles_task_id = "{{ get_searched_articles_task_id }}";
+            $.ajax({
+                url: '/get_searched_articles_check/' + get_searched_articles_task_id + '/', 
+                method: 'GET',
+                data: "{{ get_searched_articles_result }}",
+                success: function (data) {
+                    if (data["get_searched_articles_result"] !== false) {
+                        window.location.href = '/get_searched_articles_result/';
+                    }
+                    else {
+                        setTimeout(checkSearchTaskSessionValue, 1000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                        console.error('AJAX request failed:', status, error);
+                    }
+            });
+        };
+        window.onload = checkSearchTaskSessionValue;
+
+    </script>
+    {% endif %}
+    {% endblock javascript %}
+    {% endblock content %}
+</body>
+
+    

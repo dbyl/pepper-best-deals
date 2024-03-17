@@ -12,7 +12,7 @@ def article():
         soup = file.read()
     soup = BeautifulSoup(soup, "html5lib")
     articles = soup.find_all('article')
-    article = articles[1] #Example article
+    article = articles[0] #Example article
     return article
 
 
@@ -21,4 +21,4 @@ def test_clean_list(article):
     """Test if function returns list without forbidden strings"""
     filtered_list = GetItemAddedDate(article).clean_list()
 
-    assert filtered_list == ["2 g, 57 min"]
+    assert filtered_list == ["mar 1."]

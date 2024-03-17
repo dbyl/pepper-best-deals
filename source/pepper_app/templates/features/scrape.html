@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+<body>
+{% block content %}
+    <div class="container-1"> 
+        <div class="text-center">
+            <h4>Scrape all pages</h4>
+            <p>Scrape the data in depth. It starts from the first page of the "new" category following through the subsequent pages adding articles to the database. </p>
+            <form method="post" action="{% url 'scrape' %}">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="d-grid gap-2 d-md-block auto">
+                        <input  class="btn btn-primary" type="submit" name="scrape_all_new_task_status" value="Start Scraping"/>
+                        <input  class="btn btn-primary" type="submit" name="scrape_all_new_task_status" value="Stop Scraping"/>
+                    </div> 
+                </div>
+            </form>
+            <div class="container-3">
+                {% if scrape_all_new_task_in_progress == True %}
+                <h5>Task status: Scraping...</h5>
+                {% else %}
+                <h5>Task status: Inactive<h5>
+                {% endif %} 
+            </div>
+        </div>
+    </div>
+
+    <div class="container-1">
+        <div class="text-center">
+            <h4>Keep refreshing</h4>
+            <p>Scrape the data by refreshing the "new" category. It populates the database with new articles appearing on the site.</p>
+            <form method="post" action="{% url 'scrape' %}">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="d-grid gap-2 d-md-block auto">
+                        <input  class="btn btn-primary" type="submit" name="scrape_by_refreshing_task_status" value="Start Refreshing"/>
+                        <input  class="btn btn-primary" type="submit" name="scrape_by_refreshing_task_status" value="Stop Refreshing"/>
+                    </div> 
+                </div>
+            </form>
+            <div class="container-3">
+                {% if scrape_by_refreshing_task_in_progress == True %}
+                <h5>Task status: Scraping...</h5>
+                {% else %}
+                <h5>Task status: Inactive<h5>
+                {% endif %} 
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+</body>

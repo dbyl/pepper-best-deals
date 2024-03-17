@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+<body>
+    {% block content %}
+    <div class="container-1">
+        <div class="row justify-content-center">
+            <div class="text-center">
+                <div class="container" >    
+                    {% if user.is_authenticated %}
+                    <h3>User Panel</h3>
+                    <p>Hi {{request.user}}! If you want to log out, use the button below.</p>
+                    <div class="d-grid gap-2 d-md-block auto">
+                        <input  class="btn btn-primary" onclick="toLogout()" type="submit" value="Log out"/>
+                    </div> 
+                    {% else %}
+                    <h3>Log in</h3>
+                    <p>Hi {{request.user}}! If you want to log in, use the button below.</p>
+                    <div class="d-grid gap-2 d-md-block auto">
+                        <input  class="btn btn-primary" onclick="toLogin()" type="submit" value="Log in"/>
+                        <input  class="btn btn-primary" onclick="toResetPassword()" type="submit" value="Reset password"/>
+                    </div> 
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% block javascript %}
+    <script>
+        function toLogout() {
+        window.location.href = "/logout/";
+        }
+
+        function toRegister() {
+        window.location.href = "/register/";
+        }
+
+        function toLogin() {
+        window.location.href = "/login/";
+        }
+
+        function toResetPassword() {
+        window.location.href = "/reset_password/";
+        }
+     </script>
+    {% endblock javascript %}
+    {% endblock content %}
+</body>
+
+    
+
